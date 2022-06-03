@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Microservice to manage TO-DO Items.",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Ali Idrizi",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
 }

@@ -1,0 +1,22 @@
+apiVersion: skaffold/v2beta28
+kind: Config
+metadata:
+  name: todo-app
+build:
+  artifacts:
+    - image: todo-item
+      context: todo-item
+      docker:
+        dockerfile: Dockerfile
+    - image: todo-list
+      context: todo-list
+      docker:
+        dockerfile: Dockerfile
+    - image: web-client
+      context: web-client
+      docker:
+        dockerfile: Dockerfile
+deploy:
+  kustomize:
+    paths:
+      - "k8s/base"
