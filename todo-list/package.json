@@ -1,0 +1,10 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "Microservice to manage TO-DO Lists.",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Ali Idrizi",
+  "license": "ISC"
+}
