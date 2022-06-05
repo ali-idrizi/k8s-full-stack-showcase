@@ -12,6 +12,10 @@ build:
       context: todo-list
       docker:
         dockerfile: Dockerfile
+    - image: user
+      context: user
+      docker:
+        dockerfile: Dockerfile
     - image: web-client
       context: web-client
       docker:
