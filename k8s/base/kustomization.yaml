@@ -3,5 +3,6 @@ kind: Kustomization
 resources:
   - todo-item.yaml
   - todo-list.yaml
+  - user.yaml
   - web-client.yaml
   - nginx-ingress.yaml
