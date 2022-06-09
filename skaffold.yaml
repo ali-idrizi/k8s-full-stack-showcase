@@ -4,6 +4,10 @@ metadata:
   name: todo-app
 build:
   artifacts:
+    - image: auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
     - image: todo-item
       context: todo-item
       docker:
