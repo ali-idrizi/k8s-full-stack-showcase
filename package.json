@@ -1,0 +1,22 @@
+{
+  "name": "k8s-full-stack-starter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ali-idrizi/k8s-full-stack-starter.git"
+  },
+  "author": "Ali Idrizi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ali-idrizi/k8s-full-stack-starter/issues"
+  },
+  "homepage": "https://github.com/ali-idrizi/k8s-full-stack-starter#readme",
+  "devDependencies": {
+    "husky": "^8.0.1"
+  }
+}
