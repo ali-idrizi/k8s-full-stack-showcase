@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Post, Res } from '@nestjs/common'
 import { Response } from 'express'
 import { IGenerateTokenPairBody, ITokenPair } from './app.interface'
 import { AppService } from './app.service'
@@ -12,6 +12,10 @@ export class AppController {
     @Body() body: IGenerateTokenPairBody,
     @Res({ passthrough: true }) response: Response,
   ): ITokenPair {
+    if (!body.userId) {
+      throw new BadRequestException()
+    }
+
     const tokens = this.appService.generateTokenPair(body.userId)
 
     response.cookie('jwt', tokens.jwt, {
