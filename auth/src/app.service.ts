@@ -15,13 +15,14 @@ export class AppService {
    */
   generateTokenPair(userId: string): ITokenPair {
     const jwtExpiresIn = this.configService.get('JWT_EXPIRES_IN_SECONDS', { infer: true })
+    const jwtSecret = this.configService.get('JWT_SECRET', { infer: true })
 
-    if (!jwtExpiresIn) {
+    if (!jwtExpiresIn || !jwtSecret) {
       throw new InternalServerErrorException()
     }
 
     return {
-      jwt: generateJwtToken(userId, jwtExpiresIn),
+      jwt: generateJwtToken(userId, jwtExpiresIn, jwtSecret),
       refreshToken: generateRefreshToken(),
     }
   }

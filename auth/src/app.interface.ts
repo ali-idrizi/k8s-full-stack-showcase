@@ -9,4 +9,5 @@ export interface IGenerateTokenPairBody {
 
 export interface IEnvironment {
   readonly JWT_EXPIRES_IN_SECONDS: number
+  readonly JWT_SECRET: string
 }

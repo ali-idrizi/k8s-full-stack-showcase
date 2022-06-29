@@ -10,12 +10,12 @@ import * as JWT from 'jsonwebtoken'
  *
  * @returns {string} a signed JWT
  */
-export function generateJwtToken(userId: string, expiresIn: number): string {
+export function generateJwtToken(userId: string, expiresIn: number, secret: string): string {
   const jwtPayload = {
     uid: userId,
   }
 
-  return JWT.sign(jwtPayload, 'secret', {
+  return JWT.sign(jwtPayload, secret, {
     expiresIn,
   })
 }

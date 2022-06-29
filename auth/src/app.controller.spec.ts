@@ -6,8 +6,10 @@ import { AppController } from './app.controller'
 import { IEnvironment, ITokenPair } from './app.interface'
 import { AppService } from './app.service'
 
-const env: IEnvironment = {
+const USER_ID = 'random-user-uuid'
+const ENV: IEnvironment = {
   JWT_EXPIRES_IN_SECONDS: 900,
+  JWT_SECRET: 'secret',
 }
 
 describe('AppController', () => {
@@ -22,7 +24,7 @@ describe('AppController', () => {
         ConfigModule.forRoot({
           ignoreEnvFile: true,
           ignoreEnvVars: true,
-          load: [(): IEnvironment => env],
+          load: [(): IEnvironment => ENV],
         }),
       ],
     }).compile()
@@ -37,7 +39,7 @@ describe('AppController', () => {
     let timestamp: number
 
     it('should generate token pair', () => {
-      tokens = appController.generateTokenPair({ userId: 'random-uuid' }, mockRes.res)
+      tokens = appController.generateTokenPair({ userId: USER_ID }, mockRes.res)
       timestamp = Math.floor(new Date().getTime() / 1000)
 
       expect(tokens.jwt).toBeTruthy()
@@ -45,15 +47,18 @@ describe('AppController', () => {
     })
 
     it('should be a valid JWT with correct expiration', () => {
-      const decoded = JWT.verify(tokens.jwt, 'secret', { ignoreExpiration: true }) as JWT.JwtPayload
+      const jwtSecret = configService.get('JWT_SECRET')
+      const jwtExpiresIn = configService.get('JWT_EXPIRES_IN_SECONDS')
+
+      const decoded = JWT.verify(tokens.jwt, jwtSecret) as JWT.JwtPayload
 
       expect(decoded.exp).toBeTruthy()
       expect(decoded.uid).toBeTruthy()
 
       const expiresIn = decoded.exp! - timestamp
 
-      expect(decoded.uid).toEqual('random-uuid')
-      expect(expiresIn).toEqual(configService.get('JWT_EXPIRES_IN_SECONDS'))
+      expect(decoded.uid).toEqual(USER_ID)
+      expect(expiresIn).toEqual(jwtExpiresIn)
     })
 
     it('should set tokens as cookies', () => {
