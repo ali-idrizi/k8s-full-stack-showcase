@@ -8,6 +8,7 @@ build:
       context: auth
       docker:
         dockerfile: Dockerfile
+        target: dev
       sync:
         manual:
           - src: 'src/**/*.ts'
@@ -32,3 +33,31 @@ deploy:
   kustomize:
     paths:
       - "k8s/base"
+profiles:
+  - name: dev
+    activation:
+      - kubeContext: minikube
+  - name: prod
+    build:
+      artifacts:
+        - image: auth
+          context: auth
+          docker:
+            dockerfile: Dockerfile
+            target: prod
+        - image: todo-item
+          context: todo-item
+          docker:
+            dockerfile: Dockerfile
+        - image: todo-list
+          context: todo-list
+          docker:
+            dockerfile: Dockerfile
+        - image: user
+          context: user
+          docker:
+            dockerfile: Dockerfile
+        - image: web-client
+          context: web-client
+          docker:
+            dockerfile: Dockerfile
