@@ -1,4 +1,5 @@
 import { getMockRes } from '@jest-mock/express'
+import { BadRequestException } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as JWT from 'jsonwebtoken'
@@ -37,6 +38,13 @@ describe('AppController', () => {
     const mockRes = getMockRes()
     let tokens: ITokenPair
     let timestamp: number
+
+    it('should throw BadRequestException', () => {
+      expect(() => {
+        // @ts-ignore
+        appController.generateTokenPair({ userId: undefined }, mockRes.res)
+      }).toThrow(BadRequestException)
+    })
 
     it('should generate token pair', () => {
       tokens = appController.generateTokenPair({ userId: USER_ID }, mockRes.res)
