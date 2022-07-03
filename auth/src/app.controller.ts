@@ -18,14 +18,14 @@ export class AppController {
 
     const tokens = this.appService.generateTokenPair(body.userId)
 
-    response.cookie('jwt', tokens.jwt, {
-      secure: true,
-    })
+    // response.cookie('jwt', tokens.jwt, {
+    //   secure: true,
+    // })
 
-    response.cookie('refresh-token', tokens.refreshToken, {
-      httpOnly: true,
-      secure: true,
-    })
+    // response.cookie('refresh-token', tokens.refreshToken, {
+    //   httpOnly: true,
+    //   secure: true,
+    // })
 
     return tokens
   }
