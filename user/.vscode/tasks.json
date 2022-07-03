@@ -5,8 +5,7 @@
       "label": "bridge-to-kubernetes.service",
       "type": "bridge-to-kubernetes.service",
       "service": "user-service",
-      "ports": [3001],
-      "useKubernetesServiceEnvironmentVariables": true
+      "ports": [3001]
     }
   ]
 }
