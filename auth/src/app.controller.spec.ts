@@ -1,4 +1,5 @@
 import { getMockRes } from '@jest-mock/express'
+import { BadRequestException } from '@nestjs/common'
 import { ConfigModule, ConfigService } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as JWT from 'jsonwebtoken'
@@ -14,7 +15,6 @@ const ENV: IEnvironment = {
 
 describe('AppController', () => {
   let appController: AppController
-  let configService: ConfigService
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -30,13 +30,19 @@ describe('AppController', () => {
     }).compile()
 
     appController = app.get<AppController>(AppController)
-    configService = app.get<ConfigService>(ConfigService)
   })
 
   describe('/generate', () => {
     const mockRes = getMockRes()
     let tokens: ITokenPair
     let timestamp: number
+
+    it('should throw BadRequestException', () => {
+      expect(() => {
+        // @ts-ignore
+        appController.generateTokenPair({ userId: undefined }, mockRes.res)
+      }).toThrow(BadRequestException)
+    })
 
     it('should generate token pair', () => {
       tokens = appController.generateTokenPair({ userId: USER_ID }, mockRes.res)
@@ -47,10 +53,7 @@ describe('AppController', () => {
     })
 
     it('should be a valid JWT with correct expiration', () => {
-      const jwtSecret = configService.get('JWT_SECRET')
-      const jwtExpiresIn = configService.get('JWT_EXPIRES_IN_SECONDS')
-
-      const decoded = JWT.verify(tokens.jwt, jwtSecret) as JWT.JwtPayload
+      const decoded = JWT.verify(tokens.jwt, ENV.JWT_SECRET) as JWT.JwtPayload
 
       expect(decoded.exp).toBeTruthy()
       expect(decoded.uid).toBeTruthy()
@@ -58,7 +61,7 @@ describe('AppController', () => {
       const expiresIn = decoded.exp! - timestamp
 
       expect(decoded.uid).toEqual(USER_ID)
-      expect(expiresIn).toEqual(jwtExpiresIn)
+      expect(expiresIn).toEqual(ENV.JWT_EXPIRES_IN_SECONDS)
     })
 
     it('should set tokens as cookies', () => {
