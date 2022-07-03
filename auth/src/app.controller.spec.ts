@@ -1,6 +1,6 @@
 import { getMockRes } from '@jest-mock/express'
 import { BadRequestException } from '@nestjs/common'
-import { ConfigModule, ConfigService } from '@nestjs/config'
+import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as JWT from 'jsonwebtoken'
 import { AppController } from './app.controller'
