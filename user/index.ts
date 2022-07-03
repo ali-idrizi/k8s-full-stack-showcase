@@ -4,7 +4,16 @@ import express from "express";
 const app = express();
 const router = express.Router();
 
-const prisma = new PrismaClient();
+const DB_HOST = process.env.USER_DB_SERVICE_SERVICE_HOST;
+const DB_PORT = process.env.USER_DB_SERVICE_SERVICE_PORT;
+
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: `mysql://root:password@${DB_HOST}:${DB_PORT}/user`,
+    },
+  },
+});
 
 router.use("/add", async (req, res) => {
   const name = req.query.name as string;
@@ -40,4 +49,4 @@ router.use("/", async (req, res) => {
 
 app.use("/", router);
 
-app.listen(3000, () => console.log("user microservice started on port 3000"));
+app.listen(3001, () => console.log("user microservice started on port 3001"));
