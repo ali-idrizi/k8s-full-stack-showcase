@@ -29,7 +29,6 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/microservices": "^8.4.7",
     "@nestjs/platform-express": "^8.0.0",
-    "cookie-parser": "^1.4.6",
     "jsonwebtoken": "^8.5.1",
     "nats": "^2.7.1",
     "reflect-metadata": "^0.1.13",
