@@ -25,6 +25,11 @@ build:
       context: user
       docker:
         dockerfile: Dockerfile
+        target: dev
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
     - image: web-client
       context: web-client
       docker:
