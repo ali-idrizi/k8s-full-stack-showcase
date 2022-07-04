@@ -1,4 +1,5 @@
 import { ConfigModule } from '@nestjs/config'
+import { ClientsModule, Transport } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { AppController } from './app.controller'
 import { IEnvironment } from './app.interface'
@@ -21,6 +22,12 @@ describe('AppController', () => {
           load: [(): IEnvironment => ENV],
         }),
         PrismaModule,
+        ClientsModule.register([
+          {
+            name: 'AUTH_SERVICE',
+            transport: Transport.NATS,
+          },
+        ]),
       ],
     }).compile()
 
@@ -28,7 +35,7 @@ describe('AppController', () => {
   })
 
   describe('/', () => {
-    it('should work', () => {
+    it('should be defined', () => {
       expect(appController).toBeDefined()
     })
   })

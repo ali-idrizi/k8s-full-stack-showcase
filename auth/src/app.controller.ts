@@ -1,32 +1,18 @@
-import { BadRequestException, Body, Controller, Post, Res } from '@nestjs/common'
-import { Response } from 'express'
-import { IGenerateTokenPairBody, ITokenPair } from './app.interface'
+import { Controller } from '@nestjs/common'
+import { MessagePattern, Payload, RpcException } from '@nestjs/microservices'
+import { ITokenPair } from './app.interface'
 import { AppService } from './app.service'
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post('/generate')
-  generateTokenPair(
-    @Body() body: IGenerateTokenPairBody,
-    @Res({ passthrough: true }) response: Response,
-  ): ITokenPair {
-    if (!body.userId) {
-      throw new BadRequestException()
+  @MessagePattern({ cmd: 'generateTokenPair' })
+  generateTokenPair(@Payload('userId') userId: string): ITokenPair {
+    if (!userId) {
+      throw new RpcException('userId is required')
     }
 
-    const tokens = this.appService.generateTokenPair(body.userId)
-
-    response.cookie('jwt', tokens.jwt, {
-      secure: true,
-    })
-
-    response.cookie('refresh-token', tokens.refreshToken, {
-      httpOnly: true,
-      secure: true,
-    })
-
-    return tokens
+    return this.appService.generateTokenPair(userId)
   }
 }

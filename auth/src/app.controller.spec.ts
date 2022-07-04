@@ -1,6 +1,6 @@
 import { getMockRes } from '@jest-mock/express'
-import { BadRequestException } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
+import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as JWT from 'jsonwebtoken'
 import { AppController } from './app.controller'
@@ -37,15 +37,16 @@ describe('AppController', () => {
     let tokens: ITokenPair
     let timestamp: number
 
-    it('should throw BadRequestException', () => {
+    it('should throw RpcException', () => {
       expect(() => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        appController.generateTokenPair({ userId: undefined }, mockRes.res)
-      }).toThrow(BadRequestException)
+        appController.generateTokenPair(undefined)
+      }).toThrow(RpcException)
     })
 
     it('should generate token pair', () => {
-      tokens = appController.generateTokenPair({ userId: USER_ID }, mockRes.res)
+      tokens = appController.generateTokenPair(USER_ID)
       timestamp = Math.floor(new Date().getTime() / 1000)
 
       expect(tokens.jwt).toBeTruthy()
@@ -58,21 +59,10 @@ describe('AppController', () => {
       expect(decoded.exp).toBeTruthy()
       expect(decoded.uid).toBeTruthy()
 
-      const expiresIn = decoded.exp! - timestamp
+      const expiresIn = (decoded.exp as number) - timestamp
 
       expect(decoded.uid).toEqual(USER_ID)
       expect(expiresIn).toEqual(ENV.JWT_EXPIRES_IN_SECONDS)
-    })
-
-    it('should set tokens as cookies', () => {
-      expect(mockRes.res.cookie).toHaveBeenCalledTimes(2)
-      expect(mockRes.res.cookie).toHaveBeenCalledWith('jwt', tokens.jwt, {
-        secure: true,
-      })
-      expect(mockRes.res.cookie).toHaveBeenCalledWith('refresh-token', tokens.refreshToken, {
-        httpOnly: true,
-        secure: true,
-      })
     })
 
     mockRes.mockClear()
