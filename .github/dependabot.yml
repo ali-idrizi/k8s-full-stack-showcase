@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "daily"
       
- - package-ecosystem: "npm"
+  - package-ecosystem: "npm"
     directory: "/user"
     schedule:
       interval: "daily"
