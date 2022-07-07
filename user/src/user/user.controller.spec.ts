@@ -1,27 +1,27 @@
 import { ConfigModule } from '@nestjs/config'
 import { ClientsModule, Transport } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
-import { AppController } from './app.controller'
-import { IEnvironment } from './app.interface'
-import { AppService } from './app.service'
-import { PrismaModule } from './prisma/prisma.module'
+import { IEnvironment } from 'src/app.interface'
+import { PrismaModule } from 'src/prisma/prisma.module'
+import { UserController } from './user.controller'
+import { UserService } from './user.service'
 
 const ENV: IEnvironment = {}
 
-describe('AppController', () => {
-  let appController: AppController
+describe('UserController', () => {
+  let userController: UserController
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [UserController],
+      providers: [UserService],
       imports: [
+        PrismaModule,
         ConfigModule.forRoot({
           ignoreEnvFile: true,
           ignoreEnvVars: true,
           load: [(): IEnvironment => ENV],
         }),
-        PrismaModule,
         ClientsModule.register([
           {
             name: 'AUTH_SERVICE',
@@ -31,12 +31,12 @@ describe('AppController', () => {
       ],
     }).compile()
 
-    appController = app.get<AppController>(AppController)
+    userController = app.get<UserController>(UserController)
   })
 
   describe('/', () => {
     it('should be defined', () => {
-      expect(appController).toBeDefined()
+      expect(userController).toBeDefined()
     })
   })
 })
