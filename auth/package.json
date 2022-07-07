@@ -24,7 +24,7 @@
     "src/**/*.ts": "jest --bail --findRelatedTests"
   },
   "dependencies": {
-    "@nestjs/common": "^8.0.0",
+    "@nestjs/common": "^8.4.7",
     "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/microservices": "^8.4.7",
