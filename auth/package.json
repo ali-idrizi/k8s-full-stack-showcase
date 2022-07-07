@@ -28,7 +28,7 @@
     "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.4.7",
     "@nestjs/microservices": "^8.4.7",
-    "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/platform-express": "^8.4.7",
     "jsonwebtoken": "^8.5.1",
     "nats": "^2.7.1",
     "reflect-metadata": "^0.1.13",
