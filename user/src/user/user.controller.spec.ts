@@ -7,9 +7,8 @@ import { Observable } from 'rxjs'
 import { IEnvironment } from 'src/app.interface'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/context'
-import { LoginDto } from './dto/login.dto'
 import { UserController } from './user.controller'
-import { ILoginRes, ITokenPair } from './user.interface'
+import { ITokenPair } from './user.interface'
 import { UserService } from './user.service'
 
 const TEST_USER: User = {
@@ -19,6 +18,11 @@ const TEST_USER: User = {
   createdAt: new Date(),
   updatedAt: new Date(),
   id: 'id',
+} as const
+
+const TEST_TOKENS: ITokenPair = {
+  jwt: 'jwt',
+  refreshToken: 'refreshToken',
 } as const
 
 const ENV: IEnvironment = {} as const
@@ -87,8 +91,8 @@ describe('UserController', () => {
       expect(res.user).toEqual(TEST_USER)
 
       expect(res.tokens).toBeTruthy()
-      expect(res.tokens).toHaveProperty('jwt')
-      expect(res.tokens).toHaveProperty('refreshToken')
+      expect(res.tokens.jwt).toBe(TEST_TOKENS.jwt)
+      expect(res.tokens.refreshToken).toBe(TEST_TOKENS.refreshToken)
     })
 
     it('should throw', async () => {
