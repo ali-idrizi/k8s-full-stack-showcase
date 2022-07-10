@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
-import { Observable } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { IEnvironment } from 'src/app.interface'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/context'
@@ -27,21 +27,8 @@ const TEST_TOKENS: ITokenPair = {
 
 const ENV: IEnvironment = {} as const
 
-class AuthClient {
-  send(): Observable<ITokenPair> {
-    return new Observable((subscriber) => {
-      subscriber.next({
-        jwt: 'jwt',
-        refreshToken: 'refreshToken',
-      })
-      subscriber.complete()
-    })
-  }
-}
-
 describe('UserController', () => {
   let userController: UserController
-
   let prismaMockContext: PrismaMockContext
 
   beforeEach(async () => {
@@ -53,7 +40,9 @@ describe('UserController', () => {
         UserService,
         {
           provide: 'AUTH_SERVICE',
-          useClass: AuthClient,
+          useValue: {
+            send: of.bind(null, TEST_TOKENS),
+          },
         },
         {
           provide: PrismaService,
