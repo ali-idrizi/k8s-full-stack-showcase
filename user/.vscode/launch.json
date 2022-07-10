@@ -5,6 +5,7 @@
       "name": "Start Debug",
       "type": "pwa-node",
       "request": "launch",
+      "outputCapture": "std",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start:debug"]
     }
