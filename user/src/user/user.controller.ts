@@ -1,19 +1,24 @@
-import { BadRequestException, Controller, Get, Inject } from '@nestjs/common'
-import { ClientProxy } from '@nestjs/microservices'
-import { User } from '@prisma/client'
-import { catchError, Observable } from 'rxjs'
-import { ITokenPair } from './user.interface'
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  UseInterceptors,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common'
+import { LoginDto } from './dto/login.dto'
+import { ILoginRes } from './user.interface'
 import { UserService } from './user.service'
 
 @Controller()
+@UseInterceptors(ClassSerializerInterceptor)
+@UsePipes(new ValidationPipe({ transform: true, stopAtFirstError: true }))
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    @Inject('AUTH_SERVICE') private client: ClientProxy,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
-  @Get('/')
-  async getUsers(): Promise<User[]> {
-    return await this.userService.getUsers()
+  @Get('/login')
+  login(@Body() loginDto: LoginDto): Promise<ILoginRes> {
+    return this.userService.login(loginDto)
   }
 }

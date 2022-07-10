@@ -34,7 +34,11 @@ describe('UserController', () => {
     userController = app.get<UserController>(UserController)
   })
 
-  describe('/', () => {
+  it('should be defined', () => {
+    expect(userController).toBeDefined()
+  })
+
+  describe('/login', () => {
     it('should be defined', () => {
       expect(userController).toBeDefined()
     })
