@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import * as bcrypt from 'bcrypt'
-import { Observable, of } from 'rxjs'
+import { of } from 'rxjs'
 import { IEnvironment } from 'src/app.interface'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/context'
@@ -41,7 +41,7 @@ describe('UserController', () => {
         {
           provide: 'AUTH_SERVICE',
           useValue: {
-            send: of.bind(null, TEST_TOKENS),
+            send: () => of(TEST_TOKENS),
           },
         },
         {
