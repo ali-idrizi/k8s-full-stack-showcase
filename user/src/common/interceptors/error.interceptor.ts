@@ -6,7 +6,7 @@ import {
   InternalServerErrorException,
   NestInterceptor,
 } from '@nestjs/common'
-import { catchError, Observable } from 'rxjs'
+import { catchError, Observable, throwError } from 'rxjs'
 
 @Injectable()
 export class ErrorIterceptor implements NestInterceptor {
@@ -15,11 +15,11 @@ export class ErrorIterceptor implements NestInterceptor {
       catchError((error) => {
         switch (true) {
           case error instanceof HttpException:
-            throw error
+            return throwError(() => error)
 
           default:
             // TODO: Log error and message
-            throw new InternalServerErrorException('Internal Server Error')
+            return throwError(() => new InternalServerErrorException('Internal Server Error'))
         }
       }),
     )
