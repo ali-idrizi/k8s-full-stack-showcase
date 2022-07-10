@@ -23,7 +23,7 @@
   },
   "lint-staged": {
     "{src,test}/**/*.ts": "eslint",
-    "src/**/*.ts": "jest --bail --findRelatedTests"
+    "src/**/*.ts": "jest --bail --findRelatedTests --passWithNoTests"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
