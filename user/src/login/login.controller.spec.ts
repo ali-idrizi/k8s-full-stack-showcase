@@ -1,15 +1,13 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import { of } from 'rxjs'
-import { IEnvironment } from 'src/app.interface'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/mock-context'
-import { UserController } from './user.controller'
-import { ITokenPair } from './user.interface'
-import { UserService } from './user.service'
+import { ITokenPair } from 'src/user.interface'
+import { LoginController } from './login.controller'
+import { LoginService } from './login.service'
 
 const TEST_USER: User = {
   id: 'id',
@@ -25,19 +23,17 @@ const TEST_TOKENS: ITokenPair = {
   refreshToken: 'refreshToken',
 } as const
 
-const ENV: IEnvironment = {} as const
-
 describe('UserController', () => {
-  let userController: UserController
+  let loginController: LoginController
   let prismaMockContext: PrismaMockContext
 
   beforeEach(async () => {
     prismaMockContext = createMockContext()
 
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [UserController],
+      controllers: [LoginController],
       providers: [
-        UserService,
+        LoginService,
         {
           provide: 'AUTH_SERVICE',
           useValue: {
@@ -49,27 +45,20 @@ describe('UserController', () => {
           useValue: prismaMockContext.prisma,
         },
       ],
-      imports: [
-        ConfigModule.forRoot({
-          ignoreEnvFile: true,
-          ignoreEnvVars: true,
-          load: [(): IEnvironment => ENV],
-        }),
-      ],
     }).compile()
 
-    userController = app.get<UserController>(UserController)
+    loginController = app.get<LoginController>(LoginController)
   })
 
   it('should be defined', () => {
-    expect(userController).toBeDefined()
+    expect(loginController).toBeDefined()
   })
 
   describe('/login', () => {
     it('should login', async () => {
       prismaMockContext.prisma.user.findUnique.mockResolvedValue(TEST_USER)
 
-      const res = await userController.login({
+      const res = await loginController.login({
         email: TEST_USER.email,
         password: 'password',
       })
@@ -90,19 +79,19 @@ describe('UserController', () => {
         HttpStatus.UNAUTHORIZED,
       )
 
-      // Mock incorrect email address -- user is not found in the database
+      // Test incorrect email address -- user is not found in the database
       prismaMockContext.prisma.user.findUnique.mockResolvedValue(null)
       await expect(
-        userController.login({
+        loginController.login({
           email: 'incorrect@email.com',
           password: 'password',
         }),
       ).rejects.toThrow(expectedException)
 
-      // Mock correct email address, but incorrect password -- user is found in the database
+      // Test correct email address, but incorrect password -- user is found in the database
       prismaMockContext.prisma.user.findUnique.mockResolvedValue(TEST_USER)
       await expect(
-        userController.login({
+        loginController.login({
           email: TEST_USER.email,
           password: 'incorrect-password',
         }),

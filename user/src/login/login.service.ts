@@ -5,13 +5,14 @@ import { plainToInstance } from 'class-transformer'
 import { firstValueFrom, timeout } from 'rxjs'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
-import { LoginDto } from './dto/login.dto'
-import { UserDto } from './dto/user.dto'
-import { UserDb } from './user.db'
-import { ILoginRes, ITokenPair } from './user.interface'
+import { UserDb } from 'src/user.db'
+import { UserDto } from 'src/user.dto'
+import { ITokenPair } from 'src/user.interface'
+import { LoginDto } from './login.dto'
+import { ILoginRes } from './login.interface'
 
 @Injectable()
-export class UserService {
+export class LoginService {
   private readonly userDb: UserDb
 
   constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy, prisma: PrismaService) {

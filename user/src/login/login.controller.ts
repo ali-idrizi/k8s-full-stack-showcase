@@ -7,18 +7,18 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common'
-import { LoginDto } from './dto/login.dto'
-import { ILoginRes } from './user.interface'
-import { UserService } from './user.service'
+import { LoginDto } from './login.dto'
+import { ILoginRes } from './login.interface'
+import { LoginService } from './login.service'
 
 @Controller()
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true, stopAtFirstError: true }))
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class LoginController {
+  constructor(private readonly loginService: LoginService) {}
 
   @Get('/login')
   login(@Body() loginDto: LoginDto): Promise<ILoginRes> {
-    return this.userService.login(loginDto)
+    return this.loginService.login(loginDto)
   }
 }
