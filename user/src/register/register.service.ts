@@ -13,7 +13,7 @@ export class RegisterService {
     this.userDb = new UserDb(prisma)
   }
 
-  async register(RegisterDto: RegisterDto): Promise<IRegisterRes> {
+  async register(registerDto: RegisterDto): Promise<IRegisterRes> {
     return {
       success: true,
     }
