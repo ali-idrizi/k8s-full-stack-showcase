@@ -2,7 +2,9 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
-  Get,
+  HttpCode,
+  HttpStatus,
+  Post,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -17,7 +19,8 @@ import { LoginService } from './login.service'
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
-  @Get('/')
+  @Post('/')
+  @HttpCode(HttpStatus.OK)
   login(@Body() loginDto: LoginDto): Promise<ILoginRes> {
     return this.loginService.login(loginDto)
   }
