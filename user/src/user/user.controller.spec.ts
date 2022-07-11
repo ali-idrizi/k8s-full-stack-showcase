@@ -2,9 +2,9 @@ import { HttpException, HttpStatus } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
-import * as bcrypt from 'bcrypt'
 import { of } from 'rxjs'
 import { IEnvironment } from 'src/app.interface'
+import { HashModule } from 'src/common/utils/hash'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/context'
 import { UserController } from './user.controller'
@@ -13,7 +13,7 @@ import { UserService } from './user.service'
 
 const TEST_USER: User = {
   email: 'test@email.com',
-  password: bcrypt.hashSync('password', 12),
+  password: HashModule.hashSync('password'),
   name: 'Test',
   createdAt: new Date(),
   updatedAt: new Date(),
