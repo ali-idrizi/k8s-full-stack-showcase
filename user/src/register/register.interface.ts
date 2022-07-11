@@ -1,3 +1,3 @@
-export interface IRegisterRes {
+export interface Response {
   readonly success: boolean
 }

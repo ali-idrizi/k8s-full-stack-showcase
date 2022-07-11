@@ -3,7 +3,7 @@ import { AuthService } from 'src/auth/auth.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { UserDb } from 'src/user.db'
 import { RegisterDto } from './register.dto'
-import { IRegisterRes } from './register.interface'
+import { Response } from './register.interface'
 
 @Injectable()
 export class RegisterService {
@@ -13,7 +13,7 @@ export class RegisterService {
     this.userDb = new UserDb(prisma)
   }
 
-  async register(registerDto: RegisterDto): Promise<IRegisterRes> {
+  async register(registerDto: RegisterDto): Promise<Response> {
     return {
       success: true,
     }

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices'
 import { Environment } from './auth.constant'
-import { IAuthEnvironment } from './auth.interface'
+import { AuthEnvironment } from './auth.interface'
 import { AuthService } from './auth.service'
 
 @Module({
@@ -11,7 +11,7 @@ import { AuthService } from './auth.service'
     {
       provide: 'AUTH_SERVICE',
       inject: [ConfigService],
-      useFactory: (configService: ConfigService<IAuthEnvironment>): ClientProxy => {
+      useFactory: (configService: ConfigService<AuthEnvironment>): ClientProxy => {
         const natsHost = configService.get(Environment.NATS_HOST, { infer: true })
         const natsPort = configService.get(Environment.NATS_PORT, { infer: true })
 

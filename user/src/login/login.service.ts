@@ -7,7 +7,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { UserDb } from 'src/user.db'
 import { UserDto } from 'src/user.dto'
 import { LoginDto } from './login.dto'
-import { ILoginRes } from './login.interface'
+import { Response } from './login.interface'
 
 @Injectable()
 export class LoginService {
@@ -17,7 +17,7 @@ export class LoginService {
     this.userDb = new UserDb(prisma)
   }
 
-  async login(loginDto: LoginDto): Promise<ILoginRes> {
+  async login(loginDto: LoginDto): Promise<Response> {
     const userData = await this.userDb.findByEmail(loginDto.email)
     const user = await this.validateUser(loginDto, userData)
     const tokens = await this.authService.getTokens(user.id)

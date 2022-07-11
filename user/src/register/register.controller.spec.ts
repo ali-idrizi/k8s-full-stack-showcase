@@ -4,7 +4,7 @@ import { AuthService } from 'src/auth/auth.service'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/mock-context'
-import { ITokenPair } from 'src/user.interface'
+import { TokenPair } from 'src/user.interface'
 import { RegisterController } from './register.controller'
 import { RegisterService } from './register.service'
 
@@ -17,7 +17,7 @@ const TEST_USER: User = {
   updatedAt: new Date(),
 } as const
 
-const TEST_TOKENS: ITokenPair = {
+const TEST_TOKENS: TokenPair = {
   jwt: 'jwt',
   refreshToken: 'refreshToken',
 } as const
