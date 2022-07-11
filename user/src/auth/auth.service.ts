@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom, timeout } from 'rxjs'
 import { ITokenPair } from 'src/user.interface'
-import { Command } from './auth.constants'
+import { Command } from './auth.constant'
 
 @Injectable()
 export class AuthService {

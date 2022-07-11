@@ -1,4 +1,4 @@
-import { Environment } from './auth.constants'
+import { Environment } from './auth.constant'
 
 export interface IAuthEnvironment {
   [Environment.NATS_HOST]: string

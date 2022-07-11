@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices'
-import { Environment } from './auth.constants'
+import { Environment } from './auth.constant'
 import { IAuthEnvironment } from './auth.interface'
 import { AuthService } from './auth.service'
 
