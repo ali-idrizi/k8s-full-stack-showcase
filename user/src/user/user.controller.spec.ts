@@ -90,19 +90,21 @@ describe('UserController', () => {
         HttpStatus.UNAUTHORIZED,
       )
 
+      // Mock incorrect email address -- user is not found in the database
       prismaMockContext.prisma.user.findUnique.mockResolvedValue(null)
       await expect(
         userController.login({
-          email: 'invalid@email.com',
+          email: 'incorrect@email.com',
           password: 'password',
         }),
       ).rejects.toThrow(expectedException)
 
+      // Mock correct email address, but incorrect password -- user is found in the database
       prismaMockContext.prisma.user.findUnique.mockResolvedValue(TEST_USER)
       await expect(
         userController.login({
           email: TEST_USER.email,
-          password: 'invalid-password',
+          password: 'incorrect-password',
         }),
       ).rejects.toThrow(expectedException)
     })
