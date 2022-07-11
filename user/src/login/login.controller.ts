@@ -11,13 +11,13 @@ import { LoginDto } from './login.dto'
 import { ILoginRes } from './login.interface'
 import { LoginService } from './login.service'
 
-@Controller()
+@Controller('login')
 @UseInterceptors(ClassSerializerInterceptor)
 @UsePipes(new ValidationPipe({ transform: true, stopAtFirstError: true }))
 export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
-  @Get('/login')
+  @Get('/')
   login(@Body() loginDto: LoginDto): Promise<ILoginRes> {
     return this.loginService.login(loginDto)
   }

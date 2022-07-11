@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
-import { of } from 'rxjs'
+import { AuthService } from 'src/auth/auth.service'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/mock-context'
@@ -35,9 +35,9 @@ describe('UserController', () => {
       providers: [
         LoginService,
         {
-          provide: 'AUTH_SERVICE',
+          provide: AuthService,
           useValue: {
-            send: () => of(TEST_TOKENS),
+            getTokens: () => Promise.resolve(TEST_TOKENS),
           },
         },
         {
