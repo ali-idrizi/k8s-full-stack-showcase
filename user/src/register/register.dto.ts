@@ -1,13 +1,13 @@
 import { Type } from 'class-transformer'
 import { IsDefined, MinLength } from 'class-validator'
 import { Match } from 'src/common/decorators/match.decorator'
-import { LoginDto } from 'src/login/login.dto'
+import { AuthInputDto } from 'src/common/dto/auth-input.dto'
 
-export class RegisterDto extends LoginDto {
+export class RegisterDto extends AuthInputDto {
   @MinLength(8, {
     message: 'Password must be at least 8 characters',
   })
-  override password: string
+  password: string
 
   @IsDefined({
     message: 'Confirm Password is required',
