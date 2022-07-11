@@ -45,7 +45,7 @@ async function main() {
       update: {},
       create: {
         ...user,
-        password: await bcrypt.hash(user.password, 12),
+        password: await bcrypt.hash(user.password, 10),
       },
     })
   })

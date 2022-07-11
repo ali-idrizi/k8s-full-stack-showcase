@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt'
 
-const SALT_ROUNDS = 12
+const SALT_ROUNDS = 10
 
 export const HashUtil = {
   isValid(plainPassword: string, hash: string): Promise<boolean> {
