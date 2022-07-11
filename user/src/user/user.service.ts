@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices'
 import { User } from '@prisma/client'
 import { plainToInstance } from 'class-transformer'
 import { firstValueFrom, timeout } from 'rxjs'
-import { HashModule } from 'src/common/utils/hash'
+import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { LoginDto } from './dto/login.dto'
 import { UserDto } from './dto/user.dto'
@@ -32,7 +32,7 @@ export class UserService {
   private async validateUser(loginInput: LoginDto, userData: User | null): Promise<UserDto> {
     if (userData !== null) {
       const user = plainToInstance(UserDto, userData)
-      const isPasswordValid = await HashModule.isValid(loginInput.password, user.password)
+      const isPasswordValid = await HashUtil.isValid(loginInput.password, user.password)
 
       if (isPasswordValid) {
         return user

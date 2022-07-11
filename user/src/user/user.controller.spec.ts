@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import { of } from 'rxjs'
 import { IEnvironment } from 'src/app.interface'
-import { HashModule } from 'src/common/utils/hash'
+import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { createMockContext, PrismaMockContext } from 'src/prisma/test/context'
 import { UserController } from './user.controller'
@@ -12,12 +12,12 @@ import { ITokenPair } from './user.interface'
 import { UserService } from './user.service'
 
 const TEST_USER: User = {
-  email: 'test@email.com',
-  password: HashModule.hashSync('password'),
+  id: 'id',
   name: 'Test',
+  email: 'test@email.com',
+  password: HashUtil.hashSync('password'),
   createdAt: new Date(),
   updatedAt: new Date(),
-  id: 'id',
 } as const
 
 const TEST_TOKENS: ITokenPair = {
