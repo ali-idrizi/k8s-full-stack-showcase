@@ -18,7 +18,7 @@ export class ErrorIterceptor implements NestInterceptor {
             return throwError(() => error)
 
           default:
-            // TODO: Log error and message
+            console.error(error)
             return throwError(() => new InternalServerErrorException('Internal Server Error'))
         }
       }),
