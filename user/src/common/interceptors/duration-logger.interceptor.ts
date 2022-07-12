@@ -8,15 +8,15 @@ export class DurationLoggerInterceptor implements NestInterceptor {
     const url = context.switchToHttp().getRequest().url
     const now = performance.now()
 
-    const logTime = (): void => {
+    const logTime = (type: string): void => {
       const executionTime = performance.now() - now
-      console.log(`[${url}] Request took ${executionTime.toFixed(0)}ms`)
+      console.log(`[${url} {${type}}] Request took ${executionTime.toFixed(0)}ms`)
     }
 
     return next.handle().pipe(
       tap({
-        next: logTime,
-        error: logTime,
+        next: () => logTime('success'),
+        error: () => logTime('error'),
       }),
     )
   }
