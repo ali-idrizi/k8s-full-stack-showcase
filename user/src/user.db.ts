@@ -1,4 +1,4 @@
-import { User } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 export class UserDb {
@@ -9,6 +9,12 @@ export class UserDb {
       where: {
         email,
       },
+    })
+  }
+
+  async createUser(user: Prisma.UserCreateInput): Promise<User> {
+    return this.prisma.user.create({
+      data: user,
     })
   }
 }
