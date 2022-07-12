@@ -1,5 +1,6 @@
+import { HttpException, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { User } from '@prisma/client'
+import { Prisma, User } from '@prisma/client'
 import { AuthService } from 'src/auth/auth.service'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { PrismaService } from 'src/prisma/prisma.service'
@@ -51,5 +52,43 @@ describe('UserController', () => {
 
   it('should be defined', () => {
     expect(registerController).toBeDefined()
+  })
+
+  describe('/register', () => {
+    const registerData = {
+      name: TEST_USER.name,
+      email: TEST_USER.email,
+      password: 'password',
+      confirmPassword: 'password',
+    }
+
+    it('should create user and tokens', async () => {
+      prismaMockContext.prisma.user.create.mockResolvedValue(TEST_USER)
+
+      const res = await registerController.register(registerData)
+
+      expect(res).toEqual({
+        user: TEST_USER,
+        tokens: TEST_TOKENS,
+      })
+    })
+
+    it('should throw', async () => {
+      // Test that a correct HttpException is thrown when the email is already registered
+      prismaMockContext.prisma.user.create.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'Invalid `this.prisma.user.create()` invocation',
+          'P2002',
+          '',
+        ),
+      )
+      await expect(registerController.register(registerData)).rejects.toThrow(
+        new HttpException('Email address is already registered', HttpStatus.CONFLICT),
+      )
+
+      // Test that the same error is thrown in every other case
+      prismaMockContext.prisma.user.create.mockRejectedValue(new Error())
+      await expect(registerController.register(registerData)).rejects.toThrow(new Error())
+    })
   })
 })
