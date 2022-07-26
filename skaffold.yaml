@@ -45,7 +45,7 @@ deploy:
         namespace: kong
         createNamespace: true
         valuesFiles:
-          - ./k8s/values/dev/kong-values.yaml
+          - .k8s/values/dev/kong-values.yaml
 
       - name: nats
         remoteChart: nats
@@ -54,12 +54,12 @@ deploy:
         namespace: dev
         createNamespace: true
         valuesFiles:
-          - ./k8s/values/dev/nats-values.yaml
+          - .k8s/values/dev/nats-values.yaml
         wait: true
 
       - name: dev
         useHelmSecrets: true
-        chartPath: ./k8s/helm-charts
+        chartPath: .k8s/helm-charts
         namespace: dev
         createNamespace: true
         artifactOverrides:
@@ -82,8 +82,8 @@ deploy:
           helm:
             explicitRegistry: true
         valuesFiles:
-          - ./k8s/values/dev/values.yaml
-          - ./k8s/values/dev/secrets.yaml
+          - .k8s/values/dev/values.yaml
+          - .k8s/values/dev/secrets.yaml
 
 profiles:
   - name: dev
