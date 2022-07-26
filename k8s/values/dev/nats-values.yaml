@@ -1,0 +1,4 @@
+fullnameOverride: nats
+replicaCount: 3
+auth:
+  enabled: false

@@ -1,5 +1,5 @@
 FROM node:18 as base
-WORKDIR /usr/src/app
+WORKDIR /app
 COPY . .
 RUN npm install
 
@@ -16,10 +16,10 @@ ENV NODE_ENV=production
 RUN npm run build
 
 FROM node:18-alpine as prod
-WORKDIR /usr/src/app
+WORKDIR /app
 ENV NODE_ENV=production
 COPY package*.json .
 COPY .env .
-COPY --from=builder /usr/src/app/dist dist
+COPY --from=builder /app/dist dist
 RUN npm install --omit=dev
 CMD [ "npm", "run", "start:prod" ]

@@ -1,0 +1,22 @@
+todoItem:
+  node:
+    ingress:
+      hostname: todo.local
+
+todoList:
+  node:
+    ingress:
+      hostname: todo.local
+
+user:
+  mysql:
+    auth:
+      database: user
+  node:
+    ingress:
+      hostname: todo.local
+
+webClient:
+  node:
+    ingress:
+      hostname: todo.local

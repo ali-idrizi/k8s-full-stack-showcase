@@ -2,8 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 
-const NATS_HOST = process.env.NATS_SERVICE_SERVICE_HOST;
-const NATS_PORT = process.env.NATS_SERVICE_SERVICE_PORT;
+const NATS_HOST = process.env.NATS_SERVICE_HOST;
+const NATS_PORT = process.env.NATS_SERVICE_PORT;
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {

@@ -1,0 +1,19 @@
+apiVersion: v2
+
+name: node
+description: Helm chart for releasing any image (using bitnami/node) and a mysql database (using bitnami/mysql)
+type: application
+
+version: 0.1.0
+appVersion: "0.1.0"
+
+dependencies:
+  - name: mysql
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.2.1
+    condition: mysql.enabled
+
+  - name: node
+    repository: https://charts.bitnami.com/bitnami
+    version: 18.1.16
+    condition: node.enabled

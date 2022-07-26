@@ -1,0 +1,43 @@
+auth:
+  mysql:
+    enabled: false
+  node:
+    nameOverride: auth
+    ingress:
+      enabled: false
+
+todoItem:
+  mysql:
+    enabled: false
+  node:
+    nameOverride: todo-item
+    ingress:
+      path: /api/todo-item 
+
+todoList:
+  mysql:
+    enabled: false
+  node:
+    nameOverride: todo-list
+    ingress:
+      path: /api/todo-list
+
+user:
+  mysql:
+    nameOverride: user-db
+  node:
+    nameOverride: user
+    containerPorts:
+      http: 3001
+    ingress:
+      path: /api/user
+
+webClient:
+  mysql:
+    enabled: false
+  node:
+    nameOverride: web-client
+    containerPorts:
+      http: 8080
+    ingress:
+      path: /

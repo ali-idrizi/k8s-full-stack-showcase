@@ -1,0 +1,18 @@
+dependencies:
+- name: node
+  repository: ""
+  version: 0.1.0
+- name: node
+  repository: ""
+  version: 0.1.0
+- name: node
+  repository: ""
+  version: 0.1.0
+- name: node
+  repository: ""
+  version: 0.1.0
+- name: node
+  repository: ""
+  version: 0.1.0
+digest: sha256:4f92dced93ec9c95047ce29b6b7f8bd1d074d694748e8d74ee7bfc6dffe86513
+generated: "2022-07-26T12:51:59.933302257+02:00"

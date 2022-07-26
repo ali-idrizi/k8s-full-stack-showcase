@@ -4,7 +4,7 @@
     {
       "label": "bridge-to-kubernetes.service",
       "type": "bridge-to-kubernetes.service",
-      "service": "user-service",
+      "service": "dev-user",
       "ports": [3001]
     }
   ]
