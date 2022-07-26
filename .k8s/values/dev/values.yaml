@@ -10,6 +10,8 @@ todoList:
 
 user:
   mysql:
+    enabled: true
+    nameOverride: user-db
     auth:
       database: user
   node:
