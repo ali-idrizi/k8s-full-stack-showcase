@@ -36,6 +36,8 @@ build:
         dockerfile: Dockerfile
 
 deploy:
+  logs:
+    prefix: auto
   helm:
     releases:
       - name: kong
