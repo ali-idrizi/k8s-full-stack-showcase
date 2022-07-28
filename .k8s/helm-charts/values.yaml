@@ -1,23 +1,25 @@
 auth:
-  node:
+  main:
     nameOverride: auth
     ingress:
       enabled: false
+    service:
+      enabled: false
 
 todoItem:
-  node:
+  main:
     nameOverride: todo-item
     ingress:
       path: /api/todo-item 
 
 todoList:
-  node:
+  main:
     nameOverride: todo-list
     ingress:
       path: /api/todo-list
 
 user:
-  node:
+  main:
     nameOverride: user
     containerPorts:
       http: 3001
@@ -25,7 +27,7 @@ user:
       path: /api/user
 
 webClient:
-  node:
+  main:
     nameOverride: web-client
     containerPorts:
       http: 8080

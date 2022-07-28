@@ -1,18 +1,18 @@
 dependencies:
-- name: node
+- name: app
   repository: ""
   version: 0.1.0
-- name: node
+- name: app
   repository: ""
   version: 0.1.0
-- name: node
+- name: app
   repository: ""
   version: 0.1.0
-- name: node
+- name: app
   repository: ""
   version: 0.1.0
-- name: node
+- name: app
   repository: ""
   version: 0.1.0
-digest: sha256:4f92dced93ec9c95047ce29b6b7f8bd1d074d694748e8d74ee7bfc6dffe86513
-generated: "2022-07-26T12:51:59.933302257+02:00"
+digest: sha256:3428bec7b748cf1288449c1e246d3fcda0b5c1142f2bddda771a7501d63a7c82
+generated: "2022-07-28T14:02:26.291591473+02:00"

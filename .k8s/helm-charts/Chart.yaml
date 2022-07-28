@@ -8,22 +8,22 @@ version: 0.1.0
 appVersion: "0.1.0"
 
 dependencies:
-  - name: node
+  - name: app
     version: 0.1.0
     alias: auth
 
-  - name: node
+  - name: app
     version: 0.1.0
     alias: todoItem
 
-  - name: node
+  - name: app
     version: 0.1.0
     alias: todoList
 
-  - name: node
+  - name: app
     version: 0.1.0
     alias: user
 
-  - name: node
+  - name: app
     version: 0.1.0
     alias: webClient

@@ -1,22 +1,17 @@
 mysql:
   enabled: false
 
-node:
+main:
   enabled: true
-  getAppFromExternalRepository: false
-  installCommand: []
-  command: []
-  extraEnvVarsSecret: '{{ include "common.names.fullname" . }}-env'
-  mongodb:
-    enabled: false
-  containerSecurityContext:
-    enabled: false
+  extraEnvFrom:
+    - secretRef:
+        name: '{{ include "common.names.fullname" . }}'
+        optional: true
   livenessProbe:
     enabled: false
   readinessProbe:
     enabled: false
   ingress:
-    enabled: true
     ingressClassName: kong
     annotations:
       konghq.com/strip-path: "true"

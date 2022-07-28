@@ -66,19 +66,19 @@ deploy:
         createNamespace: true
         artifactOverrides:
           auth:
-            node:
+            main:
               image: gcr.io/k8s-full-stack-starter/auth
           todoItem:
-            node:
+            main:
               image: gcr.io/k8s-full-stack-starter/todo-item
           todoList:
-            node:
+            main:
               image: gcr.io/k8s-full-stack-starter/todo-list
           user:
-            node:
+            main:
               image: gcr.io/k8s-full-stack-starter/user
           webClient:
-            node:
+            main:
               image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
           helm:
