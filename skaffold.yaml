@@ -46,6 +46,7 @@ deploy:
         version: 2.11.0
         namespace: kong
         createNamespace: true
+        upgradeOnChange: true
         valuesFiles:
           - .k8s/values/dev/kong-values.yaml
 
@@ -55,6 +56,7 @@ deploy:
         version: 7.3.7
         namespace: dev
         createNamespace: true
+        upgradeOnChange: true
         valuesFiles:
           - .k8s/values/dev/nats-values.yaml
         wait: true
