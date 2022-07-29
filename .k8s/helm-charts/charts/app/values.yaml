@@ -16,6 +16,8 @@ main:
     annotations:
       konghq.com/strip-path: "true"
     pathType: Prefix
+  service:
+    clusterIP: None
 
 externalDb:
   enabled: false
