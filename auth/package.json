@@ -21,7 +21,7 @@
   },
   "lint-staged": {
     "{src,test}/**/*.ts": "eslint",
-    "src/**/*.ts": "jest --bail --findRelatedTests"
+    "src/**/*.ts": "jest --bail --findRelatedTests --passWithNoTests"
   },
   "dependencies": {
     "@nestjs/common": "^8.4.7",

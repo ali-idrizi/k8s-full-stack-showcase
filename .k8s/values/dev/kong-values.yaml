@@ -1,0 +1,6 @@
+ingressController:
+  installCRDs: false
+proxy:
+  type: NodePort
+  http:
+    nodePort: 30000

@@ -1,0 +1,27 @@
+mysql:
+  enabled: false
+
+main:
+  enabled: true
+  dbSecretRef:
+    name: '{{ include "common.names.fullname" . }}'
+    optional: true
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  ingress:
+    ingressClassName: kong
+    annotations:
+      konghq.com/strip-path: "true"
+    pathType: Prefix
+  service:
+    clusterIP: None
+
+externalDb:
+  enabled: false
+  host: ""
+  port: ""
+  username: ""
+  password: ""
+  database: ""

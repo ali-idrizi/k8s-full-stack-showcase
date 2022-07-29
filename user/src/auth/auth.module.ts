@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { InternalServerErrorException, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices'
 import { Environment } from './auth.constant'
@@ -14,6 +14,10 @@ import { AuthService } from './auth.service'
       useFactory: (configService: ConfigService<AuthEnvironment>): ClientProxy => {
         const natsHost = configService.get(Environment.NATS_HOST, { infer: true })
         const natsPort = configService.get(Environment.NATS_PORT, { infer: true })
+
+        if (!natsHost || !natsPort) {
+          throw new InternalServerErrorException()
+        }
 
         return ClientProxyFactory.create({
           transport: Transport.NATS,
