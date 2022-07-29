@@ -1,6 +1,6 @@
 export const Environment = {
-  NATS_HOST: 'NATS_PORT_4222_TCP_ADDR',
-  NATS_PORT: 'NATS_PORT_4222_TCP_PORT',
+  NATS_HOST: 'NATS_HOST',
+  NATS_PORT: 'NATS_PORT',
 } as const
 
 export const Command = {

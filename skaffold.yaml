@@ -52,8 +52,8 @@ deploy:
 
       - name: nats
         remoteChart: nats
-        repo: https://charts.bitnami.com/bitnami
-        version: 7.3.7
+        repo: https://nats-io.github.io/k8s/helm/charts/
+        version: 0.17.3
         namespace: dev
         createNamespace: true
         upgradeOnChange: true

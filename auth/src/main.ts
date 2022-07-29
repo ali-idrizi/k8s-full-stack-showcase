@@ -5,8 +5,8 @@ import { AppModule } from './app.module'
 const CONNECT_RETRIES = 10
 const CONNECT_DELAY = 5000
 
-const NATS_HOST = process.env.NATS_PORT_4222_TCP_ADDR
-const NATS_PORT = process.env.NATS_PORT_4222_TCP_PORT
+const NATS_HOST = process.env.NATS_HOST
+const NATS_PORT = process.env.NATS_PORT
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {

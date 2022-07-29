@@ -1,4 +1,3 @@
 fullnameOverride: nats
-replicaCount: 3
-auth:
+natsbox:
   enabled: false

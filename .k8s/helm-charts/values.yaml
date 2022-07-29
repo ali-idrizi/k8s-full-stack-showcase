@@ -1,6 +1,9 @@
 auth:
   main:
     nameOverride: auth
+    extraEnvFrom:
+      - configMapRef:
+          name: nats
     ingress:
       enabled: false
     service:
@@ -21,6 +24,9 @@ todoList:
 user:
   main:
     nameOverride: user
+    extraEnvFrom:
+      - configMapRef:
+          name: nats
     containerPorts:
       http: 3001
     ingress:
@@ -33,3 +39,7 @@ webClient:
       http: 8080
     ingress:
       path: /
+
+nats:
+  host: nats
+  port: 4222
