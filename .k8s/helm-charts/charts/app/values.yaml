@@ -3,10 +3,9 @@ mysql:
 
 main:
   enabled: true
-  extraEnvFrom:
-    - secretRef:
-        name: '{{ include "common.names.fullname" . }}'
-        optional: true
+  dbSecretRef:
+    name: '{{ include "common.names.fullname" . }}'
+    optional: true
   livenessProbe:
     enabled: false
   readinessProbe:
