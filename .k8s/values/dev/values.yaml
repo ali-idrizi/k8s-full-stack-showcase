@@ -4,3 +4,10 @@ user:
     nameOverride: user-db
     auth:
       database: user
+
+auth:
+  mysql:
+    enabled: true
+    nameOverride: auth-db
+    auth:
+      database: auth
