@@ -3,9 +3,9 @@ import { ConfigModule } from '@nestjs/config'
 import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as JWT from 'jsonwebtoken'
-import { AppController } from './app.controller'
-import { IEnvironment, ITokenPair } from './app.interface'
-import { AppService } from './app.service'
+import { AuthController } from './auth.controller'
+import { IEnvironment, ITokenPair } from './auth.interface'
+import { AuthService } from './auth.service'
 
 const USER_ID = 'random-user-uuid'
 const ENV: IEnvironment = {
@@ -13,13 +13,13 @@ const ENV: IEnvironment = {
   JWT_SECRET: 'secret',
 }
 
-describe('AppController', () => {
-  let appController: AppController
+describe('AuthController', () => {
+  let authController: AuthController
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
+      controllers: [AuthController],
+      providers: [AuthService],
       imports: [
         ConfigModule.forRoot({
           ignoreEnvFile: true,
@@ -29,7 +29,7 @@ describe('AppController', () => {
       ],
     }).compile()
 
-    appController = app.get<AppController>(AppController)
+    authController = app.get<AuthController>(AuthController)
   })
 
   describe('/generate', () => {
@@ -41,12 +41,12 @@ describe('AppController', () => {
       expect(() => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        appController.generateTokenPair(undefined)
+        authController.generateTokenPair(undefined)
       }).toThrow(RpcException)
     })
 
     it('should generate token pair', () => {
-      tokens = appController.generateTokenPair(USER_ID)
+      tokens = authController.generateTokenPair(USER_ID)
       timestamp = Math.floor(new Date().getTime() / 1000)
 
       expect(tokens.jwt).toBeTruthy()

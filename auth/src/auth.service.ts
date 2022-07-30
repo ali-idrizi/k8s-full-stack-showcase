@@ -1,10 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
-import { IEnvironment, ITokenPair } from './app.interface'
-import { generateJwtToken, generateRefreshToken } from './utils/token'
+import { IEnvironment, ITokenPair } from './auth.interface'
+import { TokenUtil } from './common/utils/token.util'
 
 @Injectable()
-export class AppService {
+export class AuthService {
   constructor(private readonly configService: ConfigService<IEnvironment>) {}
 
   /**
@@ -22,8 +22,8 @@ export class AppService {
     }
 
     return {
-      jwt: generateJwtToken(userId, jwtExpiresIn, jwtSecret),
-      refreshToken: generateRefreshToken(),
+      jwt: TokenUtil.generateJwtToken(userId, jwtExpiresIn, jwtSecret),
+      refreshToken: TokenUtil.generateRefreshToken(),
     }
   }
 }
