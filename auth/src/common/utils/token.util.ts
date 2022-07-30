@@ -5,11 +5,11 @@ export const TokenUtil = {
   /**
    * Generate a signed JWT for a user
    *
-   * @param {string} userId the user ID field to be add to the payload as `uid`
-   * @param {number} expiresIn the expiration time of the generated JWT in seconds
-   * @param {string} secret the secret used to sign the JWT
+   * @param userId the user ID field to be add to the payload as `uid`
+   * @param expiresIn the expiration time of the generated JWT in seconds
+   * @param secret the secret used to sign the JWT
    *
-   * @returns {string} a signed JWT
+   * @returns a signed JWT
    */
   generateJwtToken: (userId: string, expiresIn: number, secret: string): string => {
     const jwtPayload = {

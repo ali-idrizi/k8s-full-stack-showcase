@@ -10,8 +10,8 @@ export class AuthService {
   /**
    * Generates a JWT/refresh-token pair for a user
    *
-   * @param {string} userId the user ID field to be add to the JWT payload as `uid`
-   * @returns {ITokenPair} an object containing the JWT and the refresh-token
+   * @param userId the user ID field to be add to the JWT payload as `uid`
+   * @returns an object containing the JWT and the refresh-token
    */
   generateTokenPair(userId: string): ITokenPair {
     const jwtExpiresIn = this.configService.get('JWT_EXPIRES_IN_SECONDS', { infer: true })
