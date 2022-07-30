@@ -1,6 +1,5 @@
 import { getMockRes } from '@jest-mock/express'
 import { ConfigModule } from '@nestjs/config'
-import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import * as JWT from 'jsonwebtoken'
 import { AuthController } from './auth.controller'
@@ -37,16 +36,8 @@ describe('AuthController', () => {
     let tokens: ITokenPair
     let timestamp: number
 
-    it('should throw RpcException', () => {
-      expect(() => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        authController.generateTokenPair(undefined)
-      }).toThrow(RpcException)
-    })
-
     it('should generate token pair', () => {
-      tokens = authController.generateTokenPair(USER_ID)
+      tokens = authController.generateTokenPair({ userId: USER_ID })
       timestamp = Math.floor(new Date().getTime() / 1000)
 
       expect(tokens.jwt).toBeTruthy()

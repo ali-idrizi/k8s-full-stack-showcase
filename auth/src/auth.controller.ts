@@ -1,18 +1,15 @@
 import { Controller } from '@nestjs/common'
-import { MessagePattern, Payload, RpcException } from '@nestjs/microservices'
+import { MessagePattern, Payload } from '@nestjs/microservices'
 import { ITokenPair } from './auth.interface'
 import { AuthService } from './auth.service'
+import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'generateTokenPair' })
-  generateTokenPair(@Payload('userId') userId: string): ITokenPair {
-    if (!userId) {
-      throw new RpcException('userId is required')
-    }
-
-    return this.authService.generateTokenPair(userId)
+  generateTokenPair(@Payload() payload: GenerateTokenPairDto): ITokenPair {
+    return this.authService.generateTokenPair(payload)
   }
 }
