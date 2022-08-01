@@ -18,7 +18,7 @@ export class AuthService {
       throw new RpcException('Environment variables missing')
     }
 
-    const jwt = TokenUtil.generateJwtToken(payload.userId, parseInt(jwtExpiresIn), jwtSecret)
+    const jwt = TokenUtil.generateJwt(payload.userId, parseInt(jwtExpiresIn), jwtSecret)
     const refreshToken = TokenUtil.generateRefreshToken()
 
     await this.prisma.auth.create({

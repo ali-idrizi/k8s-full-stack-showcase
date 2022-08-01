@@ -11,7 +11,7 @@ export const TokenUtil = {
    *
    * @returns a signed JWT
    */
-  generateJwtToken: (userId: string, expiresIn: number, secret: string): string => {
+  generateJwt: (userId: string, expiresIn: number, secret: string): string => {
     const jwtPayload = {
       uid: userId,
     }
