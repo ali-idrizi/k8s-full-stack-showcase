@@ -9,7 +9,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @MessagePattern({ cmd: 'generateTokenPair' })
-  generateTokenPair(@Payload() payload: GenerateTokenPairDto): ITokenPair {
+  generateTokenPair(@Payload() payload: GenerateTokenPairDto): Promise<ITokenPair> {
     return this.authService.generateTokenPair(payload)
   }
 }

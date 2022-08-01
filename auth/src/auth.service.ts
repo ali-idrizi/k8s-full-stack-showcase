@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { RpcException } from '@nestjs/microservices'
+import { PrismaService } from 'nestjs-prisma'
 import { IEnvironment, ITokenPair } from './auth.interface'
 import { TokenUtil } from './common/utils/token.util'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly configService: ConfigService<IEnvironment>) {}
+  constructor(private configService: ConfigService<IEnvironment>, private prisma: PrismaService) {}
 
-  generateTokenPair(payload: GenerateTokenPairDto): ITokenPair {
+  async generateTokenPair(payload: GenerateTokenPairDto): Promise<ITokenPair> {
     const jwtExpiresIn = this.configService.get('JWT_EXPIRES_IN_SECONDS', { infer: true })
     const jwtSecret = this.configService.get('JWT_SECRET', { infer: true })
 
@@ -17,9 +18,16 @@ export class AuthService {
       throw new RpcException('Environment variables missing')
     }
 
-    return {
-      jwt: TokenUtil.generateJwtToken(payload.userId, jwtExpiresIn, jwtSecret),
-      refreshToken: TokenUtil.generateRefreshToken(),
-    }
+    const jwt = TokenUtil.generateJwtToken(payload.userId, parseInt(jwtExpiresIn), jwtSecret)
+    const refreshToken = TokenUtil.generateRefreshToken()
+
+    await this.prisma.auth.create({
+      data: {
+        refreshToken,
+        userId: payload.userId,
+      },
+    })
+
+    return { jwt, refreshToken }
   }
 }
