@@ -4,6 +4,7 @@ import { ITokenPair, ValidateJwtRes } from './auth.interface'
 import { AuthService } from './auth.service'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 import { RefreshJwtDto } from './dto/refresh-jwt.dto'
+import { RemoveRefreshTokenDto } from './dto/remove-refresh-token.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
 
 @Controller()
@@ -24,5 +25,10 @@ export class AuthController {
   async refreshJwt(@Payload() payload: RefreshJwtDto): Promise<ITokenPair> {
     await this.authService.removeRefreshToken(payload.refreshToken)
     return this.authService.generateTokenPair({ userId: payload.userId })
+  }
+
+  @MessagePattern({ cmd: 'removeRefreshToken' })
+  removeRefreshToken(@Payload() payload: RemoveRefreshTokenDto): Promise<void> {
+    return this.authService.removeRefreshToken(payload.refreshToken)
   }
 }

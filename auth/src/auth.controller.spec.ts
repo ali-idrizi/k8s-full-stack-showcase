@@ -16,6 +16,7 @@ const ENV: IEnvironment = {
 
 describe('AuthController', () => {
   let authController: AuthController
+  let authService: AuthService
   let prismaMockContext: PrismaMockContext
 
   beforeEach(async () => {
@@ -46,6 +47,7 @@ describe('AuthController', () => {
     }).compile()
 
     authController = app.get<AuthController>(AuthController)
+    authService = app.get<AuthService>(AuthService)
   })
 
   describe('generateTokenPair', () => {
@@ -116,17 +118,27 @@ describe('AuthController', () => {
   })
 
   describe('refreshJwt', () => {
-    it('should delete refresh token and return a new token pair', async () => {
-      prismaMockContext.prisma.auth.delete.mockReturnThis()
+    it('should delete the refresh token and return a new token pair', async () => {
+      jest.spyOn(authService, 'removeRefreshToken')
 
       const refreshToken = 'random-refresh-token'
       const res = await authController.refreshJwt({ refreshToken, userId: USER_ID })
 
-      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledTimes(1)
-      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledWith({ where: { refreshToken } })
-
+      expect(authService.removeRefreshToken).toHaveBeenCalledTimes(1)
       expect(res.jwt).toBeTruthy()
       expect(res.refreshToken).toBeTruthy()
+    })
+  })
+
+  describe('removeRefreshToken', () => {
+    it('should delete the refresh token', async () => {
+      prismaMockContext.prisma.auth.delete.mockReturnThis()
+
+      const refreshToken = 'random-refresh-token'
+      await authController.removeRefreshToken({ refreshToken })
+
+      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledTimes(1)
+      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledWith({ where: { refreshToken } })
     })
   })
 })
