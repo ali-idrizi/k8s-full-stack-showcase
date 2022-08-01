@@ -31,7 +31,7 @@ describe('AuthController', () => {
     authController = app.get<AuthController>(AuthController)
   })
 
-  describe('/generate', () => {
+  describe('generateTokenPair', () => {
     const mockRes = getMockRes()
     let tokens: ITokenPair
     let timestamp: number
