@@ -114,4 +114,19 @@ describe('AuthController', () => {
       }).toThrow(RpcException)
     })
   })
+
+  describe('refreshJwt', () => {
+    it('should delete refresh token and return a new token pair', async () => {
+      prismaMockContext.prisma.auth.delete.mockReturnThis()
+
+      const refreshToken = 'random-refresh-token'
+      const res = await authController.refreshJwt({ refreshToken, userId: USER_ID })
+
+      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledTimes(1)
+      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledWith({ where: { refreshToken } })
+
+      expect(res.jwt).toBeTruthy()
+      expect(res.refreshToken).toBeTruthy()
+    })
+  })
 })

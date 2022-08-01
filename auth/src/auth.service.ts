@@ -56,4 +56,12 @@ export class AuthService {
       payload: jwtPayload,
     }
   }
+
+  async removeRefreshToken(refreshToken: string): Promise<void> {
+    await this.prisma.auth.delete({
+      where: {
+        refreshToken,
+      },
+    })
+  }
 }

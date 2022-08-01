@@ -3,6 +3,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices'
 import { ITokenPair, ValidateJwtRes } from './auth.interface'
 import { AuthService } from './auth.service'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
+import { RefreshJwtDto } from './dto/refresh-jwt.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
 
 @Controller()
@@ -17,5 +18,11 @@ export class AuthController {
   @MessagePattern({ cmd: 'validateJwt' })
   validateJwt(@Payload() payload: ValidateJwtDto): ValidateJwtRes {
     return this.authService.validateJwt(payload)
+  }
+
+  @MessagePattern({ cmd: 'refreshJwt' })
+  async refreshJwt(@Payload() payload: RefreshJwtDto): Promise<ITokenPair> {
+    await this.authService.removeRefreshToken(payload.refreshToken)
+    return this.authService.generateTokenPair({ userId: payload.userId })
   }
 }

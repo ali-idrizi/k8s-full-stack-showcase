@@ -2,7 +2,7 @@ import { IsDefined } from 'class-validator'
 
 export class ValidateJwtDto {
   @IsDefined({
-    message: 'JWT is required',
+    message: 'jwt is required',
   })
   jwt: string
 }
