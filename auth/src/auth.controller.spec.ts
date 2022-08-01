@@ -1,11 +1,12 @@
 import { ConfigModule } from '@nestjs/config'
+import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
-import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthController } from './auth.controller'
 import { IEnvironment, ITokenPair } from './auth.interface'
 import { AuthService } from './auth.service'
 import { createMockContext, PrismaMockContext } from './common/test/prisma.mock-context'
+import { JwtStatus, TokenUtil } from './common/utils/token.util'
 
 const USER_ID = 'random-user-uuid'
 const ENV: IEnvironment = {
@@ -70,15 +71,47 @@ describe('AuthController', () => {
     })
 
     it('should be a valid JWT with correct expiration', () => {
-      const decoded = JWT.verify(tokens.jwt, ENV.JWT_SECRET) as JWT.JwtPayload
+      const valid = TokenUtil.verfiyJwt(tokens.jwt, ENV.JWT_SECRET)
+      const payload = TokenUtil.decodeJwt(tokens.jwt)
 
-      expect(decoded.exp).toBeTruthy()
-      expect(decoded.uid).toBeTruthy()
+      expect(valid).toEqual(JwtStatus.VALID)
+      expect(payload.exp).toBeTruthy()
+      expect(payload.uid).toBeTruthy()
 
-      const expiresIn = (decoded.exp as number) - timestamp
+      const expiresIn = (payload.exp as number) - timestamp
 
-      expect(decoded.uid).toEqual(USER_ID)
+      expect(payload.uid).toEqual(USER_ID)
       expect(expiresIn).toEqual(parseInt(ENV.JWT_EXPIRES_IN_SECONDS))
+    })
+  })
+
+  describe('validateJwt', () => {
+    it('should verify a valid JWT', () => {
+      const jwt = TokenUtil.generateJwt(USER_ID, 60, ENV.JWT_SECRET)
+      const res = authController.validateJwt({ jwt })
+
+      expect(res.expired).toEqual(false)
+      expect(res.payload.uid).toEqual(USER_ID)
+    })
+
+    it('should return expired if JWT is expired', () => {
+      const expiredJwt = TokenUtil.generateJwt(USER_ID, 0, ENV.JWT_SECRET)
+      const res = authController.validateJwt({ jwt: expiredJwt })
+
+      expect(res.expired).toEqual(true)
+      expect(res.payload.uid).toEqual(USER_ID)
+    })
+
+    it('should throw if JWT is invalid', () => {
+      const invalidSecretJwt = TokenUtil.generateJwt(USER_ID, 60, 'invalid-secret')
+
+      expect(() => {
+        authController.validateJwt({ jwt: invalidSecretJwt })
+      }).toThrow(RpcException)
+
+      expect(() => {
+        authController.validateJwt({ jwt: 'invalid-jwt' })
+      }).toThrow(RpcException)
     })
   })
 })
