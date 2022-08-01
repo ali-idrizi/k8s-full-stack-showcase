@@ -1,7 +1,5 @@
-import { getMockRes } from '@jest-mock/express'
 import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Auth } from '@prisma/client'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthController } from './auth.controller'
@@ -50,7 +48,6 @@ describe('AuthController', () => {
   })
 
   describe('generateTokenPair', () => {
-    const mockRes = getMockRes()
     let tokens: ITokenPair
     let timestamp: number
 
@@ -83,7 +80,5 @@ describe('AuthController', () => {
       expect(decoded.uid).toEqual(USER_ID)
       expect(expiresIn).toEqual(parseInt(ENV.JWT_EXPIRES_IN_SECONDS))
     })
-
-    mockRes.mockClear()
   })
 })
