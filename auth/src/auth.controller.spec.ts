@@ -3,13 +3,13 @@ import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthController } from './auth.controller'
-import { IEnvironment, TokenPair } from './auth.interface'
+import { AuthEnvironment, TokenPair } from './auth.interface'
 import { AuthService } from './auth.service'
 import { createMockContext, PrismaMockContext } from './common/test/prisma.mock-context'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 
 const USER_ID = 'random-user-uuid'
-const ENV: IEnvironment = {
+const ENV: AuthEnvironment = {
   JWT_EXPIRES_IN_SECONDS: '900',
   JWT_SECRET: 'secret',
 }
@@ -34,7 +34,7 @@ describe('AuthController', () => {
         ConfigModule.forRoot({
           ignoreEnvFile: true,
           load: [
-            (): IEnvironment => {
+            (): AuthEnvironment => {
               // Delete variables defined in `ENV` from `process.env`
               // TODO: Use `ignoreEnvVarsOnGet` when https://github.com/nestjs/config/pull/997 is merged
               Object.keys(ENV).forEach((key) => delete process.env[key])

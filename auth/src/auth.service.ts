@@ -4,7 +4,8 @@ import { RpcException } from '@nestjs/microservices'
 import { Prisma } from '@prisma/client'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
-import { IEnvironment, TokenPair, RemoveRefreshTokenRes, ValidateJwtRes } from './auth.interface'
+import { Environment } from './auth.constant'
+import { AuthEnvironment, RemoveRefreshTokenRes, TokenPair, ValidateJwtRes } from './auth.interface'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
@@ -14,9 +15,12 @@ export class AuthService {
   jwtSecret: string
   jwtExpiresIn: number
 
-  constructor(private configService: ConfigService<IEnvironment>, private prisma: PrismaService) {
-    const jwtSecret = this.configService.get('JWT_SECRET', { infer: true })
-    const jwtExpiresIn = this.configService.get('JWT_EXPIRES_IN_SECONDS', { infer: true })
+  constructor(
+    private configService: ConfigService<AuthEnvironment>,
+    private prisma: PrismaService,
+  ) {
+    const jwtSecret = this.configService.get(Environment.JWT_SECRET, { infer: true })
+    const jwtExpiresIn = this.configService.get(Environment.JWT_EXPIRES_IN_SECONDS, { infer: true })
 
     if (!jwtSecret || !jwtExpiresIn) {
       throw new RpcException('Environment variables missing')

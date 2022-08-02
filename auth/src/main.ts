@@ -1,13 +1,14 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import { MicroserviceOptions, RpcException, Transport } from '@nestjs/microservices'
+import { Environment } from './auth.constant'
 import { AuthModule } from './auth.module'
 
 const CONNECT_RETRIES = 10
 const CONNECT_DELAY = 5000
 
-const NATS_HOST = process.env.NATS_HOST
-const NATS_PORT = process.env.NATS_PORT
+const NATS_HOST = process.env[Environment.NATS_HOST]
+const NATS_PORT = process.env[Environment.NATS_PORT]
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
