@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { RpcException } from '@nestjs/microservices'
-import { Prisma } from '@prisma/client'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
 import { AuthEnvironment, TokenPair, ValidateJwtRes } from './auth.interface'
+import { ErrorUtil } from './common/utils/error.util'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
+import { RefreshJwtDto } from './dto/refresh-jwt.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
 
 @Injectable()
@@ -62,12 +63,26 @@ export class AuthService {
     }
   }
 
+  async refreshJwt(payload: RefreshJwtDto): Promise<TokenPair> {
+    try {
+      await this.prisma.auth.delete({ where: { refreshToken: payload.refreshToken } })
+    } catch (error) {
+      if (ErrorUtil.isNotFoundError(error)) {
+        throw new RpcException('Invalid refresh token')
+      }
+
+      throw error
+    }
+
+    return this.generateTokenPair({ userId: payload.userId })
+  }
+
   async removeRefreshToken(refreshToken: string): Promise<void> {
     try {
       await this.prisma.auth.delete({ where: { refreshToken } })
     } catch (error) {
       // don't throw when the refresh token does not exist in the database
-      if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2025') {
+      if (!ErrorUtil.isNotFoundError(error)) {
         throw error
       }
     }

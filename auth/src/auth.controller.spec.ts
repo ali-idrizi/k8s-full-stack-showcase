@@ -1,6 +1,7 @@
 import { ConfigModule } from '@nestjs/config'
 import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthController } from './auth.controller'
 import { AuthEnvironment, TokenPair } from './auth.interface'
@@ -8,6 +9,7 @@ import { AuthService } from './auth.service'
 import { createMockContext, PrismaMockContext } from './common/test/prisma.mock-context'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 
+const REFRESH_TOKEN = 'random-refresh-token'
 const USER_ID = 'random-user-uuid'
 const ENV: AuthEnvironment = {
   JWT_EXPIRES_IN_SECONDS: '900',
@@ -16,7 +18,6 @@ const ENV: AuthEnvironment = {
 
 describe('AuthController', () => {
   let authController: AuthController
-  let authService: AuthService
   let prismaMockContext: PrismaMockContext
 
   beforeEach(async () => {
@@ -47,7 +48,6 @@ describe('AuthController', () => {
     }).compile()
 
     authController = app.get<AuthController>(AuthController)
-    authService = app.get<AuthService>(AuthService)
   })
 
   describe('generateTokenPair', () => {
@@ -118,13 +118,26 @@ describe('AuthController', () => {
   })
 
   describe('refreshJwt', () => {
+    it('should throw if refreshToken is invalid', () => {
+      prismaMockContext.prisma.auth.delete.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Row does not exist in the database', 'P2025', ''),
+      )
+
+      expect(async () => {
+        await authController.refreshJwt({ refreshToken: REFRESH_TOKEN, userId: USER_ID })
+      }).rejects.toThrow(RpcException)
+    })
+
+    // TODO: Implement expired refresh token test
+
     it('should delete the refresh token and return a new token pair', async () => {
-      jest.spyOn(authService, 'removeRefreshToken')
+      prismaMockContext.prisma.auth.delete.mockReturnThis()
 
-      const refreshToken = 'random-refresh-token'
-      const res = await authController.refreshJwt({ refreshToken, userId: USER_ID })
+      const res = await authController.refreshJwt({ refreshToken: REFRESH_TOKEN, userId: USER_ID })
 
-      expect(authService.removeRefreshToken).toHaveBeenCalledTimes(1)
+      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledWith({
+        where: { refreshToken: REFRESH_TOKEN },
+      })
       expect(res.jwt).toBeTruthy()
       expect(res.refreshToken).toBeTruthy()
     })
@@ -134,11 +147,22 @@ describe('AuthController', () => {
     it('should delete the refresh token', async () => {
       prismaMockContext.prisma.auth.delete.mockReturnThis()
 
-      const refreshToken = 'random-refresh-token'
-      await authController.removeRefreshToken({ refreshToken })
+      await authController.removeRefreshToken({ refreshToken: REFRESH_TOKEN })
 
       expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledTimes(1)
-      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledWith({ where: { refreshToken } })
+      expect(prismaMockContext.prisma.auth.delete).toHaveBeenCalledWith({
+        where: { refreshToken: REFRESH_TOKEN },
+      })
+    })
+
+    it('should not throw when the refresh token does not exist', async () => {
+      prismaMockContext.prisma.auth.delete.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError('Row does not exist in the database', 'P2025', ''),
+      )
+
+      expect(async () => {
+        await authController.removeRefreshToken({ refreshToken: REFRESH_TOKEN })
+      }).not.toThrow()
     })
   })
 })

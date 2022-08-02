@@ -23,9 +23,8 @@ export class AuthController {
   }
 
   @MessagePattern({ cmd: Command.REFRESH_JWT })
-  async refreshJwt(@Payload() payload: RefreshJwtDto): Promise<TokenPair> {
-    await this.authService.removeRefreshToken(payload.refreshToken)
-    return this.authService.generateTokenPair({ userId: payload.userId })
+  refreshJwt(@Payload() payload: RefreshJwtDto): Promise<TokenPair> {
+    return this.authService.refreshJwt(payload)
   }
 
   @EventPattern({ cmd: Command.REMOVE_REFRESH_TOKEN })
