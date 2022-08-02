@@ -4,7 +4,7 @@ import { RpcException } from '@nestjs/microservices'
 import { Prisma } from '@prisma/client'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
-import { IEnvironment, ITokenPair, RemoveRefreshTokenRes, ValidateJwtRes } from './auth.interface'
+import { IEnvironment, TokenPair, RemoveRefreshTokenRes, ValidateJwtRes } from './auth.interface'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
@@ -26,7 +26,7 @@ export class AuthService {
     this.jwtExpiresIn = parseInt(jwtExpiresIn)
   }
 
-  async generateTokenPair(payload: GenerateTokenPairDto): Promise<ITokenPair> {
+  async generateTokenPair(payload: GenerateTokenPairDto): Promise<TokenPair> {
     const jwt = TokenUtil.generateJwt(payload.userId, this.jwtExpiresIn, this.jwtSecret)
     const refreshToken = TokenUtil.generateRefreshToken()
 

@@ -1,6 +1,6 @@
 import * as JWT from 'jsonwebtoken'
 
-export interface ITokenPair {
+export interface TokenPair {
   readonly jwt: string
   readonly refreshToken: string
 }

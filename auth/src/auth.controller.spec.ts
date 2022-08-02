@@ -3,7 +3,7 @@ import { RpcException } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthController } from './auth.controller'
-import { IEnvironment, ITokenPair } from './auth.interface'
+import { IEnvironment, TokenPair } from './auth.interface'
 import { AuthService } from './auth.service'
 import { createMockContext, PrismaMockContext } from './common/test/prisma.mock-context'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
@@ -51,7 +51,7 @@ describe('AuthController', () => {
   })
 
   describe('generateTokenPair', () => {
-    let tokens: ITokenPair
+    let tokens: TokenPair
     let timestamp: number
 
     it('should generate token pair and store the refreshToken', async () => {
