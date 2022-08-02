@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
-import { AuthEnvironment, RemoveRefreshTokenRes, TokenPair, ValidateJwtRes } from './auth.interface'
+import { AuthEnvironment, TokenPair, ValidateJwtRes } from './auth.interface'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
@@ -62,18 +62,14 @@ export class AuthService {
     }
   }
 
-  async removeRefreshToken(refreshToken: string): Promise<RemoveRefreshTokenRes> {
+  async removeRefreshToken(refreshToken: string): Promise<void> {
     try {
       await this.prisma.auth.delete({ where: { refreshToken } })
     } catch (error) {
-      // succeed even when the refresh token does not exist in the database
-      if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2025') {
-        return { success: true }
+      // don't throw when the refresh token does not exist in the database
+      if (!(error instanceof Prisma.PrismaClientKnownRequestError) || error.code !== 'P2025') {
+        throw error
       }
-
-      throw error
     }
-
-    return { success: true }
   }
 }

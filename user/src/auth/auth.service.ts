@@ -16,11 +16,7 @@ export class AuthService {
     return firstValueFrom(tokens)
   }
 
-  async removeRefreshToken(refreshToken: string): Promise<void> {
-    const res = this.authClient
-      .send<void>({ cmd: Command.REMOVE_REFRESH_TOKEN }, { refreshToken })
-      .pipe(timeout(10000))
-
-    return firstValueFrom(res)
+  removeRefreshToken(refreshToken: string): void {
+    this.authClient.emit({ cmd: Command.REMOVE_REFRESH_TOKEN }, { refreshToken })
   }
 }

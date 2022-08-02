@@ -9,7 +9,7 @@ export class LogoutController {
 
   @Post('/')
   @HttpCode(HttpStatus.OK)
-  logout(@Body() logoutDto: LogoutDto): Promise<Response> {
+  logout(@Body() logoutDto: LogoutDto): Response {
     return this.logoutService.logout(logoutDto)
   }
 }
