@@ -8,6 +8,7 @@ export interface TokenPair {
 
 export interface AuthEnvironment {
   [Environment.JWT_EXPIRES_IN_SECONDS]: string
+  [Environment.REFRESH_TOKEN_EXPIRES_IN_SECONDS]: string
   [Environment.JWT_SECRET]: string
 }
 

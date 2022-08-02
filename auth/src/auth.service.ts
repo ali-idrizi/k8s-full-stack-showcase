@@ -5,6 +5,7 @@ import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
 import { AuthEnvironment, TokenPair, ValidateJwtRes } from './auth.interface'
+import { DateUtil } from './common/utils/date.util'
 import { ErrorUtil } from './common/utils/error.util'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
@@ -15,6 +16,7 @@ import { ValidateJwtDto } from './dto/validate-jwt.dto'
 export class AuthService {
   jwtSecret: string
   jwtExpiresIn: number
+  refreshTokenExpiresIn: number
 
   constructor(
     private configService: ConfigService<AuthEnvironment>,
@@ -22,13 +24,18 @@ export class AuthService {
   ) {
     const jwtSecret = this.configService.get(Environment.JWT_SECRET, { infer: true })
     const jwtExpiresIn = this.configService.get(Environment.JWT_EXPIRES_IN_SECONDS, { infer: true })
+    const refreshTokenExpiresIn = this.configService.get(
+      Environment.REFRESH_TOKEN_EXPIRES_IN_SECONDS,
+      { infer: true },
+    )
 
-    if (!jwtSecret || !jwtExpiresIn) {
+    if (!jwtSecret || !jwtExpiresIn || !refreshTokenExpiresIn) {
       throw new RpcException('Environment variables missing')
     }
 
     this.jwtSecret = jwtSecret
     this.jwtExpiresIn = parseInt(jwtExpiresIn)
+    this.refreshTokenExpiresIn = parseInt(refreshTokenExpiresIn)
   }
 
   async generateTokenPair(payload: GenerateTokenPairDto): Promise<TokenPair> {
@@ -65,7 +72,12 @@ export class AuthService {
 
   async refreshJwt(payload: RefreshJwtDto): Promise<TokenPair> {
     try {
-      await this.prisma.auth.delete({ where: { refreshToken: payload.refreshToken } })
+      const auth = await this.prisma.auth.delete({ where: { refreshToken: payload.refreshToken } })
+
+      const isExpired = DateUtil.isMoreThanSecondsAgo(auth.createdAt, this.refreshTokenExpiresIn)
+      if (isExpired) {
+        throw new RpcException('Refresh token is expired')
+      }
     } catch (error) {
       if (ErrorUtil.isNotFoundError(error)) {
         throw new RpcException('Invalid refresh token')
