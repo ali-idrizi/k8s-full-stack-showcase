@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common'
 import { MessagePattern, Payload } from '@nestjs/microservices'
-import { ITokenPair, ValidateJwtRes } from './auth.interface'
+import { ITokenPair, RemoveRefreshTokenRes, ValidateJwtRes } from './auth.interface'
 import { AuthService } from './auth.service'
 import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
 import { RefreshJwtDto } from './dto/refresh-jwt.dto'
@@ -28,7 +28,7 @@ export class AuthController {
   }
 
   @MessagePattern({ cmd: 'removeRefreshToken' })
-  removeRefreshToken(@Payload() payload: RemoveRefreshTokenDto): Promise<void> {
+  removeRefreshToken(@Payload() payload: RemoveRefreshTokenDto): Promise<RemoveRefreshTokenRes> {
     return this.authService.removeRefreshToken(payload.refreshToken)
   }
 }

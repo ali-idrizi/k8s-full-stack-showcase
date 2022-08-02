@@ -14,3 +14,7 @@ export interface ValidateJwtRes {
   expired: boolean
   payload: JWT.JwtPayload
 }
+
+export interface RemoveRefreshTokenRes {
+  success: boolean
+}
