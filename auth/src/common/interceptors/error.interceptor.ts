@@ -23,6 +23,7 @@ export class ErrorInterceptor implements NestInterceptor {
             return throwError(
               () =>
                 new RpcException({
+                  status: 'error',
                   message: response?.message ?? 'An unknown error occurred',
                   error: response?.error ?? undefined,
                 }),
