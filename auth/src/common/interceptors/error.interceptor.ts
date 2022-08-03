@@ -12,27 +12,28 @@ import { catchError, Observable, throwError } from 'rxjs'
 export class ErrorInterceptor implements NestInterceptor {
   intercept(_context: ExecutionContext, next: CallHandler<unknown>): Observable<unknown> {
     return next.handle().pipe(
-      catchError((error) => {
-        switch (true) {
-          case error instanceof RpcException:
-            return throwError(() => error)
-
-          case error instanceof BadRequestException:
-            const response = error.getResponse()
-
-            return throwError(
-              () =>
-                new RpcException({
-                  status: 'error',
-                  message: response?.message ?? 'An unknown error occurred',
-                  error: response?.error ?? undefined,
-                }),
-            )
-
-          default:
-            console.error(error)
-            return throwError(() => new RpcException('An unknown error occurred'))
+      catchError((error: unknown) => {
+        if (error instanceof RpcException) {
+          return throwError(() => error)
         }
+
+        if (error instanceof BadRequestException) {
+          let response = error.getResponse() as Record<string, unknown> | string
+
+          if (typeof response !== 'string') {
+            response = {
+              status: 'error',
+              message: response?.message ?? 'An unknown error occurred',
+              error: response?.error ?? undefined,
+            }
+          }
+
+          console.error(response)
+          return throwError(() => new RpcException(response))
+        }
+
+        console.error(error)
+        return throwError(() => new RpcException('An unknown error occurred'))
       }),
     )
   }
