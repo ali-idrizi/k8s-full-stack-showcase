@@ -1,8 +1,9 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { MicroserviceOptions, RpcException, Transport } from '@nestjs/microservices'
+import { MicroserviceOptions, Transport } from '@nestjs/microservices'
 import { Environment } from './auth.constant'
 import { AuthModule } from './auth.module'
+import { ErrorInterceptor } from './common/interceptors/error.interceptor'
 
 const CONNECT_RETRIES = 10
 const CONNECT_DELAY = 5000
@@ -21,20 +22,9 @@ async function bootstrap(): Promise<void> {
     },
   })
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      stopAtFirstError: true,
-      exceptionFactory: (errors): RpcException => {
-        const error = errors.map((validatonError) => ({
-          target: validatonError.target?.constructor?.name ?? null,
-          message: validatonError.constraints,
-        }))
-
-        return new RpcException(error)
-      },
-    }),
-  )
+  app
+    .useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true }))
+    .useGlobalInterceptors(new ErrorInterceptor())
 
   await app.listen()
 }
