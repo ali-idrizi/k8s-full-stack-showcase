@@ -23,8 +23,8 @@ export class ErrorInterceptor implements NestInterceptor {
           if (typeof response !== 'string') {
             response = {
               status: 'error',
-              message: response?.message ?? 'An unknown error occurred',
-              error: response?.error ?? undefined,
+              message: response.message ?? 'An unknown error occurred',
+              error: response.error ?? undefined,
             }
           }
 
