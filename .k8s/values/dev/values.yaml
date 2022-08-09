@@ -1,6 +1,15 @@
 user:
   mysql:
     enabled: true
+    createShadowDb: true
     nameOverride: user-db
     auth:
       database: user
+
+auth:
+  mysql:
+    enabled: true
+    createShadowDb: true
+    nameOverride: auth-db
+    auth:
+      database: auth

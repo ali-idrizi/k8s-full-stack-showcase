@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Auth {
+  refreshToken String   @id
+  userId       String
+  createdAt    DateTime @default(now())
+
+  @@map("auth")
+}

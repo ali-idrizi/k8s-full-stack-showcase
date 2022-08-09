@@ -7,6 +7,14 @@
       "request": "launch",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start:debug"]
+    },
+    {
+      "name": "Test Debug",
+      "type": "pwa-node",
+      "request": "launch",
+      "outputCapture": "std",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test:debug"]
     }
   ]
 }

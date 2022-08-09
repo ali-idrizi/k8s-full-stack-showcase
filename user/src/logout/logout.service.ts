@@ -7,8 +7,8 @@ import { Response } from './logout.interface'
 export class LogoutService {
   constructor(private authService: AuthService) {}
 
-  async logout(logoutDto: LogoutDto): Promise<Response> {
-    await this.authService.removeRefreshToken(logoutDto.refreshToken)
+  logout(logoutDto: LogoutDto): Response {
+    this.authService.removeRefreshToken(logoutDto.refreshToken)
 
     return {
       success: true,
