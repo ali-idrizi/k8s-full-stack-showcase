@@ -14,9 +14,9 @@ import { ValidateJwtDto } from './dto/validate-jwt.dto'
 
 @Injectable()
 export class AuthService {
-  jwtSecret: string
-  jwtExpiresIn: number
-  refreshTokenExpiresIn: number
+  private jwtSecret: string
+  private jwtExpiresIn: number
+  private refreshTokenExpiresIn: number
 
   constructor(
     private configService: ConfigService<AuthEnvironment>,
