@@ -50,8 +50,8 @@ extraEnvVars: []
 ## @param extraEnvFrom Extra environmant variables to be set using envFrom, from either ConfigMap or secret
 ##
 extraEnvFrom: []
-
-##db
+## @param db Credientials for the database connection
+##
 db:
   enabled: false
   host: ""
