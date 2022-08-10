@@ -11,7 +11,7 @@ build:
         target: dev
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             dest: .
     - image: gcr.io/k8s-full-stack-starter/todo-item
       context: todo-item
@@ -28,7 +28,7 @@ build:
         target: dev
       sync:
         manual:
-          - src: 'src/**/*.ts'
+          - src: "src/**/*.ts"
             dest: .
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
@@ -61,33 +61,38 @@ deploy:
           - .k8s/values/dev/nats-values.yaml
         wait: true
 
-      - name: dev
+      - name: dev-db
         useHelmSecrets: true
-        chartPath: .k8s/helm-charts
+        chartPath: .k8s/helm-charts/db
+        namespace: dev
+        createNamespace: true
+        valuesFiles:
+          - .k8s/values/dev/db-values.yaml
+          - .k8s/values/dev/db-secrets.yaml
+        wait: true
+
+      - name: dev-app
+        useHelmSecrets: true
+        chartPath: .k8s/helm-charts/app
         namespace: dev
         createNamespace: true
         artifactOverrides:
           auth:
-            main:
-              image: gcr.io/k8s-full-stack-starter/auth
+            image: gcr.io/k8s-full-stack-starter/auth
           todoItem:
-            main:
-              image: gcr.io/k8s-full-stack-starter/todo-item
+            image: gcr.io/k8s-full-stack-starter/todo-item
           todoList:
-            main:
-              image: gcr.io/k8s-full-stack-starter/todo-list
+            image: gcr.io/k8s-full-stack-starter/todo-list
           user:
-            main:
-              image: gcr.io/k8s-full-stack-starter/user
+            image: gcr.io/k8s-full-stack-starter/user
           webClient:
-            main:
-              image: gcr.io/k8s-full-stack-starter/web-client
+            image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
           helm:
             explicitRegistry: true
         valuesFiles:
-          - .k8s/values/dev/values.yaml
-          - .k8s/values/dev/secrets.yaml
+          - .k8s/values/dev/app-values.yaml
+          - .k8s/values/dev/app-secrets.yaml
 
 profiles:
   - name: dev

@@ -1,0 +1,18 @@
+dependencies:
+- name: main
+  repository: ""
+  version: 0.1.0
+- name: main
+  repository: ""
+  version: 0.1.0
+- name: main
+  repository: ""
+  version: 0.1.0
+- name: main
+  repository: ""
+  version: 0.1.0
+- name: main
+  repository: ""
+  version: 0.1.0
+digest: sha256:aac240f0b245288712273aff229831649ae19d1983d29713f71da1f62b7a17f0
+generated: "2022-08-10T11:35:49.598333614+02:00"

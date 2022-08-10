@@ -1,0 +1,58 @@
+default: &default
+  livenessProbe:
+    enabled: false
+  readinessProbe:
+    enabled: false
+  ingress: &ingress
+    ingressClassName: kong
+    annotations:
+      konghq.com/strip-path: "true"
+    pathType: Prefix
+  service: &service
+    clusterIP: None
+
+auth:
+  <<: *default
+  extraEnvFrom:
+    - configMapRef:
+        name: nats
+  ingress:
+    enabled: false
+
+todoItem:
+  <<: *default
+  nameOverride: todo-item
+  ingress:
+    <<: *ingress
+    path: /api/todo-item
+
+todoList:
+  <<: *default
+  nameOverride: todo-list
+  ingress:
+    <<: *ingress
+    path: /api/todo-list
+
+user:
+  <<: *default
+  extraEnvFrom:
+    - configMapRef:
+        name: nats
+  containerPorts:
+    http: 3001
+  ingress:
+    <<: *ingress
+    path: /api/user
+
+webClient:
+  <<: *default
+  nameOverride: web-client
+  containerPorts:
+    http: 8080
+  ingress:
+    <<: *ingress
+    path: /
+
+nats:
+  host: nats
+  port: 4222

@@ -1,29 +1,25 @@
 apiVersion: v2
 
-name: helm-charts
-description: Helm chart for releasing k8s-full-stack-starter
+name: app
+description: Helm chart for releasing all the necessary microservices
 type: application
 
 version: 0.1.0
 appVersion: "0.1.0"
 
 dependencies:
-  - name: app
+  - name: main
     version: 0.1.0
     alias: auth
-
-  - name: app
+  - name: main
     version: 0.1.0
     alias: todoItem
-
-  - name: app
+  - name: main
     version: 0.1.0
     alias: todoList
-
-  - name: app
+  - name: main
     version: 0.1.0
     alias: user
-
-  - name: app
+  - name: main
     version: 0.1.0
     alias: webClient

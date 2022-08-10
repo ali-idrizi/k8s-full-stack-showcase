@@ -47,13 +47,18 @@ hostAliases: []
 ##    value: true
 ##
 extraEnvVars: []
-## @param dbSecretRef secretRef that contains database credentials DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE
-## Will be added as enviroment variables
-##
-dbSecretRef: {}
 ## @param extraEnvFrom Extra environmant variables to be set using envFrom, from either ConfigMap or secret
 ##
 extraEnvFrom: []
+
+##db
+db:
+  enabled: false
+  host: ""
+  port: 3306
+  username: ""
+  password: ""
+  database: ""
 
 ## @section Node deployment parameters
 
