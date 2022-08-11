@@ -3,11 +3,14 @@ kind: Config
 metadata:
   name: todo-app
 build:
+  local:
+    concurrency: 3
+    useBuildkit: true
   artifacts:
     - image: gcr.io/k8s-full-stack-starter/auth
       context: auth
       docker:
-        dockerfile: Dockerfile
+        dockerfile: .k8s/docker/Dockerfile.nestjs
         target: dev
       sync:
         manual:
@@ -24,7 +27,7 @@ build:
     - image: gcr.io/k8s-full-stack-starter/user
       context: user
       docker:
-        dockerfile: Dockerfile
+        dockerfile: .k8s/docker/Dockerfile.nestjs
         target: dev
       sync:
         manual:
@@ -34,7 +37,14 @@ build:
       context: web-client
       docker:
         dockerfile: Dockerfile
-
+    - image: gcr.io/k8s-full-stack-starter/auth-prisma
+      context: auth
+      docker:
+        dockerfile: .k8s/docker/Dockerfile.prisma
+    - image: gcr.io/k8s-full-stack-starter/user-prisma
+      context: user
+      docker:
+        dockerfile: .k8s/docker/Dockerfile.prisma
 deploy:
   logs:
     prefix: auto
@@ -79,12 +89,18 @@ deploy:
         artifactOverrides:
           auth:
             image: gcr.io/k8s-full-stack-starter/auth
+            db:
+              prisma:
+                image: gcr.io/k8s-full-stack-starter/auth-prisma
           todoItem:
             image: gcr.io/k8s-full-stack-starter/todo-item
           todoList:
             image: gcr.io/k8s-full-stack-starter/todo-list
           user:
             image: gcr.io/k8s-full-stack-starter/user
+            db:
+              prisma:
+                image: gcr.io/k8s-full-stack-starter/user-prisma
           webClient:
             image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
