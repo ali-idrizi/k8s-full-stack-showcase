@@ -1,0 +1,16 @@
+user:
+  db:
+    prisma:
+      migrate:
+        enabled: true
+      seed:
+        enabled: true
+
+auth:
+  db:
+    prisma:
+      migrate:
+        enabled: true
+
+nats:
+  host: nats.dev.svc.cluster.local

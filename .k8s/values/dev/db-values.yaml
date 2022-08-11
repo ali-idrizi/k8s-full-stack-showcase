@@ -1,0 +1,9 @@
+user:
+  createShadowDb: true
+  auth:
+    database: user
+
+auth:
+  createShadowDb: true
+  auth:
+    database: auth

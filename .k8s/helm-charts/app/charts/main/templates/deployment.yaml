@@ -70,8 +70,9 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
           envFrom:
-            {{- if .Values.dbSecretRef }}
-            - secretRef: {{- include "common.tplvalues.render" (dict "value" .Values.dbSecretRef "context" $) | nindent 16 }}
+            {{- if .Values.db.enabled }}
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}
             {{- end }}
             {{- if .Values.extraEnvFrom }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvFrom "context" $) | nindent 12 }}

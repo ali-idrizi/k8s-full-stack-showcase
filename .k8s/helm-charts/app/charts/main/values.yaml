@@ -47,13 +47,32 @@ hostAliases: []
 ##    value: true
 ##
 extraEnvVars: []
-## @param dbSecretRef secretRef that contains database credentials DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_DATABASE
-## Will be added as enviroment variables
-##
-dbSecretRef: {}
 ## @param extraEnvFrom Extra environmant variables to be set using envFrom, from either ConfigMap or secret
 ##
 extraEnvFrom: []
+## @param db Database credientials and prisma details
+## @param db.prisma.image Image with prisma installed and migrations/seed files in /prisma directory
+## @param db.prisma.migrate.enabled If a Job should be create to migrate the database on install/upgrade
+## @param db.prisma.seed.enabled If a Job should be create to seed the database on install
+## @param db.prisma.seed.fileName The name of the file inside /prisma to seed into database
+##
+db:
+  enabled: false
+  prisma:
+    migrate:
+      enabled: false
+    seed:
+      enabled: false
+      fileName: seed.ts
+    image:
+      registry: ""
+      repository: node
+      tag: latest
+  host: ""
+  port: 3306
+  username: ""
+  password: ""
+  database: ""
 
 ## @section Node deployment parameters
 
