@@ -11,8 +11,12 @@ dependencies:
   - name: mysql
     repository: https://charts.bitnami.com/bitnami
     version: 9.2.1
-    alias: user
+    alias: auth
   - name: mysql
     repository: https://charts.bitnami.com/bitnami
     version: 9.2.1
-    alias: auth
+    alias: todo
+  - name: mysql
+    repository: https://charts.bitnami.com/bitnami
+    version: 9.2.1
+    alias: user

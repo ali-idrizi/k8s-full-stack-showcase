@@ -7,8 +7,11 @@ default: &default
       GRANT ALL PRIVILEGES ON shadow_db.* TO '{{ .Values.auth.username }}'@'%';
     {{- end -}}
 
-user:
+auth:
   <<: *default
 
-auth:
+todo:
+  <<: *default
+
+user:
   <<: *default
