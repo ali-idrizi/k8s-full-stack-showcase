@@ -19,19 +19,12 @@ auth:
   ingress:
     enabled: false
 
-todoItem:
+todo:
   <<: *default
-  nameOverride: todo-item
+  nameOverride: todo
   ingress:
     <<: *ingress
-    path: /api/todo-item
-
-todoList:
-  <<: *default
-  nameOverride: todo-list
-  ingress:
-    <<: *ingress
-    path: /api/todo-list
+    path: /api/todo
 
 user:
   <<: *default

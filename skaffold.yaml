@@ -93,10 +93,8 @@ deploy:
             db:
               prisma:
                 image: gcr.io/k8s-full-stack-starter/auth-prisma
-          todoItem:
-            image: gcr.io/k8s-full-stack-starter/todo-item
-          todoList:
-            image: gcr.io/k8s-full-stack-starter/todo-list
+          todo:
+            image: gcr.io/k8s-full-stack-starter/todo
           user:
             image: gcr.io/k8s-full-stack-starter/user
             db:
