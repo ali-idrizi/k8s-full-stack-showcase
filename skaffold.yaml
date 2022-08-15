@@ -16,14 +16,15 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: gcr.io/k8s-full-stack-starter/todo-item
-      context: todo-item
+    - image: gcr.io/k8s-full-stack-starter/todo
+      context: todo
       docker:
-        dockerfile: Dockerfile
-    - image: gcr.io/k8s-full-stack-starter/todo-list
-      context: todo-list
-      docker:
-        dockerfile: Dockerfile
+        dockerfile: .k8s/docker/Dockerfile.nestjs
+        target: dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: gcr.io/k8s-full-stack-starter/user
       context: user
       docker:
