@@ -1,14 +1,8 @@
 auth:
   createShadowDb: true
-  auth:
-    database: auth
 
 todo:
   createShadowDb: true
-  auth:
-    database: todo
 
 user:
   createShadowDb: true
-  auth:
-    database: user
