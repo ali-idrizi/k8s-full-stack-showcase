@@ -22,6 +22,8 @@ auth:
 todo:
   <<: *default
   nameOverride: todo
+  containerPorts:
+    http: 3002
   ingress:
     <<: *ingress
     path: /api/todo
