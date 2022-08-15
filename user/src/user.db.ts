@@ -1,5 +1,5 @@
 import { Prisma, User } from '@prisma/client'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from 'nestjs-prisma'
 
 export class UserDb {
   constructor(private prisma: PrismaService) {}
