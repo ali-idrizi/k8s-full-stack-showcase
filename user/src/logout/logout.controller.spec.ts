@@ -5,6 +5,7 @@ import { LogoutService } from './logout.service'
 
 describe('UserController', () => {
   let logoutController: LogoutController
+  let authService: AuthService
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
@@ -14,13 +15,14 @@ describe('UserController', () => {
         {
           provide: AuthService,
           useValue: {
-            removeRefreshToken: () => Promise.resolve(),
+            removeRefreshToken: jest.fn(),
           },
         },
       ],
     }).compile()
 
     logoutController = app.get<LogoutController>(LogoutController)
+    authService = app.get<AuthService>(AuthService)
   })
 
   it('should be defined', () => {
@@ -28,11 +30,12 @@ describe('UserController', () => {
   })
 
   describe('/logout', () => {
-    it('should logout', async () => {
-      const res = await logoutController.logout({
+    it('should logout', () => {
+      const res = logoutController.logout({
         refreshToken: 'test-refresh-token',
       })
 
+      expect(authService.removeRefreshToken).toHaveBeenCalledTimes(1)
       expect(res.success).toBe(true)
     })
   })
