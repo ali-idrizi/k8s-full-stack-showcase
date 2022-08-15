@@ -3,11 +3,11 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import { AuthService } from 'src/auth/auth.service'
 import { HashUtil } from 'src/common/utils/hash.util'
-import { PrismaService } from 'src/prisma/prisma.service'
-import { createMockContext, PrismaMockContext } from 'src/prisma/test/mock-context'
+import { createMockContext, PrismaMockContext } from 'src/common/test/prisma.mock-context'
 import { TokenPair } from 'src/user.interface'
 import { LoginController } from './login.controller'
 import { LoginService } from './login.service'
+import { PrismaService } from 'nestjs-prisma'
 
 const TEST_USER: User = {
   id: 'id',
