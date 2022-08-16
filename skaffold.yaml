@@ -42,6 +42,10 @@ build:
       context: auth
       docker:
         dockerfile: .k8s/docker/Dockerfile.prisma
+    - image: gcr.io/k8s-full-stack-starter/todo-prisma
+      context: todo
+      docker:
+        dockerfile: .k8s/docker/Dockerfile.prisma
     - image: gcr.io/k8s-full-stack-starter/user-prisma
       context: user
       docker:
@@ -95,6 +99,9 @@ deploy:
                 image: gcr.io/k8s-full-stack-starter/auth-prisma
           todo:
             image: gcr.io/k8s-full-stack-starter/todo
+            db:
+              prisma:
+                image: gcr.io/k8s-full-stack-starter/todo-prisma
           user:
             image: gcr.io/k8s-full-stack-starter/user
             db:

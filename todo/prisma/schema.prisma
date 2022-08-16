@@ -9,8 +9,23 @@ datasource db {
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
-model Todo {
+model Item {
   id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+  completed Boolean  @default(false)
+  listId    String
+  list      List     @relation(fields: [listId], references: [id])
 
-  @@map("todos")
+  @@map("items")
+}
+
+model List {
+  id      String  @id @default(uuid())
+  userId  String
+  title   String
+  default Boolean @default(false)
+  items   Item[]
+
+  @@map("lists")
 }
