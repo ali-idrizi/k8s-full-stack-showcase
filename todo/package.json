@@ -23,9 +23,6 @@
     "{src,test}/**/*.ts": "eslint",
     "src/**/*.ts": "jest --bail --findRelatedTests --passWithNoTests"
   },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
-  },
   "dependencies": {
     "@nestjs/common": "^8.4.7",
     "@nestjs/config": "^2.2.0",
