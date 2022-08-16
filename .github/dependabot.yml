@@ -16,6 +16,11 @@ updates:
       interval: "daily"
 
   - package-ecosystem: "npm"
+    directory: "/todo"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "npm"
     directory: "/user"
     schedule:
       interval: "daily"
