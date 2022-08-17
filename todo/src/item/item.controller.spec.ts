@@ -71,4 +71,60 @@ describe('ItemController', () => {
       }).rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('delete', () => {
+    it('should delete an item', async () => {
+      prismaMockContext.prisma.item.delete.mockResolvedValue({ ...TEST_ITEM })
+
+      await itemController.delete(TEST_ITEM.id)
+
+      expect(prismaService.item.delete).toHaveBeenCalledWith({
+        where: { id: TEST_ITEM.id },
+      })
+    })
+
+    it('should throw BadRequest if item is not found', async () => {
+      prismaMockContext.prisma.item.delete.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'Item does not exist in the database',
+          'P2025',
+          '',
+        ),
+      )
+
+      expect(async () => {
+        await itemController.delete(TEST_ITEM.id)
+      }).rejects.toThrow(BadRequestException)
+    })
+  })
+
+  describe('update', () => {
+    const updateData = { title: 'New Title' }
+
+    it('should update an item', async () => {
+      prismaMockContext.prisma.item.update.mockResolvedValueOnce({ ...TEST_ITEM, ...updateData })
+
+      const res = await itemController.update(TEST_ITEM.id, updateData)
+
+      expect(prismaService.item.update).toHaveBeenCalledWith({
+        where: { id: TEST_ITEM.id },
+        data: { title: updateData.title },
+      })
+      expect(res.title).toBe(updateData.title)
+    })
+
+    it('should throw BadRequest if item is not found', async () => {
+      prismaMockContext.prisma.item.update.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'Item does not exist in the database',
+          'P2025',
+          '',
+        ),
+      )
+
+      expect(async () => {
+        await itemController.update(TEST_ITEM.id, updateData)
+      }).rejects.toThrow(BadRequestException)
+    })
+  })
 })

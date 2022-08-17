@@ -10,7 +10,9 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(TodoModule)
 
   app
-    .useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true }))
+    .useGlobalPipes(
+      new ValidationPipe({ transform: true, stopAtFirstError: true, whitelist: true }),
+    )
     .useGlobalInterceptors(new DurationLoggerInterceptor(), new ErrorIterceptor())
     .use(cookieParser())
 
