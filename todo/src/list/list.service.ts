@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common'
 import { List } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { ErrorUtil } from 'src/common/utils/error.util'
+import { CreateDto } from './dto/create.dto'
 
 @Injectable()
 export class ListService {
@@ -34,5 +35,14 @@ export class ListService {
 
       throw error
     }
+  }
+
+  async create(createDto: CreateDto): Promise<List> {
+    return this.prisma.list.create({
+      data: {
+        ...createDto,
+        userId: 'temp-user-id', // TODO: update
+      },
+    })
   }
 }

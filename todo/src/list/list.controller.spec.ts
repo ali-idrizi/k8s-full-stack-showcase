@@ -63,4 +63,11 @@ describe('ListController', () => {
       }).rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('create', () => {
+    it('should create a new list', async () => {
+      await listController.create({ title: 'title' })
+      expect(prismaService.list.create).toHaveBeenCalled()
+    })
+  })
 })
