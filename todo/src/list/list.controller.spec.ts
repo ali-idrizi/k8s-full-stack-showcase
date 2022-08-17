@@ -30,4 +30,11 @@ describe('ListController', () => {
   it('should be defined', () => {
     expect(listController).toBeDefined()
   })
+
+  describe('getAll', () => {
+    it('should return all lists', async () => {
+      await listController.getAll()
+      expect(prismaService.list.findMany).toHaveBeenCalled()
+    })
+  })
 })
