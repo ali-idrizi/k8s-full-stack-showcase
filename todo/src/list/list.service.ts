@@ -3,6 +3,7 @@ import { List } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { ErrorUtil } from 'src/common/utils/error.util'
 import { CreateDto } from './dto/create.dto'
+import { UpdateDto } from './dto/update.dto'
 
 @Injectable()
 export class ListService {
@@ -54,6 +55,23 @@ export class ListService {
           id,
         },
       })
+    } catch (error) {
+      if (ErrorUtil.isNotFoundError(error)) {
+        throw new BadRequestException('List not found')
+      }
+
+      throw error
+    }
+  }
+
+  async update(id: string, updateDto: UpdateDto): Promise<List> {
+    try {
+      const list = await this.prisma.list.update({
+        where: { id },
+        data: updateDto,
+      })
+
+      return list
     } catch (error) {
       if (ErrorUtil.isNotFoundError(error)) {
         throw new BadRequestException('List not found')

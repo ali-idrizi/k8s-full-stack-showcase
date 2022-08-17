@@ -93,4 +93,31 @@ describe('ListController', () => {
       }).rejects.toThrow(BadRequestException)
     })
   })
+
+  describe('update', () => {
+    const updateData = { title: 'New Title' }
+
+    it('should update a list', async () => {
+      await listController.update('id', updateData)
+
+      expect(prismaService.list.update).toHaveBeenCalledWith({
+        where: { id: 'id' },
+        data: updateData,
+      })
+    })
+
+    it('should throw BadRequest if list is not found', async () => {
+      prismaMockContext.prisma.list.update.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'Item does not exist in the database',
+          'P2025',
+          '',
+        ),
+      )
+
+      expect(async () => {
+        await listController.update('id', updateData)
+      }).rejects.toThrow(BadRequestException)
+    })
+  })
 })
