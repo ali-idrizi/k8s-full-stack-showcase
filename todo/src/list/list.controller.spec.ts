@@ -1,4 +1,6 @@
+import { BadRequestException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { createMockContext, PrismaMockContext } from 'src/common/test/prisma.mock-context'
 import { ListController } from './list.controller'
@@ -35,6 +37,30 @@ describe('ListController', () => {
     it('should return all lists', async () => {
       await listController.getAll()
       expect(prismaService.list.findMany).toHaveBeenCalled()
+    })
+  })
+
+  describe('getOne', () => {
+    it('should return a list with items', async () => {
+      await listController.getOne('id')
+      expect(prismaService.list.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: { id: 'id' },
+        include: { items: true },
+      })
+    })
+
+    it('should throw BadRequest if list does not exist', () => {
+      prismaMockContext.prisma.list.findUniqueOrThrow.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'List does not exist in the database',
+          'P2025',
+          '',
+        ),
+      )
+
+      expect(async () => {
+        await listController.getOne('id')
+      }).rejects.toThrow(BadRequestException)
     })
   })
 })
