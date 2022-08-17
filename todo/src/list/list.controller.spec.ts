@@ -41,7 +41,7 @@ describe('ListController', () => {
   })
 
   describe('getOne', () => {
-    it('should return a list with items', async () => {
+    it('should return the list with items', async () => {
       await listController.getOne('id')
       expect(prismaService.list.findUniqueOrThrow).toHaveBeenCalledWith({
         where: { id: 'id' },
@@ -49,13 +49,9 @@ describe('ListController', () => {
       })
     })
 
-    it('should throw BadRequest if list does not exist', () => {
+    it('should throw BadRequest if list is not found', () => {
       prismaMockContext.prisma.list.findUniqueOrThrow.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError(
-          'List does not exist in the database',
-          'P2025',
-          '',
-        ),
+        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
       )
 
       expect(async () => {
@@ -72,7 +68,7 @@ describe('ListController', () => {
   })
 
   describe('delete', () => {
-    it('should delete a list', async () => {
+    it('should delete the list', async () => {
       await listController.delete('id')
       expect(prismaService.list.delete).toHaveBeenCalledWith({
         where: { id: 'id' },
@@ -81,11 +77,7 @@ describe('ListController', () => {
 
     it('should throw BadRequest if list is not found', async () => {
       prismaMockContext.prisma.list.delete.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError(
-          'Item does not exist in the database',
-          'P2025',
-          '',
-        ),
+        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
       )
 
       expect(async () => {
@@ -97,7 +89,7 @@ describe('ListController', () => {
   describe('update', () => {
     const updateData = { title: 'New Title' }
 
-    it('should update a list', async () => {
+    it('should update the list', async () => {
       await listController.update('id', updateData)
 
       expect(prismaService.list.update).toHaveBeenCalledWith({
@@ -108,11 +100,7 @@ describe('ListController', () => {
 
     it('should throw BadRequest if list is not found', async () => {
       prismaMockContext.prisma.list.update.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError(
-          'Item does not exist in the database',
-          'P2025',
-          '',
-        ),
+        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
       )
 
       expect(async () => {
