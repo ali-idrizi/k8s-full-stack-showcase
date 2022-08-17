@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post } from '@nestjs/common'
 import { List } from '@prisma/client'
 import { CreateDto } from './dto/create.dto'
 import { ListService } from './list.service'
@@ -20,5 +20,11 @@ export class ListController {
   @Post('/')
   create(@Body() createDto: CreateDto): Promise<List> {
     return this.listService.create(createDto)
+  }
+
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  delete(@Param('id') id: string): Promise<void> {
+    return this.listService.delete(id)
   }
 }

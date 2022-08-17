@@ -45,4 +45,21 @@ export class ListService {
       },
     })
   }
+
+  async delete(id: string): Promise<void> {
+    // TODO: Make sure item belongs to the user
+    try {
+      await this.prisma.list.delete({
+        where: {
+          id,
+        },
+      })
+    } catch (error) {
+      if (ErrorUtil.isNotFoundError(error)) {
+        throw new BadRequestException('List not found')
+      }
+
+      throw error
+    }
+  }
 }

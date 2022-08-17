@@ -70,4 +70,27 @@ describe('ListController', () => {
       expect(prismaService.list.create).toHaveBeenCalled()
     })
   })
+
+  describe('delete', () => {
+    it('should delete a list', async () => {
+      await listController.delete('id')
+      expect(prismaService.list.delete).toHaveBeenCalledWith({
+        where: { id: 'id' },
+      })
+    })
+
+    it('should throw BadRequest if list is not found', async () => {
+      prismaMockContext.prisma.list.delete.mockRejectedValue(
+        new Prisma.PrismaClientKnownRequestError(
+          'Item does not exist in the database',
+          'P2025',
+          '',
+        ),
+      )
+
+      expect(async () => {
+        await listController.delete('id')
+      }).rejects.toThrow(BadRequestException)
+    })
+  })
 })
