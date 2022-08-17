@@ -50,7 +50,16 @@ describe('ItemController', () => {
         listId: TEST_ITEM.listId,
       })
 
-      expect(prismaService.item.create).toHaveBeenCalledTimes(1)
+      expect(prismaService.item.create).toHaveBeenCalledWith({
+        data: {
+          title: TEST_ITEM.title,
+          list: {
+            connect: {
+              id: TEST_ITEM.listId,
+            },
+          },
+        },
+      })
       expect(res).toEqual(TEST_ITEM)
     })
 
