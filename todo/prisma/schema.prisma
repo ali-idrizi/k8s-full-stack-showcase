@@ -1,0 +1,31 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+}
+
+model Item {
+  id        String   @id @default(uuid())
+  title     String
+  createdAt DateTime @default(now())
+  completed Boolean  @default(false)
+  listId    String
+  list      List     @relation(fields: [listId], references: [id])
+
+  @@map("items")
+}
+
+model List {
+  id      String  @id @default(uuid())
+  userId  String
+  title   String
+  default Boolean @default(false)
+  items   Item[]
+
+  @@map("lists")
+}

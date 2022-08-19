@@ -11,5 +11,8 @@ printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
 echo "CHECKING ${green}/auth${reset}"
 cd ./auth && npx lint-staged && cd ..
 
+echo "CHECKING ${green}/todo${reset}"
+cd ./todo && npx lint-staged && cd ..
+
 echo "CHECKING ${green}/user${reset}"
 cd ./user && npx lint-staged && cd ..

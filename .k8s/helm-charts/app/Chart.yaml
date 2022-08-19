@@ -13,10 +13,7 @@ dependencies:
     alias: auth
   - name: main
     version: 0.1.0
-    alias: todoItem
-  - name: main
-    version: 0.1.0
-    alias: todoList
+    alias: todo
   - name: main
     version: 0.1.0
     alias: user

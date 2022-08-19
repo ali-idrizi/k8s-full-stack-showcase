@@ -16,14 +16,15 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: gcr.io/k8s-full-stack-starter/todo-item
-      context: todo-item
+    - image: gcr.io/k8s-full-stack-starter/todo
+      context: todo
       docker:
-        dockerfile: Dockerfile
-    - image: gcr.io/k8s-full-stack-starter/todo-list
-      context: todo-list
-      docker:
-        dockerfile: Dockerfile
+        dockerfile: .k8s/docker/Dockerfile.nestjs
+        target: dev
+      sync:
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
     - image: gcr.io/k8s-full-stack-starter/user
       context: user
       docker:
@@ -39,6 +40,10 @@ build:
         dockerfile: Dockerfile
     - image: gcr.io/k8s-full-stack-starter/auth-prisma
       context: auth
+      docker:
+        dockerfile: .k8s/docker/Dockerfile.prisma
+    - image: gcr.io/k8s-full-stack-starter/todo-prisma
+      context: todo
       docker:
         dockerfile: .k8s/docker/Dockerfile.prisma
     - image: gcr.io/k8s-full-stack-starter/user-prisma
@@ -92,10 +97,11 @@ deploy:
             db:
               prisma:
                 image: gcr.io/k8s-full-stack-starter/auth-prisma
-          todoItem:
-            image: gcr.io/k8s-full-stack-starter/todo-item
-          todoList:
-            image: gcr.io/k8s-full-stack-starter/todo-list
+          todo:
+            image: gcr.io/k8s-full-stack-starter/todo
+            db:
+              prisma:
+                image: gcr.io/k8s-full-stack-starter/todo-prisma
           user:
             image: gcr.io/k8s-full-stack-starter/user
             db:

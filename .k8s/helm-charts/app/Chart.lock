@@ -11,8 +11,5 @@ dependencies:
 - name: main
   repository: ""
   version: 0.1.0
-- name: main
-  repository: ""
-  version: 0.1.0
-digest: sha256:aac240f0b245288712273aff229831649ae19d1983d29713f71da1f62b7a17f0
-generated: "2022-08-10T11:35:49.598333614+02:00"
+digest: sha256:970dfb296235c88e541c4ac5039609f9a1526528150457fdb27cdf45b3c162ae
+generated: "2022-08-15T20:26:20.684822466+02:00"

@@ -1,15 +1,21 @@
+auth:
+  db:
+    prisma:
+      migrate:
+        enabled: true
+
+todo:
+  db:
+    prisma:
+      migrate:
+        enabled: true
+
 user:
   db:
     prisma:
       migrate:
         enabled: true
       seed:
-        enabled: true
-
-auth:
-  db:
-    prisma:
-      migrate:
         enabled: true
 
 nats:
