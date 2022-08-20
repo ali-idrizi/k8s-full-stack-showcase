@@ -4,7 +4,8 @@ import { RpcException } from '@nestjs/microservices'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
-import { AuthEnvironment, TokenPair, ValidateJwtRes } from './auth.interface'
+import { TokenPair, ValidateJwtRes } from './auth.interface'
+import { ConfigUtil } from './common/utils/config.util'
 import { DateUtil } from './common/utils/date.util'
 import { ErrorUtil } from './common/utils/error.util'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
@@ -18,20 +19,12 @@ export class AuthService {
   private jwtExpiresIn: number
   private refreshTokenExpiresIn: number
 
-  constructor(
-    private configService: ConfigService<AuthEnvironment>,
-    private prisma: PrismaService,
-  ) {
-    const jwtSecret = this.configService.get(Environment.JWT_SECRET, { infer: true })
-    const jwtExpiresIn = this.configService.get(Environment.JWT_EXPIRES_IN_SECONDS, { infer: true })
-    const refreshTokenExpiresIn = this.configService.get(
+  constructor(private prisma: PrismaService, configService: ConfigService) {
+    const [jwtSecret, jwtExpiresIn, refreshTokenExpiresIn] = ConfigUtil.getMultiple(configService, [
+      Environment.JWT_SECRET,
+      Environment.JWT_EXPIRES_IN_SECONDS,
       Environment.REFRESH_TOKEN_EXPIRES_IN_SECONDS,
-      { infer: true },
-    )
-
-    if (!jwtSecret || !jwtExpiresIn || !refreshTokenExpiresIn) {
-      throw new RpcException('Environment variables missing')
-    }
+    ])
 
     this.jwtSecret = jwtSecret
     this.jwtExpiresIn = parseInt(jwtExpiresIn)
