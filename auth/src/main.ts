@@ -1,6 +1,7 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { MicroserviceOptions, Transport } from '@nestjs/microservices'
+import { Transport } from '@nestjs/microservices'
+import * as cookieParser from 'cookie-parser'
 import { Environment } from './auth.constant'
 import { AuthModule } from './auth.module'
 import { ErrorInterceptor } from './common/interceptors/error.interceptor'
@@ -12,7 +13,9 @@ const NATS_HOST = process.env[Environment.NATS_HOST]
 const NATS_PORT = process.env[Environment.NATS_PORT]
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
+  const app = await NestFactory.create(AuthModule)
+
+  app.connectMicroservice({
     transport: Transport.NATS,
     options: {
       servers: [`nats://${NATS_HOST}:${NATS_PORT}`],
@@ -25,7 +28,9 @@ async function bootstrap(): Promise<void> {
   app
     .useGlobalPipes(new ValidationPipe({ transform: true, stopAtFirstError: true }))
     .useGlobalInterceptors(new ErrorInterceptor())
+    .use(cookieParser())
 
-  await app.listen()
+  await app.startAllMicroservices()
+  await app.listen(3000)
 }
 bootstrap()
