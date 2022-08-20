@@ -15,6 +15,8 @@ const ENV: AuthEnvironment = {
   JWT_EXPIRES_IN_SECONDS: '900',
   REFRESH_TOKEN_EXPIRES_IN_SECONDS: '900',
   JWT_SECRET: 'secret',
+  JWT_COOKIE_NAME: 'jwt',
+  REFRESH_TOKEN_COOKIE_NAME: 'refresh-token',
 }
 
 describe('AuthController', () => {
