@@ -9,6 +9,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.rewriteTarget }}
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}

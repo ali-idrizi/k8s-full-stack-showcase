@@ -3,12 +3,7 @@ default: &default
     enabled: false
   readinessProbe:
     enabled: false
-  ingress: &ingress
-    ingressClassName: nginx
-    annotations:
-      nginx.ingress.kubernetes.io/rewrite-target: /$2
-    pathType: Prefix
-  service: &service
+  service:
     clusterIP: None
 
 auth:
@@ -26,7 +21,6 @@ todo:
   containerPorts:
     http: 3002
   ingress:
-    <<: *ingress
     path: /api/todo(/|$)(.*)
 
 user:
@@ -37,7 +31,6 @@ user:
   containerPorts:
     http: 3001
   ingress:
-    <<: *ingress
     path: /api/user(/|$)(.*)
 
 webClient:
@@ -46,8 +39,8 @@ webClient:
   containerPorts:
     http: 8080
   ingress:
-    <<: *ingress
-    path: (/|$)(.*)
+    rewriteTarget: /$1
+    path: /(.*)
 
 nats:
   host: nats
