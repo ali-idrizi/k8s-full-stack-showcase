@@ -1,5 +1,6 @@
 import * as crypto from 'crypto'
 import * as JWT from 'jsonwebtoken'
+import { TokenPair } from 'src/auth.interface'
 
 export enum JwtStatus {
   VALID,
@@ -66,5 +67,21 @@ export const TokenUtil = {
    */
   decodeJwt: (jwt: string): JWT.JwtPayload => {
     return JWT.decode(jwt) as JWT.JwtPayload
+  },
+
+  /**
+   * Generate a pair of JWT and Refresh Token
+   *
+   * @param userId the user ID field to be add to the payload as `uid`
+   * @param jwtExpiresIn the expiration time of the generated JWT in seconds
+   * @param jwtSecret the secret used to sign the JWT
+   *
+   * @returns a pair of JWT and Refresh Token
+   */
+  generateTokenPair(userId: string, jwtExpiresIn: number, jwtSecret: string): TokenPair {
+    return {
+      jwt: this.generateJwt(userId, jwtExpiresIn, jwtSecret),
+      refreshToken: this.generateRefreshToken(),
+    }
   },
 }

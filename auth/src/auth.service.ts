@@ -32,17 +32,16 @@ export class AuthService {
   }
 
   async generateTokenPair(payload: GenerateTokenPairDto): Promise<TokenPair> {
-    const jwt = TokenUtil.generateJwt(payload.userId, this.jwtExpiresIn, this.jwtSecret)
-    const refreshToken = TokenUtil.generateRefreshToken()
+    const tokenPair = TokenUtil.generateTokenPair(payload.userId, this.jwtExpiresIn, this.jwtSecret)
 
     await this.prisma.auth.create({
       data: {
-        refreshToken,
+        refreshToken: tokenPair.refreshToken,
         userId: payload.userId,
       },
     })
 
-    return { jwt, refreshToken }
+    return tokenPair
   }
 
   validateJwt(payload: ValidateJwtDto): ValidateJwtRes {
