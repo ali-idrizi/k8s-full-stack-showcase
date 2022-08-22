@@ -1,7 +1,7 @@
 import * as JWT from 'jsonwebtoken'
 import { Environment } from './auth.constant'
 
-export interface TokenPair {
+export interface Tokens {
   jwt: string
   refreshToken: string
 }

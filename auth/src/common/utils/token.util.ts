@@ -1,6 +1,6 @@
 import * as crypto from 'crypto'
 import * as JWT from 'jsonwebtoken'
-import { TokenPair } from 'src/auth.interface'
+import { Tokens } from 'src/auth.interface'
 
 export enum JwtStatus {
   VALID,
@@ -78,7 +78,7 @@ export const TokenUtil = {
    *
    * @returns a pair of JWT and Refresh Token
    */
-  generateTokenPair(userId: string, jwtExpiresIn: number, jwtSecret: string): TokenPair {
+  genTokens(userId: string, jwtExpiresIn: number, jwtSecret: string): Tokens {
     return {
       jwt: this.generateJwt(userId, jwtExpiresIn, jwtSecret),
       refreshToken: this.generateRefreshToken(),

@@ -4,12 +4,12 @@ import { RpcException } from '@nestjs/microservices'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
-import { TokenPair, ValidateJwtRes } from './auth.interface'
+import { Tokens, ValidateJwtRes } from './auth.interface'
 import { ConfigUtil } from './common/utils/config.util'
 import { DateUtil } from './common/utils/date.util'
 import { ErrorUtil } from './common/utils/error.util'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
-import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
+import { GenTokensDto } from './dto/gen-tokens.dto'
 import { RefreshJwtDto } from './dto/refresh-jwt.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
 
@@ -31,17 +31,17 @@ export class AuthService {
     this.refreshTokenExpiresIn = parseInt(refreshTokenExpiresIn)
   }
 
-  async generateTokenPair(payload: GenerateTokenPairDto): Promise<TokenPair> {
-    const tokenPair = TokenUtil.generateTokenPair(payload.userId, this.jwtExpiresIn, this.jwtSecret)
+  async genTokens(payload: GenTokensDto): Promise<Tokens> {
+    const tokens = TokenUtil.genTokens(payload.userId, this.jwtExpiresIn, this.jwtSecret)
 
     await this.prisma.auth.create({
       data: {
-        refreshToken: tokenPair.refreshToken,
+        refreshToken: tokens.refreshToken,
         userId: payload.userId,
       },
     })
 
-    return tokenPair
+    return tokens
   }
 
   validateJwt(payload: ValidateJwtDto): ValidateJwtRes {
@@ -62,7 +62,7 @@ export class AuthService {
     }
   }
 
-  async refreshJwt(payload: RefreshJwtDto): Promise<TokenPair> {
+  async refreshJwt(payload: RefreshJwtDto): Promise<Tokens> {
     try {
       const auth = await this.prisma.auth.delete({ where: { refreshToken: payload.refreshToken } })
 
@@ -78,7 +78,7 @@ export class AuthService {
       throw error
     }
 
-    return this.generateTokenPair({ userId: payload.userId })
+    return this.genTokens({ userId: payload.userId })
   }
 
   async removeRefreshToken(refreshToken: string): Promise<void> {

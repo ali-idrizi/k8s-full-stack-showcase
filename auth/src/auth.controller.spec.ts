@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthController } from './auth.controller'
-import { AuthEnvironment, TokenPair } from './auth.interface'
+import { AuthEnvironment, Tokens } from './auth.interface'
 import { AuthService } from './auth.service'
 import { createMockContext, PrismaMockContext } from './common/test/prisma.mock-context'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
@@ -51,14 +51,14 @@ describe('AuthController', () => {
     authController = app.get<AuthController>(AuthController)
   })
 
-  describe('generateTokenPair', () => {
-    let tokens: TokenPair
+  describe('genTokens', () => {
+    let tokens: Tokens
     let timestamp: number
 
     it('should generate token pair and store the refreshToken', async () => {
       prismaMockContext.prisma.auth.create.mockReturnThis()
 
-      tokens = await authController.generateTokenPair({ userId: USER_ID })
+      tokens = await authController.genTokens({ userId: USER_ID })
       timestamp = Math.floor(new Date().getTime() / 1000)
 
       expect(tokens.jwt).toBeTruthy()
