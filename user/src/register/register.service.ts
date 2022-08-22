@@ -1,19 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { User } from '@prisma/client'
 import { plainToInstance } from 'class-transformer'
+import { Response } from 'express'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthService } from 'src/auth/auth.service'
 import { ErrorUtil } from 'src/common/utils/error.util'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { UserDto } from 'src/user.dto'
 import { RegisterDto } from './register.dto'
-import { Response } from './register.interface'
 
 @Injectable()
 export class RegisterService {
   constructor(private authService: AuthService, private prisma: PrismaService) {}
 
-  async register(registerDto: RegisterDto): Promise<Response> {
+  async register(res: Response, registerDto: RegisterDto): Promise<UserDto> {
     let userData: User
 
     try {
@@ -32,12 +32,8 @@ export class RegisterService {
       throw error
     }
 
-    const user = plainToInstance(UserDto, userData)
-    const tokens = await this.authService.genTokens(user.id)
+    await this.authService.setTokens(res, userData.id)
 
-    return {
-      user,
-      tokens,
-    }
+    return plainToInstance(UserDto, userData)
   }
 }
