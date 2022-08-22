@@ -25,7 +25,7 @@ export class LoginService {
       throw new HttpException('Invalid email address or password', HttpStatus.UNAUTHORIZED)
     }
 
-    const tokens = await this.authService.getTokens(userDto.id)
+    const tokens = await this.authService.genTokens(userDto.id)
 
     return {
       user: userDto,

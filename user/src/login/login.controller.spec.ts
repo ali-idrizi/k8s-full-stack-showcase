@@ -4,7 +4,7 @@ import { User } from '@prisma/client'
 import { AuthService } from 'src/auth/auth.service'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { createMockContext, PrismaMockContext } from 'src/common/test/prisma.mock-context'
-import { TokenPair } from 'src/user.interface'
+import { Tokens } from 'src/user.interface'
 import { LoginController } from './login.controller'
 import { LoginService } from './login.service'
 import { PrismaService } from 'nestjs-prisma'
@@ -18,7 +18,7 @@ const TEST_USER: User = {
   updatedAt: new Date(),
 } as const
 
-const TEST_TOKENS: TokenPair = {
+const TEST_TOKENS: Tokens = {
   jwt: 'jwt',
   refreshToken: 'refreshToken',
 } as const
@@ -37,7 +37,7 @@ describe('UserController', () => {
         {
           provide: AuthService,
           useValue: {
-            getTokens: () => Promise.resolve(TEST_TOKENS),
+            genTokens: () => Promise.resolve(TEST_TOKENS),
           },
         },
         {

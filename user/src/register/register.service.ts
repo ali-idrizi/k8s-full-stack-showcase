@@ -33,7 +33,7 @@ export class RegisterService {
     }
 
     const user = plainToInstance(UserDto, userData)
-    const tokens = await this.authService.getTokens(user.id)
+    const tokens = await this.authService.genTokens(user.id)
 
     return {
       user,
