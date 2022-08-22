@@ -1,6 +1,7 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common'
+import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common'
+import { Response } from 'express'
+import { UserDto } from 'src/user.dto'
 import { LoginDto } from './login.dto'
-import { Response } from './login.interface'
 import { LoginService } from './login.service'
 
 @Controller('login')
@@ -9,7 +10,7 @@ export class LoginController {
 
   @Post('/')
   @HttpCode(HttpStatus.OK)
-  login(@Body() loginDto: LoginDto): Promise<Response> {
-    return this.loginService.login(loginDto)
+  login(@Res() res: Response, @Body() loginDto: LoginDto): Promise<UserDto> {
+    return this.loginService.login(res, loginDto)
   }
 }

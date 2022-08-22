@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma, User } from '@prisma/client'
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { PrismaService } from 'nestjs-prisma'
 import { AuthService } from 'src/auth/auth.service'
-import { createMockContext, PrismaMockContext } from 'src/common/test/prisma.mock-context'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { Tokens } from 'src/user.interface'
 import { RegisterController } from './register.controller'
@@ -25,10 +25,10 @@ const TEST_TOKENS: Tokens = {
 
 describe('UserController', () => {
   let registerController: RegisterController
-  let prismaMockContext: PrismaMockContext
+  let prisma: DeepMockProxy<PrismaService>
 
   beforeEach(async () => {
-    prismaMockContext = createMockContext()
+    prisma = mockDeep()
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [RegisterController],
@@ -42,7 +42,7 @@ describe('UserController', () => {
         },
         {
           provide: PrismaService,
-          useValue: prismaMockContext.prisma,
+          useValue: prisma,
         },
       ],
     }).compile()
@@ -63,7 +63,7 @@ describe('UserController', () => {
     }
 
     it('should create user and tokens', async () => {
-      prismaMockContext.prisma.user.create.mockResolvedValue(TEST_USER)
+      prisma.user.create.mockResolvedValue(TEST_USER)
 
       const res = await registerController.register(registerData)
 
@@ -75,7 +75,7 @@ describe('UserController', () => {
 
     it('should throw', async () => {
       // Test that a correct HttpException is thrown when the email is already registered
-      prismaMockContext.prisma.user.create.mockRejectedValue(
+      prisma.user.create.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError(
           'Invalid `this.prisma.user.create()` invocation',
           'P2002',
@@ -87,7 +87,7 @@ describe('UserController', () => {
       )
 
       // Test that the same error is thrown in every other case
-      prismaMockContext.prisma.user.create.mockRejectedValue(new Error())
+      prisma.user.create.mockRejectedValue(new Error())
       await expect(registerController.register(registerData)).rejects.toThrow(new Error())
     })
   })
