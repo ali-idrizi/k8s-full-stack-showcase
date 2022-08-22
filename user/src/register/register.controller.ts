@@ -9,7 +9,10 @@ export class RegisterController {
   constructor(private readonly registerService: RegisterService) {}
 
   @Post('/')
-  register(@Res() res: Response, @Body() registerDto: RegisterDto): Promise<UserDto> {
+  register(
+    @Res({ passthrough: true }) res: Response,
+    @Body() registerDto: RegisterDto,
+  ): Promise<UserDto> {
     return this.registerService.register(res, registerDto)
   }
 }

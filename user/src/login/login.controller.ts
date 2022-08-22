@@ -10,7 +10,7 @@ export class LoginController {
 
   @Post('/')
   @HttpCode(HttpStatus.OK)
-  login(@Res() res: Response, @Body() loginDto: LoginDto): Promise<UserDto> {
+  login(@Res({ passthrough: true }) res: Response, @Body() loginDto: LoginDto): Promise<UserDto> {
     return this.loginService.login(res, loginDto)
   }
 }
