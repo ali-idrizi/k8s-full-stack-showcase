@@ -10,7 +10,7 @@ export class AuthService {
 
   getTokens(userId: string): Promise<TokenPair> {
     const tokens = this.authClient
-      .send<TokenPair>({ cmd: Command.GENERATE_TOKEN_PAIR }, { userId })
+      .send<TokenPair>({ cmd: Command.GEN_TOKENS }, { userId })
       .pipe(timeout(10000))
 
     return firstValueFrom(tokens)

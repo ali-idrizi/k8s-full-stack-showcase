@@ -12,7 +12,7 @@ import { ValidateJwtDto } from './dto/validate-jwt.dto'
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @MessagePattern({ cmd: Command.GENERATE_TOKEN_PAIR })
+  @MessagePattern({ cmd: Command.GEN_TOKENS })
   generateTokenPair(@Payload() payload: GenerateTokenPairDto): Promise<TokenPair> {
     return this.authService.generateTokenPair(payload)
   }

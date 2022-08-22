@@ -4,6 +4,6 @@ export const Environment = {
 } as const
 
 export const Command = {
-  GENERATE_TOKEN_PAIR: 'generateTokenPair',
+  GEN_TOKENS: 'genTokens',
   REMOVE_REFRESH_TOKEN: 'removeRefreshToken',
 } as const
