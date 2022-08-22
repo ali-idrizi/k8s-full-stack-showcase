@@ -92,12 +92,15 @@ describe('UserController', () => {
         password: 'password',
       })
 
-      expect(user).toBeTruthy()
       expect(user).toEqual(TEST_USER)
 
-      expect(res.cookie).toHaveBeenCalledWith('jwt', TEST_TOKENS.jwt, expect.anything())
       expect(res.cookie).toHaveBeenCalledWith(
-        'refresh-token',
+        ENV.JWT_COOKIE_NAME,
+        TEST_TOKENS.jwt,
+        expect.anything(),
+      )
+      expect(res.cookie).toHaveBeenCalledWith(
+        ENV.REFRESH_TOKEN_COOKIE_NAME,
         TEST_TOKENS.refreshToken,
         expect.anything(),
       )
