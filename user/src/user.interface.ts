@@ -1,4 +1,4 @@
-import { ENV } from './user.constant'
+import { ENV } from './user.constants'
 
 export interface Tokens {
   jwt: string
