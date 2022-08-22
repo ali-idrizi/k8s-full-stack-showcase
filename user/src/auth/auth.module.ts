@@ -2,10 +2,12 @@ import { InternalServerErrorException, Module } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices'
 import { Environment } from './auth.constant'
+import { AuthController } from './auth.controller'
 import { AuthEnvironment } from './auth.interface'
 import { AuthService } from './auth.service'
 
 @Module({
+  controllers: [AuthController],
   providers: [
     AuthService,
     {
