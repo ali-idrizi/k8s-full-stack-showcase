@@ -48,17 +48,18 @@ export class AuthService {
     const jwtStatus = TokenUtil.verfiyJwt(payload.jwt, this.jwtSecret)
 
     const expired = jwtStatus === JwtStatus.EXPIRED
-    let jwtPayload: JWT.JwtPayload
+    let userId: string
 
     if (jwtStatus === JwtStatus.VALID || expired) {
-      jwtPayload = TokenUtil.decodeJwt(payload.jwt)
+      const jwtPayload = TokenUtil.decodeJwt(payload.jwt)
+      userId = jwtPayload.uid
     } else {
       throw new RpcException('Invalid JWT')
     }
 
     return {
       expired,
-      payload: jwtPayload,
+      userId,
     }
   }
 

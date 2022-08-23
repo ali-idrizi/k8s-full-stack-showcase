@@ -94,7 +94,7 @@ describe('AuthController', () => {
       const res = authController.validateJwt({ jwt })
 
       expect(res.expired).toEqual(false)
-      expect(res.payload.uid).toEqual(USER_ID)
+      expect(res.userId).toEqual(USER_ID)
     })
 
     it('should return expired if JWT is expired', () => {
@@ -102,7 +102,7 @@ describe('AuthController', () => {
       const res = authController.validateJwt({ jwt: expiredJwt })
 
       expect(res.expired).toEqual(true)
-      expect(res.payload.uid).toEqual(USER_ID)
+      expect(res.userId).toEqual(USER_ID)
     })
 
     it('should throw if JWT is invalid', () => {

@@ -14,5 +14,5 @@ export interface AuthEnvironment {
 
 export interface ValidateJwtRes {
   expired: boolean
-  payload: JWT.JwtPayload
+  userId: string
 }
