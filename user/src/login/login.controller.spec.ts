@@ -25,7 +25,7 @@ const TEST_TOKENS: Tokens = {
   refreshToken: 'refreshToken',
 } as const
 
-describe('UserController', () => {
+describe('LoginController', () => {
   let loginController: LoginController
   let ctx: MockContext
 

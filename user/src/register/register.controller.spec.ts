@@ -25,7 +25,7 @@ const TEST_TOKENS: Tokens = {
   refreshToken: 'refreshToken',
 } as const
 
-describe('UserController', () => {
+describe('RegisterController', () => {
   let registerController: RegisterController
   let ctx: MockContext
 

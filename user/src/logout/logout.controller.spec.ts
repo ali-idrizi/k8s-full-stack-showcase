@@ -5,7 +5,7 @@ import { TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
 import { LogoutController } from './logout.controller'
 
-describe('UserController', () => {
+describe('LogoutController', () => {
   let logoutController: LogoutController
   let authService: AuthService
   let ctx: MockContext
