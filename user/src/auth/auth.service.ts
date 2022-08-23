@@ -58,4 +58,30 @@ export class AuthService {
       },
     ]
   }
+
+  removeTokens(cookies: Record<string, string>): void {
+    const refreshToken = cookies[this.refreshTokenCookieName]
+    if (refreshToken) {
+      this.removeRefreshToken(refreshToken)
+    }
+  }
+
+  getClearedCookies(): Cookie[] {
+    return [
+      {
+        name: this.jwtCookieName,
+        value: '',
+        options: {
+          maxAge: 0,
+        },
+      },
+      {
+        name: this.refreshTokenCookieName,
+        value: '',
+        options: {
+          maxAge: 0,
+        },
+      },
+    ]
+  }
 }
