@@ -2,6 +2,7 @@ import { ClassSerializerInterceptor, Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { APP_INTERCEPTOR } from '@nestjs/core'
 import { PrismaModule } from 'nestjs-prisma'
+import { AuthModule } from './auth/auth.module'
 import { LoginModule } from './login/login.module'
 import { LogoutModule } from './logout/logout.module'
 import { RegisterModule } from './register/register.module'
@@ -20,6 +21,7 @@ import { RegisterModule } from './register/register.module'
     PrismaModule.forRoot({
       isGlobal: true,
     }),
+    AuthModule,
     LoginModule,
     RegisterModule,
     LogoutModule,

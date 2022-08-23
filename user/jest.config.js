@@ -13,7 +13,6 @@ module.exports = {
   coveragePathIgnorePatterns: [
     // Ignore files that are better suited for e2e testing
     'main.ts',
-    'src/auth',
     '.*\\.module\\.ts$',
     '.*\\.interceptor\\.ts$',
     '.*\\.interface\\.ts$',

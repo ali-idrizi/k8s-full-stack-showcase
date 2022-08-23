@@ -7,6 +7,8 @@ import { ConfigUtil } from 'src/common/utils/config.util'
 import { ENV } from 'src/user.constants'
 import { Environment, Tokens } from 'src/user.interface'
 import { AUTH_CLIENT, Command } from './auth.constant'
+import { JwtStatus } from './auth.interface'
+import { InvalidRefreshTokenException, JwtInvalidException } from './exceptions'
 
 @Injectable()
 export class AuthService {
@@ -32,6 +34,36 @@ export class AuthService {
       .pipe(timeout(10000))
 
     return firstValueFrom(tokens)
+  }
+
+  async validateJwt(jwt: string): Promise<JwtStatus> {
+    const res = this.authClient
+      .send<JwtStatus>({ cmd: Command.VALIDATE_JWT }, { jwt })
+      .pipe(timeout(10000))
+
+    let data
+    try {
+      data = await firstValueFrom(res)
+    } catch (error) {
+      throw new JwtInvalidException(error)
+    }
+
+    return data
+  }
+
+  async refreshJwt(refreshToken: string, userId: string): Promise<Tokens> {
+    const res = this.authClient
+      .send<Tokens>({ cmd: Command.REFRESH_JWT }, { refreshToken, userId })
+      .pipe(timeout(10000))
+
+    let data
+    try {
+      data = await firstValueFrom(res)
+    } catch (error) {
+      throw new InvalidRefreshTokenException(error)
+    }
+
+    return data
   }
 
   removeRefreshToken(refreshToken: string): void {
