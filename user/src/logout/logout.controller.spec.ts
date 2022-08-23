@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { AUTH_CLIENT } from 'src/auth/auth.constant'
 import { AuthService } from 'src/auth/auth.service'
-import { ConfigModuleMock, TEST_ENV } from 'src/common/test/config-module.mock'
+import { AuthModuleMock } from 'src/common/test/auth-module.mock'
+import { TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
 import { LogoutController } from './logout.controller'
 
@@ -15,14 +15,7 @@ describe('UserController', () => {
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [LogoutController],
-      providers: [
-        AuthService,
-        {
-          provide: AUTH_CLIENT,
-          useValue: ctx.clientProxy,
-        },
-      ],
-      imports: [ConfigModuleMock],
+      imports: [AuthModuleMock.register(ctx.clientProxy)],
     }).compile()
 
     logoutController = app.get<LogoutController>(LogoutController)

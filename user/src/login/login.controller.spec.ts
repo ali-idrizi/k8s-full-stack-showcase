@@ -3,9 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
-import { AUTH_CLIENT } from 'src/auth/auth.constant'
-import { AuthService } from 'src/auth/auth.service'
-import { ConfigModuleMock, TEST_ENV } from 'src/common/test/config-module.mock'
+import { AuthModuleMock } from 'src/common/test/auth-module.mock'
+import { TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { Tokens } from 'src/user.interface'
@@ -37,17 +36,12 @@ describe('UserController', () => {
       controllers: [LoginController],
       providers: [
         LoginService,
-        AuthService,
-        {
-          provide: AUTH_CLIENT,
-          useValue: ctx.clientProxy,
-        },
         {
           provide: PrismaService,
           useValue: ctx.prisma,
         },
       ],
-      imports: [ConfigModuleMock],
+      imports: [AuthModuleMock.register(ctx.clientProxy)],
     }).compile()
 
     loginController = app.get<LoginController>(LoginController)
