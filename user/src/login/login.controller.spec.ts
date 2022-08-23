@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
+import { AUTH_CLIENT } from 'src/auth/auth.constant'
 import { AuthService } from 'src/auth/auth.service'
 import { ConfigModuleMock, TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
@@ -38,7 +39,7 @@ describe('UserController', () => {
         LoginService,
         AuthService,
         {
-          provide: 'AUTH_SERVICE',
+          provide: AUTH_CLIENT,
           useValue: ctx.clientProxy,
         },
         {

@@ -6,7 +6,7 @@ import { Cookie } from 'src/common/interfaces/cookie.interface'
 import { ConfigUtil } from 'src/common/utils/config.util'
 import { ENV } from 'src/user.constants'
 import { Environment, Tokens } from 'src/user.interface'
-import { Command } from './auth.constant'
+import { AUTH_CLIENT, Command } from './auth.constant'
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
   private readonly refreshTokenCookieName: string
 
   constructor(
-    @Inject('AUTH_SERVICE') private authClient: ClientProxy,
+    @Inject(AUTH_CLIENT) private authClient: ClientProxy,
     configService: ConfigService<Environment>,
   ) {
     const [jwtCookieName, refreshTokenCookieName] = ConfigUtil.getMultiple(configService, [
