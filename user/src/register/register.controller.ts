@@ -16,7 +16,8 @@ export class RegisterController {
   async register(@Req() req: Request, @Body() registerDto: RegisterDto): Promise<UserDto> {
     const user = await this.registerService.register(registerDto)
 
-    const cookies = await this.authService.getCookies(user.id)
+    const tokens = await this.authService.genTokens(user.id)
+    const cookies = await this.authService.getCookies(tokens)
     cookies.forEach((cookie) => {
       req.res?.cookie(cookie.name, cookie.value, cookie.options)
     })

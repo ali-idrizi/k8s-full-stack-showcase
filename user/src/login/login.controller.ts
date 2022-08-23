@@ -17,7 +17,8 @@ export class LoginController {
   async login(@Req() req: Request, @Body() loginDto: LoginDto): Promise<UserDto> {
     const user = await this.loginService.login(loginDto)
 
-    const cookies = await this.authService.getCookies(user.id)
+    const tokens = await this.authService.genTokens(user.id)
+    const cookies = await this.authService.getCookies(tokens)
     cookies.forEach((cookie) => {
       req.res?.cookie(cookie.name, cookie.value, cookie.options)
     })
