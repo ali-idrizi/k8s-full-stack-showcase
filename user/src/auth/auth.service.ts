@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { ClientProxy } from '@nestjs/microservices'
-import { Response } from 'express'
 import { firstValueFrom, timeout } from 'rxjs'
+import { Cookie } from 'src/common/interfaces/cookie.interface'
 import { ConfigUtil } from 'src/common/utils/config.util'
 import { ENV } from 'src/user.constants'
 import { Environment, Tokens } from 'src/user.interface'
@@ -10,8 +10,8 @@ import { Command } from './auth.constant'
 
 @Injectable()
 export class AuthService {
-  jwtCookieName: string
-  refreshTokenCookieName: string
+  private readonly jwtCookieName: string
+  private readonly refreshTokenCookieName: string
 
   constructor(
     @Inject('AUTH_SERVICE') private authClient: ClientProxy,
@@ -38,15 +38,24 @@ export class AuthService {
     this.authClient.emit({ cmd: Command.REMOVE_REFRESH_TOKEN }, { refreshToken })
   }
 
-  async setTokens(res: Response, userId: string): Promise<void> {
+  async getCookies(userId: string): Promise<Cookie[]> {
     const tokens = await this.genTokens(userId)
 
-    res.cookie(this.jwtCookieName, tokens.jwt, {
-      path: '/',
-    })
-
-    res.cookie(this.refreshTokenCookieName, tokens.refreshToken, {
-      path: '/',
-    })
+    return [
+      {
+        name: this.jwtCookieName,
+        value: tokens.jwt,
+        options: {
+          path: '/',
+        },
+      },
+      {
+        name: this.refreshTokenCookieName,
+        value: tokens.refreshToken,
+        options: {
+          path: '/',
+        },
+      },
+    ]
   }
 }

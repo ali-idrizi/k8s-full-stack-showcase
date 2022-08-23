@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { ClientProxy } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
@@ -37,12 +37,12 @@ describe('UserController', () => {
 
   let prisma: DeepMockProxy<PrismaService>
   let authClient: DeepMockProxy<ClientProxy>
-  let res: DeepMockProxy<Response>
+  let req: DeepMockProxy<Request>
 
   beforeEach(async () => {
     prisma = mockDeep()
     authClient = mockDeep()
-    res = mockDeep()
+    req = mockDeep()
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [LoginController],
@@ -87,19 +87,19 @@ describe('UserController', () => {
       prisma.user.findUnique.mockResolvedValue(TEST_USER)
       authClient.send.mockReturnValue(of(TEST_TOKENS))
 
-      const user = await loginController.login(res, {
+      const user = await loginController.login(req, {
         email: TEST_USER.email,
         password: 'password',
       })
 
       expect(user).toEqual(TEST_USER)
 
-      expect(res.cookie).toHaveBeenCalledWith(
+      expect(req.res?.cookie).toHaveBeenCalledWith(
         ENV.JWT_COOKIE_NAME,
         TEST_TOKENS.jwt,
         expect.anything(),
       )
-      expect(res.cookie).toHaveBeenCalledWith(
+      expect(req.res?.cookie).toHaveBeenCalledWith(
         ENV.REFRESH_TOKEN_COOKIE_NAME,
         TEST_TOKENS.refreshToken,
         expect.anything(),
@@ -115,7 +115,7 @@ describe('UserController', () => {
       // Test incorrect email address -- user is not found in the database
       prisma.user.findUnique.mockResolvedValue(null)
       await expect(
-        loginController.login(res, {
+        loginController.login(req, {
           email: 'incorrect@email.com',
           password: 'password',
         }),
@@ -124,7 +124,7 @@ describe('UserController', () => {
       // Test correct email address, but incorrect password -- user is found in the database
       prisma.user.findUnique.mockResolvedValue(TEST_USER)
       await expect(
-        loginController.login(res, {
+        loginController.login(req, {
           email: TEST_USER.email,
           password: 'incorrect-password',
         }),

@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { ClientProxy } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma, User } from '@prisma/client'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
@@ -37,12 +37,12 @@ describe('UserController', () => {
 
   let prisma: DeepMockProxy<PrismaService>
   let authClient: DeepMockProxy<ClientProxy>
-  let res: DeepMockProxy<Response>
+  let req: DeepMockProxy<Request>
 
   beforeEach(async () => {
     prisma = mockDeep()
     authClient = mockDeep()
-    res = mockDeep()
+    req = mockDeep()
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [RegisterController],
@@ -93,16 +93,16 @@ describe('UserController', () => {
       prisma.user.create.mockResolvedValue(TEST_USER)
       authClient.send.mockReturnValue(of(TEST_TOKENS))
 
-      const user = await registerController.register(res, registerData)
+      const user = await registerController.register(req, registerData)
 
       expect(user).toEqual(TEST_USER)
 
-      expect(res.cookie).toHaveBeenCalledWith(
+      expect(req.res?.cookie).toHaveBeenCalledWith(
         ENV.JWT_COOKIE_NAME,
         TEST_TOKENS.jwt,
         expect.anything(),
       )
-      expect(res.cookie).toHaveBeenCalledWith(
+      expect(req.res?.cookie).toHaveBeenCalledWith(
         ENV.REFRESH_TOKEN_COOKIE_NAME,
         TEST_TOKENS.refreshToken,
         expect.anything(),
@@ -118,13 +118,13 @@ describe('UserController', () => {
           '',
         ),
       )
-      await expect(registerController.register(res, registerData)).rejects.toThrow(
+      await expect(registerController.register(req, registerData)).rejects.toThrow(
         new HttpException('Email address is already registered', HttpStatus.CONFLICT),
       )
 
       // Test that the same error is thrown in every other case
       prisma.user.create.mockRejectedValue(new Error())
-      await expect(registerController.register(res, registerData)).rejects.toThrow(new Error())
+      await expect(registerController.register(req, registerData)).rejects.toThrow(new Error())
     })
   })
 })
