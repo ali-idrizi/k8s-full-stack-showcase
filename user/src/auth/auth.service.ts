@@ -38,7 +38,7 @@ export class AuthService {
     this.authClient.emit({ cmd: Command.REMOVE_REFRESH_TOKEN }, { refreshToken })
   }
 
-  async getCookies(tokens: Tokens): Promise<Cookie[]> {
+  getCookies(tokens: Tokens): Cookie[] {
     return [
       {
         name: this.jwtCookieName,

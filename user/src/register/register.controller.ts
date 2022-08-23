@@ -17,7 +17,7 @@ export class RegisterController {
     const user = await this.registerService.register(registerDto)
 
     const tokens = await this.authService.genTokens(user.id)
-    const cookies = await this.authService.getCookies(tokens)
+    const cookies = this.authService.getCookies(tokens)
     cookies.forEach((cookie) => {
       req.res?.cookie(cookie.name, cookie.value, cookie.options)
     })
