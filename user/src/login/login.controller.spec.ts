@@ -1,13 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { ClientProxy } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
-import { Request, Response } from 'express'
-import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
 import { AuthService } from 'src/auth/auth.service'
+import { createMockContext, MockContext } from 'src/common/test/mock-context'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { Environment, Tokens } from 'src/user.interface'
 import { LoginController } from './login.controller'
@@ -34,15 +32,10 @@ const ENV: Partial<Environment> = {
 
 describe('UserController', () => {
   let loginController: LoginController
-
-  let prisma: DeepMockProxy<PrismaService>
-  let authClient: DeepMockProxy<ClientProxy>
-  let req: DeepMockProxy<Request>
+  let ctx: MockContext
 
   beforeEach(async () => {
-    prisma = mockDeep()
-    authClient = mockDeep()
-    req = mockDeep()
+    ctx = createMockContext()
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [LoginController],
@@ -51,11 +44,11 @@ describe('UserController', () => {
         AuthService,
         {
           provide: 'AUTH_SERVICE',
-          useValue: authClient,
+          useValue: ctx.clientProxy,
         },
         {
           provide: PrismaService,
-          useValue: prisma,
+          useValue: ctx.prisma,
         },
       ],
       imports: [
@@ -75,7 +68,6 @@ describe('UserController', () => {
     }).compile()
 
     loginController = app.get<LoginController>(LoginController)
-    authClient = app.get<DeepMockProxy<ClientProxy>>('AUTH_SERVICE')
   })
 
   it('should be defined', () => {
@@ -84,22 +76,22 @@ describe('UserController', () => {
 
   describe('/login', () => {
     it('should login and set cookies', async () => {
-      prisma.user.findUnique.mockResolvedValue(TEST_USER)
-      authClient.send.mockReturnValue(of(TEST_TOKENS))
+      ctx.prisma.user.findUnique.mockResolvedValue(TEST_USER)
+      ctx.clientProxy.send.mockReturnValue(of(TEST_TOKENS))
 
-      const user = await loginController.login(req, {
+      const user = await loginController.login(ctx.req, {
         email: TEST_USER.email,
         password: 'password',
       })
 
       expect(user).toEqual(TEST_USER)
 
-      expect(req.res?.cookie).toHaveBeenCalledWith(
+      expect(ctx.req.res?.cookie).toHaveBeenCalledWith(
         ENV.JWT_COOKIE_NAME,
         TEST_TOKENS.jwt,
         expect.anything(),
       )
-      expect(req.res?.cookie).toHaveBeenCalledWith(
+      expect(ctx.req.res?.cookie).toHaveBeenCalledWith(
         ENV.REFRESH_TOKEN_COOKIE_NAME,
         TEST_TOKENS.refreshToken,
         expect.anything(),
@@ -113,18 +105,18 @@ describe('UserController', () => {
       )
 
       // Test incorrect email address -- user is not found in the database
-      prisma.user.findUnique.mockResolvedValue(null)
+      ctx.prisma.user.findUnique.mockResolvedValue(null)
       await expect(
-        loginController.login(req, {
+        loginController.login(ctx.req, {
           email: 'incorrect@email.com',
           password: 'password',
         }),
       ).rejects.toThrow(expectedException)
 
       // Test correct email address, but incorrect password -- user is found in the database
-      prisma.user.findUnique.mockResolvedValue(TEST_USER)
+      ctx.prisma.user.findUnique.mockResolvedValue(TEST_USER)
       await expect(
-        loginController.login(req, {
+        loginController.login(ctx.req, {
           email: TEST_USER.email,
           password: 'incorrect-password',
         }),

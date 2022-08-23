@@ -1,13 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
-import { ClientProxy } from '@nestjs/microservices'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma, User } from '@prisma/client'
-import { Request, Response } from 'express'
-import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
 import { AuthService } from 'src/auth/auth.service'
+import { createMockContext, MockContext } from 'src/common/test/mock-context'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { Environment, Tokens } from 'src/user.interface'
 import { RegisterController } from './register.controller'
@@ -34,15 +32,10 @@ const ENV: Partial<Environment> = {
 
 describe('UserController', () => {
   let registerController: RegisterController
-
-  let prisma: DeepMockProxy<PrismaService>
-  let authClient: DeepMockProxy<ClientProxy>
-  let req: DeepMockProxy<Request>
+  let ctx: MockContext
 
   beforeEach(async () => {
-    prisma = mockDeep()
-    authClient = mockDeep()
-    req = mockDeep()
+    ctx = createMockContext()
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [RegisterController],
@@ -51,11 +44,11 @@ describe('UserController', () => {
         AuthService,
         {
           provide: 'AUTH_SERVICE',
-          useValue: authClient,
+          useValue: ctx.clientProxy,
         },
         {
           provide: PrismaService,
-          useValue: prisma,
+          useValue: ctx.prisma,
         },
       ],
       imports: [
@@ -90,19 +83,19 @@ describe('UserController', () => {
     }
 
     it('should create user set cookies', async () => {
-      prisma.user.create.mockResolvedValue(TEST_USER)
-      authClient.send.mockReturnValue(of(TEST_TOKENS))
+      ctx.prisma.user.create.mockResolvedValue(TEST_USER)
+      ctx.clientProxy.send.mockReturnValue(of(TEST_TOKENS))
 
-      const user = await registerController.register(req, registerData)
+      const user = await registerController.register(ctx.req, registerData)
 
       expect(user).toEqual(TEST_USER)
 
-      expect(req.res?.cookie).toHaveBeenCalledWith(
+      expect(ctx.req.res?.cookie).toHaveBeenCalledWith(
         ENV.JWT_COOKIE_NAME,
         TEST_TOKENS.jwt,
         expect.anything(),
       )
-      expect(req.res?.cookie).toHaveBeenCalledWith(
+      expect(ctx.req.res?.cookie).toHaveBeenCalledWith(
         ENV.REFRESH_TOKEN_COOKIE_NAME,
         TEST_TOKENS.refreshToken,
         expect.anything(),
@@ -111,20 +104,20 @@ describe('UserController', () => {
 
     it('should throw', async () => {
       // Test that a correct HttpException is thrown when the email is already registered
-      prisma.user.create.mockRejectedValue(
+      ctx.prisma.user.create.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError(
           'Invalid `this.prisma.user.create()` invocation',
           'P2002',
           '',
         ),
       )
-      await expect(registerController.register(req, registerData)).rejects.toThrow(
+      await expect(registerController.register(ctx.req, registerData)).rejects.toThrow(
         new HttpException('Email address is already registered', HttpStatus.CONFLICT),
       )
 
       // Test that the same error is thrown in every other case
-      prisma.user.create.mockRejectedValue(new Error())
-      await expect(registerController.register(req, registerData)).rejects.toThrow(new Error())
+      ctx.prisma.user.create.mockRejectedValue(new Error())
+      await expect(registerController.register(ctx.req, registerData)).rejects.toThrow(new Error())
     })
   })
 })
