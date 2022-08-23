@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus } from '@nestjs/common'
-import { ConfigModule } from '@nestjs/config'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma, User } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { of } from 'rxjs'
 import { AuthService } from 'src/auth/auth.service'
+import { ConfigModuleMock, TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
 import { HashUtil } from 'src/common/utils/hash.util'
-import { Environment, Tokens } from 'src/user.interface'
+import { Tokens } from 'src/user.interface'
 import { RegisterController } from './register.controller'
 import { RegisterService } from './register.service'
 
@@ -24,11 +24,6 @@ const TEST_TOKENS: Tokens = {
   jwt: 'jwt',
   refreshToken: 'refreshToken',
 } as const
-
-const ENV: Partial<Environment> = {
-  JWT_COOKIE_NAME: 'jwt',
-  REFRESH_TOKEN_COOKIE_NAME: 'refresh-token',
-}
 
 describe('UserController', () => {
   let registerController: RegisterController
@@ -51,20 +46,7 @@ describe('UserController', () => {
           useValue: ctx.prisma,
         },
       ],
-      imports: [
-        ConfigModule.forRoot({
-          ignoreEnvFile: true,
-          load: [
-            (): Partial<Environment> => {
-              // Delete variables defined in `ENV` from `process.env`
-              // TODO: Use `ignoreEnvVarsOnGet` when https://github.com/nestjs/config/pull/997 is merged
-              Object.keys(ENV).forEach((key) => delete process.env[key])
-
-              return ENV
-            },
-          ],
-        }),
-      ],
+      imports: [ConfigModuleMock],
     }).compile()
 
     registerController = app.get<RegisterController>(RegisterController)
@@ -91,12 +73,12 @@ describe('UserController', () => {
       expect(user).toEqual(TEST_USER)
 
       expect(ctx.req.res?.cookie).toHaveBeenCalledWith(
-        ENV.JWT_COOKIE_NAME,
+        TEST_ENV.JWT_COOKIE_NAME,
         TEST_TOKENS.jwt,
         expect.anything(),
       )
       expect(ctx.req.res?.cookie).toHaveBeenCalledWith(
-        ENV.REFRESH_TOKEN_COOKIE_NAME,
+        TEST_ENV.REFRESH_TOKEN_COOKIE_NAME,
         TEST_TOKENS.refreshToken,
         expect.anything(),
       )
