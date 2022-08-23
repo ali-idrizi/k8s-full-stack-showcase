@@ -9,7 +9,11 @@ export class LogoutController {
   @Post('/')
   @HttpCode(HttpStatus.OK)
   logout(@Req() req: Request): { success: boolean } {
-    this.authService.removeTokens(req.cookies)
+    const tokens = this.authService.getTokensFromCookies(req.cookies)
+    if (tokens.refreshToken) {
+      this.authService.removeRefreshToken(tokens.refreshToken)
+    }
+
     this.authService.getClearedCookies().forEach((cookie) => {
       req.res?.cookie(cookie.name, cookie.value, cookie.options)
     })
