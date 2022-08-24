@@ -1,9 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common'
-import { Request } from 'express'
+import { ReqUtil } from '../utils/req.util'
 
 export const ReqHeader = createParamDecorator(
   (header: string, ctx: ExecutionContext): string | undefined => {
-    const req: Request = ctx.switchToHttp().getRequest()
-    return req.get(header)
+    return ReqUtil.getHeaderFromContext(ctx, header)
   },
 )

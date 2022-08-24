@@ -40,14 +40,10 @@ describe('AuthController', () => {
       }
 
       ctx.clientProxy.send
-        .calledWith(objectContainsValue(Command.VALIDATE_JWT), any())
-        .mockReturnValue(of({ expired: false, userId: 'test-user-id' }))
-
-      ctx.clientProxy.send
         .calledWith(objectContainsValue(Command.REFRESH_JWT), any())
         .mockReturnValue(of({ jwt: 'new-test-jwt', refreshToken: 'new-test-refresh-token' }))
 
-      await authController.refreshToken(ctx.req, undefined)
+      await authController.refreshToken(ctx.req, 'test-user-id', undefined)
 
       expect(ctx.clientProxy.send).toHaveBeenCalledWith(
         { cmd: Command.REFRESH_JWT },

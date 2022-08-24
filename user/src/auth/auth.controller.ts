@@ -1,7 +1,9 @@
-import { Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common'
+import { Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common'
 import { serialize } from 'cookie'
 import { Request } from 'express'
 import { ReqHeader } from 'src/common/decorators/req-header.decorator'
+import { UserId } from 'src/common/decorators/user-id.decorator'
+import { AuthGuard } from 'src/common/guards/auth.guard'
 import { AuthService } from './auth.service'
 
 @Controller('auth')
@@ -9,17 +11,18 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('refresh-token')
+  @UseGuards(AuthGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   async refreshToken(
     @Req() req: Request,
+    @UserId() userId: string,
     @ReqHeader('X-JWT-Refreshed') jwtRefreshed: string | undefined,
   ): Promise<void> {
     const tokens = this.authService.getTokensFromCookies(req.cookies)
-    const jwtStatus = await this.authService.validateJwt(tokens.jwt)
 
     // Skip if the JWT was already refreshed in the authentication subrequest
     if (jwtRefreshed !== 'true') {
-      const newTokens = await this.authService.refreshJwt(tokens.refreshToken, jwtStatus.userId)
+      const newTokens = await this.authService.refreshJwt(tokens.refreshToken, userId)
       const cookies = this.authService.getCookies(newTokens)
       cookies.forEach((cookie) => {
         req.res?.cookie(cookie.name, cookie.value, cookie.options)
