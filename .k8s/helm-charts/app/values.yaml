@@ -6,6 +6,17 @@ default: &default
   service:
     clusterIP: None
 
+ingress: &ingress
+  rewriteTarget: /$2
+  auth:
+    enabled: true
+    responseHeaders: X-User-ID
+    convertHeaders:
+      - from: X-Set-Cookie-jwt
+        to: Set-Cookie
+      - from: X-Set-Cookie-refresh-token
+        to: Set-Cookie
+
 auth:
   <<: *default
   extraEnvFrom:
@@ -21,6 +32,7 @@ todo:
   containerPorts:
     http: 3002
   ingress:
+    <<: *ingress
     path: /api/todo(/|$)(.*)
 
 user:
@@ -31,7 +43,14 @@ user:
   containerPorts:
     http: 3001
   ingress:
+    <<: *ingress
     path: /api/user(/|$)(.*)
+    annotations:
+      nginx.ingress.kubernetes.io/server-snippet: |
+        location ~ ^/api/user/auth/?$ {
+          internal;
+        }
+  service: {}
 
 webClient:
   <<: *default
@@ -39,6 +58,7 @@ webClient:
   containerPorts:
     http: 8080
   ingress:
+    <<: *ingress
     rewriteTarget: /$1
     path: /(.*)
 

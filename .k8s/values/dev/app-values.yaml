@@ -1,3 +1,7 @@
+ingress: &ingress
+  auth:
+    url: http://dev-app-user.dev.svc.cluster.local/auth
+
 auth:
   db:
     prisma:
@@ -5,18 +9,26 @@ auth:
         enabled: true
 
 todo:
+  ingress:
+    <<: *ingress
   db:
     prisma:
       migrate:
         enabled: true
 
 user:
+  ingress:
+    <<: *ingress
   db:
     prisma:
       migrate:
         enabled: true
       seed:
         enabled: true
+
+webClient:
+  ingress:
+    <<: *ingress
 
 nats:
   host: nats.dev.svc.cluster.local

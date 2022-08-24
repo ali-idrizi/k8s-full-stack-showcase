@@ -9,21 +9,24 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.rewriteTarget }}
-    {{ if .Values.ingress.auth.enabled -}}
-    nginx.ingress.kubernetes.io/auth-url: {{ .Values.ingress.auth.url }}
-    nginx.ingress.kubernetes.io/auth-response-headers: X-UserId
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      auth_request_set    $auth_jwt $upstream_http_x_jwt;
-      auth_request_set    $auth_refresh_token $upstream_http_x_refreshtoken;
-      add_header          Set-Cookie $auth_jwt;
-      add_header          Set-Cookie $auth_refresh_token;
-    {{- end -}}
     {{- if .Values.ingress.annotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{ if eq .Values.ingress.ingressClassName "nginx" -}}
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.rewriteTarget }}
+    {{ if .Values.ingress.auth.enabled -}}
+    nginx.ingress.kubernetes.io/auth-url: {{ .Values.ingress.auth.url }}
+    nginx.ingress.kubernetes.io/auth-response-headers: {{ .Values.ingress.auth.responseHeaders }}
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      {{- range .Values.ingress.auth.convertHeaders }}
+      {{ $var := regexReplaceAll "\\W+" .from "_" | lower -}}
+      auth_request_set $auth_{{ $var }} $upstream_http_{{ $var }};
+      add_header       {{ .to }} $auth_{{ $var }};
+      {{- end }}
+    {{- end -}}
     {{- end }}
 spec:
   {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
