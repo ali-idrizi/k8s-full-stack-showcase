@@ -8,7 +8,7 @@ import { ENV } from 'src/user.constants'
 import { Environment, Tokens } from 'src/user.interface'
 import { AUTH_CLIENT, Command } from './auth.constant'
 import { JwtStatus } from './auth.interface'
-import { InvalidRefreshTokenException, JwtInvalidException } from './exceptions'
+import { InvalidRefreshTokenException, InvalidJwtException } from './exceptions'
 
 @Injectable()
 export class AuthService {
@@ -45,7 +45,7 @@ export class AuthService {
     try {
       data = await firstValueFrom(res)
     } catch (error) {
-      throw new JwtInvalidException(error)
+      throw new InvalidJwtException(error)
     }
 
     return data

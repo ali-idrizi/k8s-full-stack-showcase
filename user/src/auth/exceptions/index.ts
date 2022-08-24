@@ -1,2 +1,2 @@
 export * from './invalid-refresh-token.exception'
-export * from './jwt-invalid.exception'
+export * from './invalid-jwt.exception'
