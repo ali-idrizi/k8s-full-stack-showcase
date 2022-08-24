@@ -28,7 +28,7 @@ export class AuthController {
    *
    * If the user is authenticated with a valid JWT, it will respond with the X-User-ID header.
    * If the JWT is expired, it will attempt to refresh it, if successful it will respond with the X-User-ID header
-   * and 2 additional X-Set-Cookie-* headers, that are converted to Set-Cookie by ingree-nginx.
+   * and 2 additional X-Set-Cookie-* headers, that are converted to Set-Cookie by ingress-nginx.
    *
    * If the user is not authenticated or any of the tokens are invalid, it will not set the X-User-ID header
    *
