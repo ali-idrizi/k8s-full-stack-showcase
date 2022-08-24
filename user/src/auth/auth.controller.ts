@@ -30,7 +30,7 @@ export class AuthController {
   /**
    * This endpoint is used by ingress-nginx to check if the user is authenticated, it will always return 204,
    * so that the request can be processed by downstream services. A Guard should be used to check if the
-   * X-User-ID header is set for routes the require authentication.
+   * X-User-ID header is set for routes that require authentication.
    *
    * If the user is authenticated with a valid JWT, it will respond with the X-User-ID header.
    * If the JWT is expired, it will attempt to refresh it, if successful it will respond with the X-User-ID header
