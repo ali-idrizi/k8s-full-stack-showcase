@@ -22,14 +22,14 @@ export class ItemController {
   constructor(private itemService: ItemService) {}
 
   @Post('/')
-  create(@Body() createDto: CreateDto): Promise<Item> {
-    return this.itemService.create(createDto)
+  create(@UserId() userId: string, @Body() createDto: CreateDto): Promise<Item> {
+    return this.itemService.create(userId, createDto)
   }
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: string): Promise<void> {
-    return this.itemService.delete(id)
+  delete(@UserId() userId: string, @Param('id') id: string): Promise<void> {
+    return this.itemService.delete(userId, id)
   }
 
   @Patch('/:id')
