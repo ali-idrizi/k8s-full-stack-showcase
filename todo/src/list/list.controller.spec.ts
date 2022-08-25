@@ -96,10 +96,12 @@ describe('ListController', () => {
     const updateData = { title: 'New Title' }
 
     it('should update the list', async () => {
-      await listController.update('id', updateData)
+      await listController.update('test-user-id', 'id', updateData)
 
       expect(prismaService.list.update).toHaveBeenCalledWith({
-        where: { id: 'id' },
+        where: {
+          userIndex: { userId: 'test-user-id', id: 'id' },
+        },
         data: updateData,
       })
     })
@@ -110,7 +112,7 @@ describe('ListController', () => {
       )
 
       expect(async () => {
-        await listController.update('id', updateData)
+        await listController.update('test-user-id', 'id', updateData)
       }).rejects.toThrow(BadRequestException)
     })
   })

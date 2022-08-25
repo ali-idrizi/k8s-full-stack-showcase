@@ -61,10 +61,15 @@ export class ListService {
     }
   }
 
-  async update(id: string, updateDto: UpdateDto): Promise<List> {
+  async update(userId: string, id: string, updateDto: UpdateDto): Promise<List> {
     try {
       const list = await this.prisma.list.update({
-        where: { id },
+        where: {
+          userIndex: {
+            userId,
+            id,
+          },
+        },
         data: updateDto,
       })
 

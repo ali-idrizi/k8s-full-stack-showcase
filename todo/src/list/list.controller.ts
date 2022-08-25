@@ -44,7 +44,11 @@ export class ListController {
   }
 
   @Patch('/:id')
-  update(@Param('id') id: string, @Body() updateDto: UpdateDto): Promise<List> {
-    return this.listService.update(id, updateDto)
+  update(
+    @UserId() userId: string,
+    @Param('id') id: string,
+    @Body() updateDto: UpdateDto,
+  ): Promise<List> {
+    return this.listService.update(userId, id, updateDto)
   }
 }
