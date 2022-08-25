@@ -39,11 +39,11 @@ export class ListService {
     }
   }
 
-  async create(createDto: CreateDto): Promise<List> {
+  async create(userId: string, createDto: CreateDto): Promise<List> {
     return this.prisma.list.create({
       data: {
         ...createDto,
-        userId: 'temp-user-id', // TODO: update
+        userId,
       },
     })
   }

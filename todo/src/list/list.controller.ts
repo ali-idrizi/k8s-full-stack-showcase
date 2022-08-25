@@ -33,8 +33,8 @@ export class ListController {
   }
 
   @Post('/')
-  create(@Body() createDto: CreateDto): Promise<List> {
-    return this.listService.create(createDto)
+  create(@UserId() userId: string, @Body() createDto: CreateDto): Promise<List> {
+    return this.listService.create(userId, createDto)
   }
 
   @Delete('/:id')

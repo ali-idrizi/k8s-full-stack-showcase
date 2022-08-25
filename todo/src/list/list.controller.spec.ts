@@ -66,8 +66,10 @@ describe('ListController', () => {
 
   describe('create', () => {
     it('should create a new list', async () => {
-      await listController.create({ title: 'title' })
-      expect(prismaService.list.create).toHaveBeenCalled()
+      await listController.create('test-user-id', { title: 'title' })
+      expect(prismaService.list.create).toHaveBeenCalledWith({
+        data: { userId: 'test-user-id', title: 'title' },
+      })
     })
   })
 
