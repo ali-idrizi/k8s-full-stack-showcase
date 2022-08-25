@@ -1,6 +1,15 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req } from '@nestjs/common'
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+} from '@nestjs/common'
 import { Request } from 'express'
 import { AuthService } from 'src/auth/auth.service'
+import { ReqHeader } from 'src/common/decorators/req-header.decorator'
 import { UserDto } from 'src/user.dto'
 import { LoginDto } from './login.dto'
 import { LoginService } from './login.service'
@@ -14,7 +23,15 @@ export class LoginController {
 
   @Post('/')
   @HttpCode(HttpStatus.OK)
-  async login(@Req() req: Request, @Body() loginDto: LoginDto): Promise<UserDto> {
+  async login(
+    @Req() req: Request,
+    @Body() loginDto: LoginDto,
+    @ReqHeader('X-Authenticated') authenticated: string | undefined,
+  ): Promise<UserDto> {
+    if (authenticated === 'true') {
+      throw new BadRequestException('User is already authenticated')
+    }
+
     const user = await this.loginService.login(loginDto)
 
     const tokens = await this.authService.genTokens(user.id)

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common'
+import { BadRequestException, HttpException, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { User } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
@@ -56,10 +56,14 @@ describe('LoginController', () => {
       ctx.prisma.user.findUnique.mockResolvedValue(TEST_USER)
       ctx.clientProxy.send.mockReturnValue(of(TEST_TOKENS))
 
-      const user = await loginController.login(ctx.req, {
-        email: TEST_USER.email,
-        password: 'password',
-      })
+      const user = await loginController.login(
+        ctx.req,
+        {
+          email: TEST_USER.email,
+          password: 'password',
+        },
+        undefined,
+      )
 
       expect(user).toEqual(TEST_USER)
 
@@ -76,6 +80,11 @@ describe('LoginController', () => {
     })
 
     it('should throw', async () => {
+      // Test user is already authenticated
+      await expect(
+        loginController.login(ctx.req, { email: '', password: '' }, 'true'),
+      ).rejects.toThrow(BadRequestException)
+
       const expectedException = new HttpException(
         'Invalid email address or password',
         HttpStatus.UNAUTHORIZED,
@@ -84,19 +93,27 @@ describe('LoginController', () => {
       // Test incorrect email address -- user is not found in the database
       ctx.prisma.user.findUnique.mockResolvedValue(null)
       await expect(
-        loginController.login(ctx.req, {
-          email: 'incorrect@email.com',
-          password: 'password',
-        }),
+        loginController.login(
+          ctx.req,
+          {
+            email: 'incorrect@email.com',
+            password: 'password',
+          },
+          undefined,
+        ),
       ).rejects.toThrow(expectedException)
 
       // Test correct email address, but incorrect password -- user is found in the database
       ctx.prisma.user.findUnique.mockResolvedValue(TEST_USER)
       await expect(
-        loginController.login(ctx.req, {
-          email: TEST_USER.email,
-          password: 'incorrect-password',
-        }),
+        loginController.login(
+          ctx.req,
+          {
+            email: TEST_USER.email,
+            password: 'incorrect-password',
+          },
+          undefined,
+        ),
       ).rejects.toThrow(expectedException)
     })
   })

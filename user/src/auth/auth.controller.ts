@@ -25,7 +25,9 @@ export class AuthController {
    * X-User-ID header is set for routes that require authentication.
    *
    * If the user is authenticated with a valid JWT, it will respond with the X-User-ID header
-   * If the JWT is expired, none or invalid tokens are present, it will not set the X-User-ID header at all
+   * If the JWT is expired or no/invalid tokens are present, it will not set the X-User-ID header at all
+   *
+   * If the JWT is valid or expired, it will also set the X-Authenticated header to true
    *
    * @param req the express Request object
    */
@@ -41,6 +43,7 @@ export class AuthController {
     try {
       const { expired, userId } = await this.authService.validateJwt(tokens.jwt)
 
+      req.res?.header('X-Authenticated', 'true')
       if (!expired) {
         req.res?.header('X-User-ID', userId)
       }

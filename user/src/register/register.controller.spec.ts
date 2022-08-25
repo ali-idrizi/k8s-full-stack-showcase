@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus } from '@nestjs/common'
+import { BadRequestException, HttpException, HttpStatus } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
 import { Prisma, User } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
@@ -63,7 +63,7 @@ describe('RegisterController', () => {
       ctx.prisma.user.create.mockResolvedValue(TEST_USER)
       ctx.clientProxy.send.mockReturnValue(of(TEST_TOKENS))
 
-      const user = await registerController.register(ctx.req, registerData)
+      const user = await registerController.register(ctx.req, registerData, undefined)
 
       expect(user).toEqual(TEST_USER)
 
@@ -80,6 +80,11 @@ describe('RegisterController', () => {
     })
 
     it('should throw', async () => {
+      // Test user is already authenticated
+      await expect(registerController.register(ctx.req, registerData, 'true')).rejects.toThrow(
+        BadRequestException,
+      )
+
       // Test that a correct HttpException is thrown when the email is already registered
       ctx.prisma.user.create.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError(
@@ -88,13 +93,15 @@ describe('RegisterController', () => {
           '',
         ),
       )
-      await expect(registerController.register(ctx.req, registerData)).rejects.toThrow(
+      await expect(registerController.register(ctx.req, registerData, undefined)).rejects.toThrow(
         new HttpException('Email address is already registered', HttpStatus.CONFLICT),
       )
 
       // Test that the same error is thrown in every other case
       ctx.prisma.user.create.mockRejectedValue(new Error())
-      await expect(registerController.register(ctx.req, registerData)).rejects.toThrow(new Error())
+      await expect(registerController.register(ctx.req, registerData, undefined)).rejects.toThrow(
+        new Error(),
+      )
     })
   })
 })

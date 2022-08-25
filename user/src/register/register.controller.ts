@@ -1,6 +1,7 @@
-import { Body, Controller, Post, Req } from '@nestjs/common'
+import { BadRequestException, Body, Controller, Post, Req } from '@nestjs/common'
 import { Request } from 'express'
 import { AuthService } from 'src/auth/auth.service'
+import { ReqHeader } from 'src/common/decorators/req-header.decorator'
 import { UserDto } from 'src/user.dto'
 import { RegisterDto } from './register.dto'
 import { RegisterService } from './register.service'
@@ -13,7 +14,15 @@ export class RegisterController {
   ) {}
 
   @Post('/')
-  async register(@Req() req: Request, @Body() registerDto: RegisterDto): Promise<UserDto> {
+  async register(
+    @Req() req: Request,
+    @Body() registerDto: RegisterDto,
+    @ReqHeader('X-Authenticated') authenticated: string | undefined,
+  ): Promise<UserDto> {
+    if (authenticated === 'true') {
+      throw new BadRequestException('User is already authenticated')
+    }
+
     const user = await this.registerService.register(registerDto)
 
     const tokens = await this.authService.genTokens(user.id)
