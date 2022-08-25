@@ -27,5 +27,6 @@ model List {
   default Boolean @default(false)
   items   Item[]
 
+  @@unique([userId, id], name: "userIndex")
   @@map("lists")
 }
