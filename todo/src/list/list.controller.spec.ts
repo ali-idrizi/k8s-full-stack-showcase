@@ -47,14 +47,16 @@ describe('ListController', () => {
   describe('getOne', () => {
     it('should return the list with items', async () => {
       await listController.getOne('test-user-id', 'id')
-      expect(prismaService.list.findFirstOrThrow).toHaveBeenCalledWith({
-        where: { userId: 'test-user-id', id: 'id' },
+      expect(prismaService.list.findUniqueOrThrow).toHaveBeenCalledWith({
+        where: {
+          userIndex: { userId: 'test-user-id', id: 'id' },
+        },
         include: { items: true },
       })
     })
 
     it('should throw BadRequest if list is not found', () => {
-      prismaMockContext.prisma.list.findFirstOrThrow.mockRejectedValue(
+      prismaMockContext.prisma.list.findUniqueOrThrow.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
       )
 
