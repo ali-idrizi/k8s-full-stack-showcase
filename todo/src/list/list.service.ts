@@ -17,10 +17,11 @@ export class ListService {
     })
   }
 
-  async getOne(id: string): Promise<List> {
+  async getOne(userId: string, id: string): Promise<List> {
     try {
-      const list = await this.prisma.list.findUniqueOrThrow({
+      const list = await this.prisma.list.findFirstOrThrow({
         where: {
+          userId,
           id,
         },
         include: {

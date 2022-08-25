@@ -28,8 +28,8 @@ export class ListController {
   }
 
   @Get('/:id')
-  getOne(@Param('id') id: string): Promise<List> {
-    return this.listService.getOne(id)
+  getOne(@UserId() userId: string, @Param('id') id: string): Promise<List> {
+    return this.listService.getOne(userId, id)
   }
 
   @Post('/')
