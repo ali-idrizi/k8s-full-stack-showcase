@@ -49,15 +49,19 @@ export class ListService {
   }
 
   async delete(userId: string, id: string): Promise<void> {
-    const { count } = await this.prisma.list.deleteMany({
-      where: {
-        userId,
-        id,
-      },
-    })
-
-    if (count === 0) {
-      throw new BadRequestException('List not found')
+    try {
+      await this.prisma.list.delete({
+        where: {
+          userIndex: {
+            userId,
+            id,
+          },
+        },
+      })
+    } catch (error) {
+      if (ErrorUtil.isNotFoundError(error)) {
+        throw new BadRequestException('List not found')
+      }
     }
   }
 
