@@ -4,11 +4,12 @@ import { RpcException } from '@nestjs/microservices'
 import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
-import { AuthEnvironment, TokenPair, ValidateJwtRes } from './auth.interface'
+import { Tokens, ValidateJwtRes } from './auth.interface'
+import { ConfigUtil } from './common/utils/config.util'
 import { DateUtil } from './common/utils/date.util'
 import { ErrorUtil } from './common/utils/error.util'
 import { JwtStatus, TokenUtil } from './common/utils/token.util'
-import { GenerateTokenPairDto } from './dto/generate-token-pair.dto'
+import { GenTokensDto } from './dto/gen-tokens.dto'
 import { RefreshJwtDto } from './dto/refresh-jwt.dto'
 import { ValidateJwtDto } from './dto/validate-jwt.dto'
 
@@ -18,59 +19,51 @@ export class AuthService {
   private jwtExpiresIn: number
   private refreshTokenExpiresIn: number
 
-  constructor(
-    private configService: ConfigService<AuthEnvironment>,
-    private prisma: PrismaService,
-  ) {
-    const jwtSecret = this.configService.get(Environment.JWT_SECRET, { infer: true })
-    const jwtExpiresIn = this.configService.get(Environment.JWT_EXPIRES_IN_SECONDS, { infer: true })
-    const refreshTokenExpiresIn = this.configService.get(
+  constructor(private prisma: PrismaService, configService: ConfigService) {
+    const [jwtSecret, jwtExpiresIn, refreshTokenExpiresIn] = ConfigUtil.getMultiple(configService, [
+      Environment.JWT_SECRET,
+      Environment.JWT_EXPIRES_IN_SECONDS,
       Environment.REFRESH_TOKEN_EXPIRES_IN_SECONDS,
-      { infer: true },
-    )
-
-    if (!jwtSecret || !jwtExpiresIn || !refreshTokenExpiresIn) {
-      throw new RpcException('Environment variables missing')
-    }
+    ])
 
     this.jwtSecret = jwtSecret
     this.jwtExpiresIn = parseInt(jwtExpiresIn)
     this.refreshTokenExpiresIn = parseInt(refreshTokenExpiresIn)
   }
 
-  async generateTokenPair(payload: GenerateTokenPairDto): Promise<TokenPair> {
-    const jwt = TokenUtil.generateJwt(payload.userId, this.jwtExpiresIn, this.jwtSecret)
-    const refreshToken = TokenUtil.generateRefreshToken()
+  async genTokens(payload: GenTokensDto): Promise<Tokens> {
+    const tokens = TokenUtil.genTokens(payload.userId, this.jwtExpiresIn, this.jwtSecret)
 
     await this.prisma.auth.create({
       data: {
-        refreshToken,
+        refreshToken: tokens.refreshToken,
         userId: payload.userId,
       },
     })
 
-    return { jwt, refreshToken }
+    return tokens
   }
 
   validateJwt(payload: ValidateJwtDto): ValidateJwtRes {
     const jwtStatus = TokenUtil.verfiyJwt(payload.jwt, this.jwtSecret)
 
     const expired = jwtStatus === JwtStatus.EXPIRED
-    let jwtPayload: JWT.JwtPayload
+    let userId: string
 
     if (jwtStatus === JwtStatus.VALID || expired) {
-      jwtPayload = TokenUtil.decodeJwt(payload.jwt)
+      const jwtPayload = TokenUtil.decodeJwt(payload.jwt)
+      userId = jwtPayload.uid
     } else {
       throw new RpcException('Invalid JWT')
     }
 
     return {
       expired,
-      payload: jwtPayload,
+      userId,
     }
   }
 
-  async refreshJwt(payload: RefreshJwtDto): Promise<TokenPair> {
+  async refreshJwt(payload: RefreshJwtDto): Promise<Tokens> {
     try {
       const auth = await this.prisma.auth.delete({ where: { refreshToken: payload.refreshToken } })
 
@@ -86,7 +79,7 @@ export class AuthService {
       throw error
     }
 
-    return this.generateTokenPair({ userId: payload.userId })
+    return this.genTokens({ userId: payload.userId })
   }
 
   async removeRefreshToken(refreshToken: string): Promise<void> {

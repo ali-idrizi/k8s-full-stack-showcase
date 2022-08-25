@@ -7,7 +7,7 @@ export const Environment = {
 } as const
 
 export const Command = {
-  GENERATE_TOKEN_PAIR: 'generateTokenPair',
+  GEN_TOKENS: 'genTokens',
   VALIDATE_JWT: 'validateJwt',
   REFRESH_JWT: 'refreshJwt',
   REMOVE_REFRESH_TOKEN: 'removeRefreshToken',

@@ -35,16 +35,22 @@ describe('ListController', () => {
 
   describe('getAll', () => {
     it('should return all lists', async () => {
-      await listController.getAll()
-      expect(prismaService.list.findMany).toHaveBeenCalled()
+      await listController.getAll('test-user-id')
+      expect(prismaService.list.findMany).toHaveBeenCalledWith({
+        where: {
+          userId: 'test-user-id',
+        },
+      })
     })
   })
 
   describe('getOne', () => {
     it('should return the list with items', async () => {
-      await listController.getOne('id')
+      await listController.getOne('test-user-id', 'id')
       expect(prismaService.list.findUniqueOrThrow).toHaveBeenCalledWith({
-        where: { id: 'id' },
+        where: {
+          userIndex: { userId: 'test-user-id', id: 'id' },
+        },
         include: { items: true },
       })
     })
@@ -55,23 +61,27 @@ describe('ListController', () => {
       )
 
       expect(async () => {
-        await listController.getOne('id')
+        await listController.getOne('test-user-id', 'id')
       }).rejects.toThrow(BadRequestException)
     })
   })
 
   describe('create', () => {
     it('should create a new list', async () => {
-      await listController.create({ title: 'title' })
-      expect(prismaService.list.create).toHaveBeenCalled()
+      await listController.create('test-user-id', { title: 'title' })
+      expect(prismaService.list.create).toHaveBeenCalledWith({
+        data: { userId: 'test-user-id', title: 'title' },
+      })
     })
   })
 
   describe('delete', () => {
     it('should delete the list', async () => {
-      await listController.delete('id')
+      await listController.delete('test-user-id', 'id')
       expect(prismaService.list.delete).toHaveBeenCalledWith({
-        where: { id: 'id' },
+        where: {
+          userIndex: { userId: 'test-user-id', id: 'id' },
+        },
       })
     })
 
@@ -81,7 +91,7 @@ describe('ListController', () => {
       )
 
       expect(async () => {
-        await listController.delete('id')
+        await listController.delete('test-user-id', 'id')
       }).rejects.toThrow(BadRequestException)
     })
   })
@@ -90,10 +100,12 @@ describe('ListController', () => {
     const updateData = { title: 'New Title' }
 
     it('should update the list', async () => {
-      await listController.update('id', updateData)
+      await listController.update('test-user-id', 'id', updateData)
 
       expect(prismaService.list.update).toHaveBeenCalledWith({
-        where: { id: 'id' },
+        where: {
+          userIndex: { userId: 'test-user-id', id: 'id' },
+        },
         data: updateData,
       })
     })
@@ -104,7 +116,7 @@ describe('ListController', () => {
       )
 
       expect(async () => {
-        await listController.update('id', updateData)
+        await listController.update('test-user-id', 'id', updateData)
       }).rejects.toThrow(BadRequestException)
     })
   })

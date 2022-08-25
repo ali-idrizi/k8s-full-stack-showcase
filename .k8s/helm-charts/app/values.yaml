@@ -3,13 +3,14 @@ default: &default
     enabled: false
   readinessProbe:
     enabled: false
-  ingress: &ingress
-    ingressClassName: kong
-    annotations:
-      konghq.com/strip-path: "true"
-    pathType: Prefix
-  service: &service
+  service:
     clusterIP: None
+
+ingress: &ingress
+  rewriteTarget: /$2
+  auth:
+    enabled: true
+    responseHeaders: X-User-ID, X-Authenticated
 
 auth:
   <<: *default
@@ -26,7 +27,7 @@ todo:
     http: 3002
   ingress:
     <<: *ingress
-    path: /api/todo
+    path: /api/todo(/|$)(.*)
 
 user:
   <<: *default
@@ -37,7 +38,13 @@ user:
     http: 3001
   ingress:
     <<: *ingress
-    path: /api/user
+    path: /api/user(/|$)(.*)
+    annotations:
+      nginx.ingress.kubernetes.io/server-snippet: |
+        location ~ ^/api/user/auth/?$ {
+          internal;
+        }
+  service: {}
 
 webClient:
   <<: *default
@@ -46,7 +53,8 @@ webClient:
     http: 8080
   ingress:
     <<: *ingress
-    path: /
+    rewriteTarget: /$1
+    path: /(.*)
 
 nats:
   host: nats

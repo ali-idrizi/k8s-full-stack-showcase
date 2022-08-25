@@ -15,7 +15,7 @@ model Item {
   createdAt DateTime @default(now())
   completed Boolean  @default(false)
   listId    String
-  list      List     @relation(fields: [listId], references: [id])
+  list      List     @relation(fields: [listId], references: [id], onDelete: Cascade)
 
   @@map("items")
 }
@@ -27,5 +27,6 @@ model List {
   default Boolean @default(false)
   items   Item[]
 
+  @@unique([userId, id], name: "userIndex")
   @@map("lists")
 }

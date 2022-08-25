@@ -1,6 +1,6 @@
 import { IsDefined } from 'class-validator'
 
-export class GenerateTokenPairDto {
+export class GenTokensDto {
   @IsDefined({
     message: 'userId is required',
   })

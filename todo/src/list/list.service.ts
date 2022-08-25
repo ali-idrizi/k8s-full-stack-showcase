@@ -9,19 +9,22 @@ import { UpdateDto } from './dto/update.dto'
 export class ListService {
   constructor(private prisma: PrismaService) {}
 
-  getAll(): Promise<List[]> {
+  getAll(userId: string): Promise<List[]> {
     return this.prisma.list.findMany({
       where: {
-        // TODO: add userId clause
+        userId,
       },
     })
   }
 
-  async getOne(id: string): Promise<List> {
+  async getOne(userId: string, id: string): Promise<List> {
     try {
       const list = await this.prisma.list.findUniqueOrThrow({
         where: {
-          id,
+          userIndex: {
+            userId,
+            id,
+          },
         },
         include: {
           items: true,
@@ -38,36 +41,41 @@ export class ListService {
     }
   }
 
-  async create(createDto: CreateDto): Promise<List> {
+  async create(userId: string, createDto: CreateDto): Promise<List> {
     return this.prisma.list.create({
       data: {
         ...createDto,
-        userId: 'temp-user-id', // TODO: update
+        userId,
       },
     })
   }
 
-  async delete(id: string): Promise<void> {
-    // TODO: Make sure item belongs to the user
+  async delete(userId: string, id: string): Promise<void> {
     try {
       await this.prisma.list.delete({
         where: {
-          id,
+          userIndex: {
+            userId,
+            id,
+          },
         },
       })
     } catch (error) {
       if (ErrorUtil.isNotFoundError(error)) {
         throw new BadRequestException('List not found')
       }
-
-      throw error
     }
   }
 
-  async update(id: string, updateDto: UpdateDto): Promise<List> {
+  async update(userId: string, id: string, updateDto: UpdateDto): Promise<List> {
     try {
       const list = await this.prisma.list.update({
-        where: { id },
+        where: {
+          userIndex: {
+            userId,
+            id,
+          },
+        },
         data: updateDto,
       })
 

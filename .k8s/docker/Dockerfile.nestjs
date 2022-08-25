@@ -1,7 +1,10 @@
 FROM node:18 as base
 WORKDIR /app
-COPY . .
+COPY .env .
+COPY package*.json .
+COPY prisma .
 RUN npm install
+COPY . .
 
 
 # Development

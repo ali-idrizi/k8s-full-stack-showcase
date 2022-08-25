@@ -1,17 +1,15 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { plainToInstance } from 'class-transformer'
 import { PrismaService } from 'nestjs-prisma'
-import { AuthService } from 'src/auth/auth.service'
 import { HashUtil } from 'src/common/utils/hash.util'
 import { UserDto } from 'src/user.dto'
 import { LoginDto } from './login.dto'
-import { Response } from './login.interface'
 
 @Injectable()
 export class LoginService {
-  constructor(private authService: AuthService, private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async login(loginDto: LoginDto): Promise<Response> {
+  async login(loginDto: LoginDto): Promise<UserDto> {
     const userData = await this.prisma.user.findUnique({
       where: {
         email: loginDto.email,
@@ -25,11 +23,6 @@ export class LoginService {
       throw new HttpException('Invalid email address or password', HttpStatus.UNAUTHORIZED)
     }
 
-    const tokens = await this.authService.getTokens(userDto.id)
-
-    return {
-      user: userDto,
-      tokens: tokens,
-    }
+    return userDto
   }
 }

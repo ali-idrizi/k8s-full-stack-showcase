@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common'
 import { Test, TestingModule } from '@nestjs/testing'
-import { Prisma } from '@prisma/client'
+import { Item, List, Prisma } from '@prisma/client'
 import { PrismaService } from 'nestjs-prisma'
 import { createMockContext, PrismaMockContext } from 'src/common/test/prisma.mock-context'
 import { ItemController } from './item.controller'
@@ -35,7 +35,7 @@ describe('ItemController', () => {
 
   describe('create', () => {
     it('should create an item', async () => {
-      await itemController.create({
+      await itemController.create('test-user-id', {
         title: 'Title',
         listId: 'list-id',
       })
@@ -45,7 +45,10 @@ describe('ItemController', () => {
           title: 'Title',
           list: {
             connect: {
-              id: 'list-id',
+              userIndex: {
+                id: 'list-id',
+                userId: 'test-user-id',
+              },
             },
           },
         },
@@ -58,7 +61,7 @@ describe('ItemController', () => {
       )
 
       expect(async () => {
-        await itemController.create({
+        await itemController.create('test-user-id', {
           title: 'Title',
           listId: 'list-id',
         })
@@ -68,20 +71,38 @@ describe('ItemController', () => {
 
   describe('delete', () => {
     it('should delete the item', async () => {
-      await itemController.delete('id')
+      prismaMockContext.prisma.item.findUniqueOrThrow.mockResolvedValue({
+        list: {
+          userId: 'test-user-id',
+        },
+      } as Item & { list: List })
+
+      await itemController.delete('test-user-id', 'id')
 
       expect(prismaService.item.delete).toHaveBeenCalledWith({
         where: { id: 'id' },
       })
     })
 
+    it('should throw BadRequest if item does not belong to user', async () => {
+      prismaMockContext.prisma.item.findUniqueOrThrow.mockResolvedValue({
+        list: {
+          userId: 'another-user-id',
+        },
+      } as Item & { list: List })
+
+      expect(async () => {
+        await itemController.delete('test-user-id', 'id')
+      }).rejects.toThrow(BadRequestException)
+    })
+
     it('should throw BadRequest if item is not found', async () => {
-      prismaMockContext.prisma.item.delete.mockRejectedValue(
+      prismaMockContext.prisma.item.findUniqueOrThrow.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
       )
 
       expect(async () => {
-        await itemController.delete('id')
+        await itemController.delete('test-user-id', 'id')
       }).rejects.toThrow(BadRequestException)
     })
   })
@@ -90,12 +111,31 @@ describe('ItemController', () => {
     const updateData = { title: 'New Title' }
 
     it('should update the item', async () => {
-      await itemController.update('id', updateData)
+      prismaMockContext.prisma.item.update.mockResolvedValue({
+        list: {
+          userId: 'test-user-id',
+        },
+      } as Item & { list: List })
+
+      await itemController.update('test-user-id', 'id', updateData)
 
       expect(prismaService.item.update).toHaveBeenCalledWith({
         where: { id: 'id' },
+        include: { list: true },
         data: updateData,
       })
+    })
+
+    it('should throw BadRequest if item does not belong to user', async () => {
+      prismaMockContext.prisma.item.update.mockResolvedValue({
+        list: {
+          userId: 'another-user-id',
+        },
+      } as Item & { list: List })
+
+      expect(async () => {
+        await itemController.update('test-user-id', 'id', updateData)
+      }).rejects.toThrow(BadRequestException)
     })
 
     it('should throw BadRequest if item is not found', async () => {
@@ -104,7 +144,7 @@ describe('ItemController', () => {
       )
 
       expect(async () => {
-        await itemController.update('id', updateData)
+        await itemController.update('test-user-id', 'id', updateData)
       }).rejects.toThrow(BadRequestException)
     })
   })
