@@ -374,16 +374,11 @@ ingress:
   ## @param ingress.auth.url The URL to be used a subrequest to authenticate requests
   ## @param ingress.auth.responseHeaders The headers set by auth to be passed downstream, e.g.
   ##   responseHeaders: X-User-ID, X-User-Role
-  ## @param ingress.auth.convertHeaders Headers to be converted from auth reponse to the final response, e.g.
-  ##   convertHeaders:
-  ##     - from: X-Set-Cookie-JWT
-  ##       to: Set-Cookie
   ##
   auth:
     enabled: false
     url: ""
     responseHeaders: ""
-    convertHeaders: []
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/

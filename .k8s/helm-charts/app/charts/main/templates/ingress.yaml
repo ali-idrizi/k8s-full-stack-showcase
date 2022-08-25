@@ -20,12 +20,6 @@ metadata:
     {{ if .Values.ingress.auth.enabled -}}
     nginx.ingress.kubernetes.io/auth-url: {{ .Values.ingress.auth.url }}
     nginx.ingress.kubernetes.io/auth-response-headers: {{ .Values.ingress.auth.responseHeaders }}
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-      {{- range .Values.ingress.auth.convertHeaders }}
-      {{ $var := regexReplaceAll "\\W+" .from "_" | lower -}}
-      auth_request_set $auth_{{ $var }} $upstream_http_{{ $var }};
-      add_header       {{ .to }} $auth_{{ $var }};
-      {{- end }}
     {{- end -}}
     {{- end }}
 spec:
