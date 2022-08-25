@@ -1,5 +1,6 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common'
 import { Request } from 'express'
+import { Header } from './auth.constant'
 import { AuthService } from './auth.service'
 
 @Controller('auth')
@@ -43,9 +44,9 @@ export class AuthController {
     try {
       const { expired, userId } = await this.authService.validateJwt(tokens.jwt)
 
-      req.res?.header('X-Authenticated', 'true')
+      req.res?.header(Header.AUTH, 'true')
       if (!expired) {
-        req.res?.header('X-User-ID', userId)
+        req.res?.header(Header.UID, userId)
       }
     } catch (error) {
       // TODO: Maybe clear cookies if invalid JWT or refresh token?
