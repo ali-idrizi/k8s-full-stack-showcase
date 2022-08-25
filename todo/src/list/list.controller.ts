@@ -8,19 +8,23 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common'
 import { List } from '@prisma/client'
+import { UserId } from 'src/common/decorators/user-id.decorator'
+import { AuthGuard } from 'src/common/guards/auth.guard'
 import { CreateDto } from './dto/create.dto'
 import { UpdateDto } from './dto/update.dto'
 import { ListService } from './list.service'
 
 @Controller('list')
+@UseGuards(AuthGuard)
 export class ListController {
   constructor(private listService: ListService) {}
 
   @Get('/')
-  getAll(): Promise<List[]> {
-    return this.listService.getAll()
+  getAll(@UserId() userId: string): Promise<List[]> {
+    return this.listService.getAll(userId)
   }
 
   @Get('/:id')

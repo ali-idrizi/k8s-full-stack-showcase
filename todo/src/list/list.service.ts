@@ -9,10 +9,10 @@ import { UpdateDto } from './dto/update.dto'
 export class ListService {
   constructor(private prisma: PrismaService) {}
 
-  getAll(): Promise<List[]> {
+  getAll(userId: string): Promise<List[]> {
     return this.prisma.list.findMany({
       where: {
-        // TODO: add userId clause
+        userId,
       },
     })
   }

@@ -35,8 +35,12 @@ describe('ListController', () => {
 
   describe('getAll', () => {
     it('should return all lists', async () => {
-      await listController.getAll()
-      expect(prismaService.list.findMany).toHaveBeenCalled()
+      await listController.getAll('test-user-id')
+      expect(prismaService.list.findMany).toHaveBeenCalledWith({
+        where: {
+          userId: 'test-user-id',
+        },
+      })
     })
   })
 
