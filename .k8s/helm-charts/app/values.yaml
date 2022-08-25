@@ -19,7 +19,6 @@ auth:
         name: nats
   ingress:
     enabled: false
-  service: {}
 
 todo:
   <<: *default
