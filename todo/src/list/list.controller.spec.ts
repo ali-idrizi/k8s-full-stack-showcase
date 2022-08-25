@@ -75,19 +75,19 @@ describe('ListController', () => {
 
   describe('delete', () => {
     it('should delete the list', async () => {
-      await listController.delete('id')
-      expect(prismaService.list.delete).toHaveBeenCalledWith({
-        where: { id: 'id' },
+      prismaMockContext.prisma.list.deleteMany.mockResolvedValue({ count: 1 })
+
+      await listController.delete('test-user-id', 'id')
+      expect(prismaService.list.deleteMany).toHaveBeenCalledWith({
+        where: { userId: 'test-user-id', id: 'id' },
       })
     })
 
     it('should throw BadRequest if list is not found', async () => {
-      prismaMockContext.prisma.list.delete.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
-      )
+      prismaMockContext.prisma.list.deleteMany.mockResolvedValue({ count: 0 })
 
       expect(async () => {
-        await listController.delete('id')
+        await listController.delete('test-user-id', 'id')
       }).rejects.toThrow(BadRequestException)
     })
   })

@@ -39,8 +39,8 @@ export class ListController {
 
   @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id') id: string): Promise<void> {
-    return this.listService.delete(id)
+  delete(@UserId() userId: string, @Param('id') id: string): Promise<void> {
+    return this.listService.delete(userId, id)
   }
 
   @Patch('/:id')
