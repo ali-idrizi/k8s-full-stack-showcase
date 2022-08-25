@@ -4,6 +4,7 @@ import { PrismaService } from 'nestjs-prisma'
 import { ErrorUtil } from 'src/common/utils/error.util'
 import { CreateDto } from './dto/create.dto'
 import { UpdateDto } from './dto/update.dto'
+import { ItemNotFoundException } from './exceptions'
 
 @Injectable()
 export class ItemService {
@@ -50,17 +51,26 @@ export class ItemService {
     }
   }
 
-  async update(id: string, updateDto: UpdateDto): Promise<Item> {
+  async update(userId: string, id: string, updateDto: UpdateDto): Promise<Item> {
     try {
       const item = await this.prisma.item.update({
-        where: { id },
+        where: {
+          id,
+        },
+        include: {
+          list: true,
+        },
         data: updateDto,
       })
+
+      if (item.list.userId !== userId) {
+        throw new ItemNotFoundException()
+      }
 
       return item
     } catch (error) {
       if (ErrorUtil.isNotFoundError(error)) {
-        throw new BadRequestException('Item not found')
+        throw new ItemNotFoundException()
       }
 
       throw error

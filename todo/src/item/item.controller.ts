@@ -1,10 +1,23 @@
-import { Body, Controller, Delete, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common'
 import { Item } from '@prisma/client'
+import { UserId } from 'src/common/decorators/user-id.decorator'
+import { AuthGuard } from 'src/common/guards/auth.guard'
 import { CreateDto } from './dto/create.dto'
 import { UpdateDto } from './dto/update.dto'
 import { ItemService } from './item.service'
 
 @Controller('item')
+@UseGuards(AuthGuard)
 export class ItemController {
   constructor(private itemService: ItemService) {}
 
@@ -20,7 +33,11 @@ export class ItemController {
   }
 
   @Patch('/:id')
-  update(@Param('id') id: string, @Body() updateDto: UpdateDto): Promise<Item> {
-    return this.itemService.update(id, updateDto)
+  update(
+    @UserId() userId: string,
+    @Param('id') id: string,
+    @Body() updateDto: UpdateDto,
+  ): Promise<Item> {
+    return this.itemService.update(userId, id, updateDto)
   }
 }
