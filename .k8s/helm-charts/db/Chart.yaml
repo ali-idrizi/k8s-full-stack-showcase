@@ -9,14 +9,14 @@ appVersion: "0.1.0"
 
 dependencies:
   - name: mysql
-    repository: https://charts.bitnami.com/bitnami
+    repository: "@bitnami"
     version: 9.2.1
     alias: auth
   - name: mysql
-    repository: https://charts.bitnami.com/bitnami
+    repository: "@bitnami"
     version: 9.2.1
     alias: todo
   - name: mysql
-    repository: https://charts.bitnami.com/bitnami
+    repository: "@bitnami"
     version: 9.2.1
     alias: user

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { RpcException } from '@nestjs/microservices'
-import * as JWT from 'jsonwebtoken'
 import { PrismaService } from 'nestjs-prisma'
 import { Environment } from './auth.constant'
 import { Tokens, ValidateJwtRes } from './auth.interface'
