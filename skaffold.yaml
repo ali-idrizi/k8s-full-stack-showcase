@@ -50,6 +50,7 @@ build:
       context: user
       docker:
         dockerfile: .k8s/docker/Dockerfile.prisma
+
 deploy:
   logs:
     prefix: auto
@@ -115,6 +116,19 @@ deploy:
         valuesFiles:
           - .k8s/values/dev/app-values.yaml
           - .k8s/values/dev/app-secrets.yaml
+
+test:
+  - image: gcr.io/k8s-full-stack-starter/auth
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+
+  - image: gcr.io/k8s-full-stack-starter/todo
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+
+  - image: gcr.io/k8s-full-stack-starter/user
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 
 profiles:
   - name: dev
