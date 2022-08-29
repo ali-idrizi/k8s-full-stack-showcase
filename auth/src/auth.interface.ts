@@ -1,4 +1,3 @@
-import * as JWT from 'jsonwebtoken'
 import { Environment } from './auth.constant'
 
 export interface Tokens {

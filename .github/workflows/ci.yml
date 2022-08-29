@@ -3,7 +3,7 @@ name: CI
 on:
   - push
 
-concurrency: 
+concurrency:
   group: ${{ github.head_ref }}
   cancel-in-progress: true
 
