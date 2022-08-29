@@ -10,6 +10,8 @@ COPY . .
 # Development
 FROM base as dev
 ENV NODE_ENV=development
+# find a way to get rid of building here, it's only needed for CI
+RUN npm run build
 CMD [ "npm", "run", "start:dev" ]
 
 
@@ -23,7 +25,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY package*.json .
 COPY .env .
-COPY --from=builder /app/dist dist
-COPY --from=builder /app/node_modules/.prisma node_modules/.prisma
+COPY --from=builder /app/dist .
+COPY --from=builder /app/node_modules/.prisma node_modules/
 RUN npm install --omit=dev
 CMD [ "npm", "run", "start:prod" ]
