@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  - push
+
+concurrency: 
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build, Test, Deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Setup Minikube
+        uses: hiberbee/github-action-minikube@1.7.0
+
+      - name: Setup Helm
+        uses: hiberbee/github-action-helm@1.13.0
+
+      - name: Setup Helm Repos
+        run: helm repo add bitnami https://charts.bitnami.com/bitnami
+
+      - name: Setup Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v1.39.2/skaffold-linux-amd64
+          sudo install skaffold /usr/local/bin/
+
+      - name: Build
+        run: skaffold build --file-output=tags.json
+
+      - name: Test
+        run: skaffold test --build-artifacts=tags.json
+
+      - name: Deploy
+        run: skaffold deploy --build-artifacts=tags.json
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: .scripts/install-deps.sh
+
+      - name: Lint
+        run: .scripts/lint.sh
