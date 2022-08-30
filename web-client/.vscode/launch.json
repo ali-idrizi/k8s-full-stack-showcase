@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Test Debug",
+      "type": "node",
+      "request": "launch",
+      "outputCapture": "std",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test:debug"]
+    }
+  ]
+}
