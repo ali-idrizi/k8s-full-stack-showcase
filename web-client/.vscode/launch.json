@@ -11,7 +11,7 @@
       "name": "Client Debug",
       "type": "chrome",
       "request": "launch",
-      "url": "http://localhost:3000"
+      "url": "http://localhost:3003"
     },
     {
       "name": "Test Debug",

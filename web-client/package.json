@@ -2,9 +2,9 @@
   "private": true,
   "scripts": {
     "prebuild": "rimraf .next",
-    "dev": "next dev",
+    "dev": "next dev -p 3003",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 3003",
     "format": "prettier --write \"src/**/*.{ts,tsx}\" \"__tests__/**/*.{ts,tsx}\"",
     "lint": "next lint --max-warnings=0",
     "test": "jest",
