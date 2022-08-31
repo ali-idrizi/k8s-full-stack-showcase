@@ -1,7 +1,13 @@
 name: CI
 
 on:
-  - push
+  push:
+    branches: 
+      - master
+  pull_request:
+    types: 
+      - opened
+      - synchronize
 
 concurrency:
   group: ${{ github.ref }}
