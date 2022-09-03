@@ -1,12 +1,12 @@
-import { render, screen } from '@testing-library/react'
 import Home from '@/pages/index'
+import { render, screen } from '@testing-library/react'
 
 describe('Home', () => {
   it('renders a heading', () => {
-    render(<Home />)
+    render(<Home auth={{ userId: 'test-user-id', needsRefresh: false }} />)
 
     const heading = screen.getByRole('heading', {
-      name: /welcome to next\.js!/i,
+      name: /welcome test-user-id/i,
     })
 
     expect(heading).toBeInTheDocument()
