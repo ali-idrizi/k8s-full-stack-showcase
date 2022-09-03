@@ -2,10 +2,10 @@ name: CI
 
 on:
   push:
-    branches: 
+    branches:
       - master
   pull_request:
-    types: 
+    types:
       - opened
       - synchronize
 
@@ -17,6 +17,7 @@ jobs:
   test:
     name: Build, Test, Deploy
     runs-on: ubuntu-20.04
+    timeout-minutes: 15
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
