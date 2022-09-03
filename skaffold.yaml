@@ -9,36 +9,26 @@ build:
   artifacts:
     - image: gcr.io/k8s-full-stack-starter/auth
       context: auth
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nestjs
-        target: dev
-      sync:
+      custom: &nestjsCustomBuild
+        buildCommand: |
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$PROFILE
+      sync: &nestjsSync
         manual:
           - src: "src/**/*.ts"
             dest: .
     - image: gcr.io/k8s-full-stack-starter/todo
       context: todo
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nestjs
-        target: dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
+      custom: *nestjsCustomBuild
+      sync: *nestjsSync
     - image: gcr.io/k8s-full-stack-starter/user
       context: user
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nestjs
-        target: dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
+      custom: *nestjsCustomBuild
+      sync: *nestjsSync
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nextjs
-        target: dev
+      custom:
+        buildCommand: |
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$PROFILE
       sync:
         manual:
           - src: "src/**/*.{ts,tsx}"
