@@ -13,3 +13,7 @@ cd ./todo && npm ci && cd .. || exit 1
 echo "\n"
 echo "/user"
 cd ./user && npm ci && cd .. || exit 1
+
+echo "\n"
+echo "/web-client"
+cd ./web-client && npm ci && cd .. || exit 1

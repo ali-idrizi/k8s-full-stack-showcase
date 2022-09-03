@@ -13,3 +13,7 @@ cd ./todo && npm run lint && cd .. || exit 1
 echo "\n"
 echo "/user"
 cd ./user && npm run lint && cd .. || exit 1
+
+echo "\n"
+echo "/web-client"
+cd ./web-client && npm run lint && cd .. || exit 1
