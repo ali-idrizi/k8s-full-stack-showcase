@@ -135,6 +135,10 @@ test:
     custom:
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 
+  - image: gcr.io/k8s-full-stack-starter/web-client
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+
 profiles:
   - name: dev
     activation:
