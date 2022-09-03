@@ -2,9 +2,49 @@
   "name": "web-client",
   "version": "1.0.0",
   "description": "Microservice to serve the front-end/web client.",
-  "main": "index.js",
-  "scripts": {
-  },
   "author": "Ali Idrizi",
-  "license": "ISC"
+  "license": "ISC",
+  "scripts": {
+    "prebuild": "rimraf .next",
+    "dev": "next dev -p 3003",
+    "build": "next build",
+    "start": "next start -p 3003",
+    "format": "prettier --write \"{src,__test__}/**/*.{ts,tsx}\"",
+    "lint": "eslint \"{src,__test__}/**/*.{ts,tsx}\" --max-warnings=0",
+    "test": "jest",
+    "test:snap": "jest --updateSnapshot",
+    "test:ci": "jest --ci",
+    "test:cov": "jest --coverage",
+    "test:debug": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --testTimeout=999999"
+  },
+  "lint-staged": {
+    "{src,__tests__}/**/*.{ts,tsx}": "eslint",
+    "src/**/*.{ts,tsx}": "jest --bail --findRelatedTests --passWithNoTests"
+  },
+  "dependencies": {
+    "next": "^12.2.5",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "rimraf": "^3.0.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "5.16.4",
+    "@testing-library/react": "13.2.0",
+    "@testing-library/user-event": "14.2.0",
+    "@types/react": "18.0.9",
+    "@typescript-eslint/eslint-plugin": "^5.36.0",
+    "@typescript-eslint/parser": "^5.36.0",
+    "eslint": "^8.23.0",
+    "eslint-config-next": "^12.2.5",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-jest": "^27.0.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-testing-library": "^5.6.0",
+    "jest": "28.1.0",
+    "jest-environment-jsdom": "28.1.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "4.6.4"
+  }
 }

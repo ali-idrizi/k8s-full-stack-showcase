@@ -24,3 +24,8 @@ updates:
     directory: "/user"
     schedule:
       interval: "daily"
+
+  - package-ecosystem: "npm"
+    directory: "/web-client"
+    schedule:
+      interval: "daily"

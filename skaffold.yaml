@@ -37,7 +37,12 @@ build:
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
       docker:
-        dockerfile: Dockerfile
+        dockerfile: .k8s/docker/Dockerfile.nextjs
+        target: dev
+      sync:
+        manual:
+          - src: "src/**/*.{ts,tsx}"
+            dest: .
     - image: gcr.io/k8s-full-stack-starter/auth-prisma
       context: auth
       docker:
@@ -127,6 +132,10 @@ test:
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 
   - image: gcr.io/k8s-full-stack-starter/user
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+
+  - image: gcr.io/k8s-full-stack-starter/web-client
     custom:
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 
