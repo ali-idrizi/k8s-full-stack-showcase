@@ -100,19 +100,13 @@ deploy:
         artifactOverrides:
           auth:
             image: gcr.io/k8s-full-stack-starter/auth
-            db:
-              prisma:
-                image: gcr.io/k8s-full-stack-starter/auth-prisma
+            db.prisma.image: gcr.io/k8s-full-stack-starter/auth-prisma
           todo:
             image: gcr.io/k8s-full-stack-starter/todo
-            db:
-              prisma:
-                image: gcr.io/k8s-full-stack-starter/todo-prisma
+            db.prisma.image: gcr.io/k8s-full-stack-starter/todo-prisma
           user:
             image: gcr.io/k8s-full-stack-starter/user
-            db:
-              prisma:
-                image: gcr.io/k8s-full-stack-starter/user-prisma
+            db.prisma.image: gcr.io/k8s-full-stack-starter/user-prisma
           webClient:
             image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
