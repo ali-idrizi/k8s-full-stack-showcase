@@ -10,6 +10,10 @@ build:
     - image: gcr.io/k8s-full-stack-starter/auth
       context: auth
       custom: &nestjsCustomBuild
+        dependencies:
+          paths:
+            - ../.k8s/docker/nestjs/*
+            - ./**/*
         buildCommand: |
           docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$PROFILE
       sync: &nestjsSync
@@ -27,6 +31,10 @@ build:
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
       custom:
+        dependencies:
+          paths:
+            - ../.k8s/docker/nextjs/*
+            - ./**/*
         buildCommand: |
           docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$PROFILE
       sync:
