@@ -116,20 +116,14 @@ deploy:
 
 test:
   - image: gcr.io/k8s-full-stack-starter/auth
-    custom:
+    custom: &npmTestCommand
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-
   - image: gcr.io/k8s-full-stack-starter/todo
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-
+    custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/user
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-
+    custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/web-client
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+    custom: *npmTestCommand
 
 profiles:
   - name: dev
