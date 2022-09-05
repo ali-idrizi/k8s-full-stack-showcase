@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start -p 3003",
     "format": "prettier --write \"{src,__test__}/**/*.{ts,tsx}\"",
-    "lint": "eslint \"{src,__test__}/**/*.{ts,tsx}\" --max-warnings=0",
+    "lint": "eslint \"{src,__tests__}/**/*.{ts,tsx}\" --max-warnings=0",
     "test": "jest",
     "test:snap": "jest --updateSnapshot",
     "test:ci": "jest --ci",
