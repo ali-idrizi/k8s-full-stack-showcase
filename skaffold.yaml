@@ -9,52 +9,48 @@ build:
   artifacts:
     - image: gcr.io/k8s-full-stack-starter/auth
       context: auth
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nestjs
-        target: dev
-      sync:
+      custom: &nestjsCustomBuild
+        dependencies:
+          paths:
+            - ../.k8s/docker/nestjs/*
+            - ./**/*
+        buildCommand: |
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$ENV
+      sync: &nestjsSync
         manual:
           - src: "src/**/*.ts"
             dest: .
     - image: gcr.io/k8s-full-stack-starter/todo
       context: todo
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nestjs
-        target: dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
+      custom: *nestjsCustomBuild
+      sync: *nestjsSync
     - image: gcr.io/k8s-full-stack-starter/user
       context: user
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nestjs
-        target: dev
-      sync:
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
+      custom: *nestjsCustomBuild
+      sync: *nestjsSync
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.nextjs
-        target: dev
+      custom:
+        dependencies:
+          paths:
+            - ../.k8s/docker/nextjs/*
+            - ./**/*
+        buildCommand: |
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$ENV
       sync:
         manual:
           - src: "src/**/*.{ts,tsx}"
             dest: .
     - image: gcr.io/k8s-full-stack-starter/auth-prisma
       context: auth
-      docker:
+      docker: &prismaDocker
         dockerfile: .k8s/docker/Dockerfile.prisma
     - image: gcr.io/k8s-full-stack-starter/todo-prisma
       context: todo
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.prisma
+      docker: *prismaDocker
     - image: gcr.io/k8s-full-stack-starter/user-prisma
       context: user
-      docker:
-        dockerfile: .k8s/docker/Dockerfile.prisma
+      docker: *prismaDocker
 
 deploy:
   logs:
@@ -100,19 +96,13 @@ deploy:
         artifactOverrides:
           auth:
             image: gcr.io/k8s-full-stack-starter/auth
-            db:
-              prisma:
-                image: gcr.io/k8s-full-stack-starter/auth-prisma
+            db.prisma.image: gcr.io/k8s-full-stack-starter/auth-prisma
           todo:
             image: gcr.io/k8s-full-stack-starter/todo
-            db:
-              prisma:
-                image: gcr.io/k8s-full-stack-starter/todo-prisma
+            db.prisma.image: gcr.io/k8s-full-stack-starter/todo-prisma
           user:
             image: gcr.io/k8s-full-stack-starter/user
-            db:
-              prisma:
-                image: gcr.io/k8s-full-stack-starter/user-prisma
+            db.prisma.image: gcr.io/k8s-full-stack-starter/user-prisma
           webClient:
             image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
@@ -124,20 +114,14 @@ deploy:
 
 test:
   - image: gcr.io/k8s-full-stack-starter/auth
-    custom:
+    custom: &npmTestCommand
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-
   - image: gcr.io/k8s-full-stack-starter/todo
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-
+    custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/user
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-
+    custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/web-client
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+    custom: *npmTestCommand
 
 profiles:
   - name: dev
