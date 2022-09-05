@@ -15,7 +15,7 @@ build:
             - ../.k8s/docker/nestjs/*
             - ./**/*
         buildCommand: |
-          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$PROFILE
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$ENV
       sync: &nestjsSync
         manual:
           - src: "src/**/*.ts"
@@ -36,7 +36,7 @@ build:
             - ../.k8s/docker/nextjs/*
             - ./**/*
         buildCommand: |
-          docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$PROFILE
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$ENV
       sync:
         manual:
           - src: "src/**/*.{ts,tsx}"
