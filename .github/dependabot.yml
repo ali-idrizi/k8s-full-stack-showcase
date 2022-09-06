@@ -1,8 +1,3 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 updates:
   - package-ecosystem: "npm"
@@ -12,20 +7,24 @@ updates:
 
   - package-ecosystem: "npm"
     directory: "/auth"
+    target-branch: "dependabot/auth"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/todo"
+    target-branch: "dependabot/todo"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/user"
+    target-branch: "dependabot/user"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/web-client"
+    target-branch: "dependabot/web-client"
     schedule:
       interval: "daily"
