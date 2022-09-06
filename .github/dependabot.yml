@@ -7,24 +7,24 @@ updates:
 
   - package-ecosystem: "npm"
     directory: "/auth"
-    target-branch: "dependabot/auth"
+    target-branch: "dependabot/update"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/todo"
-    target-branch: "dependabot/todo"
+    target-branch: "dependabot/update"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/user"
-    target-branch: "dependabot/user"
+    target-branch: "dependabot/update"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/web-client"
-    target-branch: "dependabot/web-client"
+    target-branch: "dependabot/update"
     schedule:
       interval: "daily"
