@@ -1,7 +1,9 @@
+import reactQueryConfig from '@/configs/react-query-config'
 import type { WithAuth } from '@/hocs/withAuth'
+import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps as NextAppProps } from 'next/app'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import '@/styles/global.css'
 
@@ -9,8 +11,13 @@ type AppProps<P = unknown> = {
   pageProps: P
 } & Omit<NextAppProps<P>, 'pageProps'>
 
-const MyApp: React.FC<AppProps<WithAuth>> = ({ Component, pageProps }) => {
+type Props = WithAuth<{
+  dehydratedState: unknown
+}>
+
+const MyApp: React.FC<AppProps<Props>> = ({ Component, pageProps }) => {
   const router = useRouter()
+  const [queryClient] = useState(() => new QueryClient(reactQueryConfig))
 
   useEffect(() => {
     const refreshToken = async (): Promise<void> => {
@@ -25,10 +32,15 @@ const MyApp: React.FC<AppProps<WithAuth>> = ({ Component, pageProps }) => {
 
     // Refresh the access token if a GSSP requested it
     if (pageProps.auth?.needsRefresh) {
-      refreshToken().then(() => {
-        // Replace the route with the current path to make another call to GSSP
-        router.replace(router.asPath)
-      })
+      refreshToken()
+        .then(() => {
+          // Replace the route with the current path, this will make another call to GSSP
+          router.replace(router.asPath)
+        })
+        .catch(() => {
+          // TODO: refresh token failed, logout and redirect to /login
+          router.push('/404')
+        })
     }
   }, [router, pageProps])
 
@@ -36,7 +48,13 @@ const MyApp: React.FC<AppProps<WithAuth>> = ({ Component, pageProps }) => {
     return <noscript>Authentication failed</noscript>
   }
 
-  return <Component {...pageProps} />
+  return (
+    <QueryClientProvider client={queryClient}>
+      <Hydrate state={pageProps.dehydratedState}>
+        <Component {...pageProps} />
+      </Hydrate>
+    </QueryClientProvider>
+  )
 }
 
 export default MyApp
