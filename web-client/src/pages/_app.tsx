@@ -1,5 +1,5 @@
 import reactQueryConfig from '@/configs/react-query-config'
-import type { WithAuth } from '@/hocs/withAuth'
+import type { AuthProps, ReactQueryProps } from '@/hocs'
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps as NextAppProps } from 'next/app'
 import { useRouter } from 'next/router'
@@ -10,12 +10,9 @@ import '@/styles/global.css'
 type AppProps<P = unknown> = {
   pageProps: P
 } & Omit<NextAppProps<P>, 'pageProps'>
+type Props = AppProps<AuthProps & ReactQueryProps>
 
-type Props = WithAuth<{
-  dehydratedState: unknown
-}>
-
-const MyApp: React.FC<AppProps<Props>> = ({ Component, pageProps }) => {
+const App: React.FC<Props> = ({ Component, pageProps }) => {
   const router = useRouter()
   const [queryClient] = useState(() => new QueryClient(reactQueryConfig))
 
@@ -57,4 +54,4 @@ const MyApp: React.FC<AppProps<Props>> = ({ Component, pageProps }) => {
   )
 }
 
-export default MyApp
+export default App

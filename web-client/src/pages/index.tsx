@@ -1,5 +1,5 @@
-import withAuth, { WithAuth } from '@/hocs/withAuth'
-import { dehydrate, QueryClient, useQuery } from '@tanstack/react-query'
+import { AuthProps, withAuth, withReactQuery } from '@/hocs'
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import React from 'react'
 
@@ -20,18 +20,17 @@ const getTodos = async (): Promise<Todo[]> => {
   ]
 }
 
-export const getServerSideProps = withAuth(async () => {
-  const queryClient = new QueryClient()
-  await queryClient.prefetchQuery(['todos'], getTodos)
+export const getServerSideProps = withAuth(
+  withReactQuery(async (_, { queryClient }) => {
+    await queryClient.prefetchQuery(['todos'], getTodos)
 
-  return {
-    props: {
-      dehydratedState: dehydrate(queryClient),
-    },
-  }
-})
+    return {
+      props: {},
+    }
+  }),
+)
 
-const Home: React.FC<WithAuth> = ({ auth }) => {
+const Home: React.FC<AuthProps> = ({ auth }) => {
   const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
 
   return (
