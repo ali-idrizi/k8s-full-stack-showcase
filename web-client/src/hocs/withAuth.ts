@@ -1,30 +1,23 @@
-import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { GsspHoc } from '.'
 
-type CommonAuthData = {
+type WithAuthData = {
   userId: string | null
 }
 
-type IncomingGetServerSideProp<P> = (
-  ctx: GetServerSidePropsContext,
-  data: CommonAuthData,
-) => GetServerSidePropsResult<P> | Promise<GetServerSidePropsResult<P>>
+export type AuthProps = { auth: { userId: string | null; needsRefresh: boolean } }
 
-type AuthProps = { auth: { userId: string | null; needsRefresh: boolean } }
-
-export type WithAuth<T = unknown> = T & AuthProps
-
-export default function withAuth<T = unknown>(incomingGSSP: IncomingGetServerSideProp<T>) {
-  return async (ctx: GetServerSidePropsContext): Promise<GetServerSidePropsResult<WithAuth<T>>> => {
+export const withAuth: GsspHoc<WithAuthData, AuthProps> = (next) => {
+  return async (ctx) => {
     const userId = (ctx.req?.headers['x-user-id'] as string | undefined) ?? null
     const needsRefresh = !userId && ctx.req?.headers['x-authenticated'] === 'true'
 
-    const gsspResult = await incomingGSSP(ctx, { userId })
+    const result = await Promise.resolve(next(ctx, { userId }))
 
-    if (!('props' in gsspResult)) {
-      return gsspResult
+    if (!('props' in result)) {
+      return result
     }
 
-    const props = await Promise.resolve(gsspResult.props)
+    const props = await Promise.resolve(result.props)
 
     return {
       props: {

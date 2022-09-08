@@ -1,18 +1,61 @@
-import withAuth, { WithAuth } from '@/hocs/withAuth'
+import { AuthProps, withAuth, withReactQuery } from '@/hocs'
+import { Button, useColorMode } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+import React from 'react'
 
-import styles from '@/pages/index.module.css'
+type Todo = {
+  title: string
+}
 
-export const getServerSideProps = withAuth(() => {
-  return {
-    props: {},
-  }
-})
+const getTodos = async (): Promise<Todo[]> => {
+  return [
+    {
+      title: 'delectus aut autem',
+    },
+    {
+      title: 'quis ut nam facilis et officia qui',
+    },
+  ]
+}
 
-const Home: React.FC<WithAuth> = ({ auth }) => {
+export const getServerSideProps = withAuth(
+  withReactQuery(async (_, { queryClient }) => {
+    await queryClient.prefetchQuery(['todos'], getTodos)
+
+    return {
+      props: {},
+    }
+  }),
+)
+
+const Home: React.FC<AuthProps> = ({ auth }) => {
+  const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
+
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Welcome {auth.userId}</h1>
+    <div>
+      <h1>Welcome {auth.userId}</h1>
+
+      <Button onClick={toggleColorMode} rounded="full">
+        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
+
+      {isError && <p>Failed to fetch data</p>}
+
+      {isSuccess && (
+        <div data-testid="todos">
+          {data.map((todo, index) => {
+            return (
+              <React.Fragment key={index}>
+                {todo.title}
+                <br />
+              </React.Fragment>
+            )
+          })}
+        </div>
+      )}
 
       <Link href="/">HOME</Link>
       <Link href="/about">ABOUT</Link>
