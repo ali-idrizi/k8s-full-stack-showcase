@@ -1,9 +1,8 @@
 import { AuthProps, withAuth, withReactQuery } from '@/hocs'
+import { Button, useColorMode } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import React from 'react'
-
-import styles from '@/pages/index.module.css'
 
 type Todo = {
   title: string
@@ -33,9 +32,15 @@ export const getServerSideProps = withAuth(
 const Home: React.FC<AuthProps> = ({ auth }) => {
   const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
 
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Welcome {auth.userId}</h1>
+    <div>
+      <h1>Welcome {auth.userId}</h1>
+
+      <Button onClick={toggleColorMode} rounded="full">
+        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
 
       {isError && <p>Failed to fetch data</p>}
 

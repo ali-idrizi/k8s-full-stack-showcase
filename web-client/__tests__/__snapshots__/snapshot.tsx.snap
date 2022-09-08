@@ -2,15 +2,18 @@
 
 exports[`renders homepage unchanged 1`] = `
 <div>
-  <div
-    class="container"
-  >
-    <h1
-      class="title"
-    >
+  <div>
+    <h1>
       Welcome 
       test-user-id
     </h1>
+    <button
+      class="chakra-button css-0"
+      type="button"
+    >
+      Toggle 
+      Light
+    </button>
     <a
       href="/"
     >
