@@ -3,8 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import React from 'react'
 
-import styles from '@/pages/index.module.css'
-
 type Todo = {
   title: string
 }
@@ -34,8 +32,8 @@ const Home: React.FC<AuthProps> = ({ auth }) => {
   const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Welcome {auth.userId}</h1>
+    <div>
+      <h1>Welcome {auth.userId}</h1>
 
       {isError && <p>Failed to fetch data</p>}
 

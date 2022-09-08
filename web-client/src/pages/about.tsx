@@ -2,8 +2,6 @@ import { AuthProps, withAuth } from '@/hocs'
 import Link from 'next/link'
 import React from 'react'
 
-import styles from '@/pages/index.module.css'
-
 export const getServerSideProps = withAuth(() => {
   return {
     props: {},
@@ -12,8 +10,8 @@ export const getServerSideProps = withAuth(() => {
 
 const About: React.FC<AuthProps> = ({ auth }) => {
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>About Page {auth.userId}</h1>
+    <div>
+      <h1>About Page {auth.userId}</h1>
 
       <Link href="/">HOME</Link>
       <Link href="/about">ABOUT</Link>
