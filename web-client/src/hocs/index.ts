@@ -1,6 +1,8 @@
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
-export type GsspHoc<HocData, HocReturnProps> = <Props = unknown>(
+export type GsspHoc<HocData, HocReturnProps> = <
+  Props extends Record<string, unknown> = Record<string, unknown>,
+>(
   next: (
     ctx: GetServerSidePropsContext,
     data: HocData,
