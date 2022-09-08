@@ -1,6 +1,7 @@
 import { Chakra } from '@/components/chakra'
 import reactQueryConfig from '@/configs/react-query-config'
 import type { AuthProps, ReactQueryProps } from '@/hocs'
+import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps as NextAppProps } from 'next/app'
 import { useRouter } from 'next/router'
@@ -48,7 +49,10 @@ const App: React.FC<Props> = ({ Component, pageProps }) => {
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
         <Chakra>
-          <Component {...pageProps} />
+          <SkipNavLink id="main">Skip to content</SkipNavLink>
+          <SkipNavContent as="main" id="main">
+            <Component {...pageProps} />
+          </SkipNavContent>
         </Chakra>
       </Hydrate>
     </QueryClientProvider>
