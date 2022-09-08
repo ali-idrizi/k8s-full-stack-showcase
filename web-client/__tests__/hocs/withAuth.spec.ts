@@ -1,4 +1,4 @@
-import withAuth from '@/hocs/withAuth'
+import { withAuth } from '@/hocs'
 import { createMockContext, MockContext } from '@/utils/test/mockContext'
 
 describe('With Authentication GSSP HOC', () => {
