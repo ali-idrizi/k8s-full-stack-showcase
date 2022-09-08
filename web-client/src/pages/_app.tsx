@@ -1,7 +1,6 @@
+import { Chakra } from '@/components/chakra'
 import reactQueryConfig from '@/configs/react-query-config'
 import type { AuthProps, ReactQueryProps } from '@/hocs'
-import { theme } from '@/theme'
-import { ChakraProvider } from '@chakra-ui/react'
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps as NextAppProps } from 'next/app'
 import { useRouter } from 'next/router'
@@ -48,9 +47,9 @@ const App: React.FC<Props> = ({ Component, pageProps }) => {
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <ChakraProvider theme={theme}>
+        <Chakra>
           <Component {...pageProps} />
-        </ChakraProvider>
+        </Chakra>
       </Hydrate>
     </QueryClientProvider>
   )

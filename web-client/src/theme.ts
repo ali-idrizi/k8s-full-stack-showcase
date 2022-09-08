@@ -1,4 +1,9 @@
-import { extendTheme } from '@chakra-ui/react'
+import { extendTheme, ThemeConfig } from '@chakra-ui/react'
+
+const config: ThemeConfig = {
+  initialColorMode: 'dark',
+  useSystemColorMode: false,
+}
 
 const colors = {
   brand: {
@@ -8,4 +13,4 @@ const colors = {
   },
 }
 
-export const theme = extendTheme({ colors })
+export const theme = extendTheme({ colors, config })

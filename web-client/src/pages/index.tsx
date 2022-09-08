@@ -1,4 +1,5 @@
 import { AuthProps, withAuth, withReactQuery } from '@/hocs'
+import { Button, useColorMode } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import Link from 'next/link'
 import React from 'react'
@@ -31,9 +32,15 @@ export const getServerSideProps = withAuth(
 const Home: React.FC<AuthProps> = ({ auth }) => {
   const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
 
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
     <div>
       <h1>Welcome {auth.userId}</h1>
+
+      <Button onClick={toggleColorMode} rounded="full">
+        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
+      </Button>
 
       {isError && <p>Failed to fetch data</p>}
 
