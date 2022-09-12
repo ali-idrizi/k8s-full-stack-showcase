@@ -6,7 +6,7 @@ export type WithReactQueryData = {
 }
 
 export type WithReactQueryProps = {
-  dehydratedState: DehydratedState
+  dehydratedState?: DehydratedState
 }
 
 export const withReactQueryHoc: GsspHoc<WithReactQueryData, WithReactQueryProps> = () => {
