@@ -1,6 +1,7 @@
-import { AuthProps, withAuth, withReactQuery } from '@/hocs'
+import { compose, withAuthHoc, withReactQueryHoc } from '@/hocs'
 import { Button, useColorMode } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
+import { InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
 
@@ -19,17 +20,20 @@ const getTodos = async (): Promise<Todo[]> => {
   ]
 }
 
-export const getServerSideProps = withAuth(
-  withReactQuery(async (_, { queryClient }) => {
-    await queryClient.prefetchQuery(['todos'], getTodos)
+const gsspHoc = compose(withAuthHoc, withReactQueryHoc)
 
-    return {
-      props: {},
-    }
-  }),
-)
+export const getServerSideProps = gsspHoc(async ({ queryClient }) => {
+  await queryClient.prefetchQuery(['todos'], getTodos)
+  console.log('fetched todos')
 
-const Home: React.FC<AuthProps> = ({ auth }) => {
+  return {
+    props: {},
+  }
+})
+
+type Props = InferGetServerSidePropsType<typeof getServerSideProps>
+
+const Home: React.FC<Props> = ({ auth }) => {
   const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
 
   const { colorMode, toggleColorMode } = useColorMode()

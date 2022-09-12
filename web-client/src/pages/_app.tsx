@@ -1,6 +1,6 @@
 import { Chakra } from '@/components/chakra'
 import reactQueryConfig from '@/configs/react-query-config'
-import type { AuthProps, ReactQueryProps } from '@/hocs'
+import type { WithAuth, WithReactQueryProps } from '@/hocs'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { AppProps as NextAppProps } from 'next/app'
@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react'
 type AppProps<P = unknown> = {
   pageProps: P
 } & Omit<NextAppProps<P>, 'pageProps'>
-type Props = AppProps<AuthProps & ReactQueryProps>
+type Props = AppProps<WithAuth & WithReactQueryProps>
 
 const App: React.FC<Props> = ({ Component, pageProps }) => {
   const router = useRouter()
