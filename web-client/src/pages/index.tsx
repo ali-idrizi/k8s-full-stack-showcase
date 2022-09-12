@@ -20,11 +20,11 @@ const getTodos = async (): Promise<Todo[]> => {
   ]
 }
 
-const gsspHoc = compose(withAuthHoc, withReactQueryHoc)
-
-export const getServerSideProps = gsspHoc(async ({ queryClient }) => {
+export const getServerSideProps = compose(
+  withAuthHoc,
+  withReactQueryHoc,
+)(async ({ queryClient }) => {
   await queryClient.prefetchQuery(['todos'], getTodos)
-  console.log('fetched todos')
 
   return {
     props: {},
