@@ -15,7 +15,9 @@
     "test:snap": "jest --updateSnapshot",
     "test:ci": "jest --ci",
     "test:cov": "jest --coverage",
-    "test:debug": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --testTimeout=999999"
+    "test:debug": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --testTimeout=999999",
+    "gen:theme-typings": "chakra-cli tokens src/theme.ts",
+    "postinstall": "npm run gen:theme-typings"
   },
   "lint-staged": {
     "{src,__tests__}/**/*.{ts,tsx}": "eslint",
@@ -34,6 +36,7 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@chakra-ui/cli": "^2.1.7",
     "@testing-library/jest-dom": "5.16.5",
     "@testing-library/react": "13.4.0",
     "@testing-library/user-event": "14.4.3",
