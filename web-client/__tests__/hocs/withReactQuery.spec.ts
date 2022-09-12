@@ -30,7 +30,7 @@ describe('With React Query GSSP HOC', () => {
     const props = await Promise.resolve(res.props)
 
     expect(props.dehydratedState).toBeTruthy()
-    expect(props.dehydratedState.queries.at(0)?.state.data).toEqual({ foo: 'bar' })
+    expect(props.dehydratedState?.queries.at(0)?.state.data).toEqual({ foo: 'bar' })
   })
 
   it('should retain original props', async () => {
