@@ -12,29 +12,37 @@ export function compose<A, B, C, D, E, F, G, H>(
   hoc3: GsspHoc<E, F>,
   hoc4: GsspHoc<G, H>,
   ...hocs: GsspHoc[]
-): <Props>(next: Next<Props, A & C & E & G>) => GetServerSideProps<Props & B & D & F & H>
+): <Props extends Record<string, unknown>>(
+  next: Next<Props, A & C & E & G>,
+) => GetServerSideProps<Props & B & D & F & H>
 
 export function compose<A, B, C, D, E, F>(
   hoc1: GsspHoc<A, B>,
   hoc2: GsspHoc<C, D>,
   hoc3: GsspHoc<E, F>,
   ...hocs: GsspHoc[]
-): <Props>(next: Next<Props, A & C & E>) => GetServerSideProps<Props & B & D & F>
+): <Props extends Record<string, unknown>>(
+  next: Next<Props, A & C & E>,
+) => GetServerSideProps<Props & B & D & F>
 
 export function compose<A, B, C, D>(
   hoc1: GsspHoc<A, B>,
   hoc2: GsspHoc<C, D>,
   ...hocs: GsspHoc[]
-): <Props>(next: Next<Props, A & C>) => GetServerSideProps<Props & B & D>
+): <Props extends Record<string, unknown>>(
+  next: Next<Props, A & C>,
+) => GetServerSideProps<Props & B & D>
 
 export function compose<A, B>(
   hoc1: GsspHoc<A, B>,
   ...hocs: GsspHoc[]
-): <Props>(next: Next<Props, A>) => GetServerSideProps<Props & B>
+): <Props extends Record<string, unknown>>(next: Next<Props, A>) => GetServerSideProps<Props & B>
 
 export function compose(
   ...hocs: GsspHoc[]
-): <Props>(next: Next<Props, unknown>) => GetServerSideProps<Props> {
+): <Props extends Record<string, unknown>>(
+  next: Next<Props, unknown>,
+) => GetServerSideProps<Props> {
   return (next) => {
     return async (ctx) => {
       const hocResults = hocs.map((hoc) => hoc(ctx))
