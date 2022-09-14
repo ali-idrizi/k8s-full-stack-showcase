@@ -1,13 +1,14 @@
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
-export type GsspHoc<HocData, HocReturnProps> = <
-  Props extends Record<string, unknown> = Record<string, unknown>,
->(
-  next: (
-    ctx: GetServerSidePropsContext,
-    data: HocData,
-  ) => GetServerSidePropsResult<Props> | Promise<GetServerSidePropsResult<Props>>,
-) => GetServerSideProps<Props & HocReturnProps>
+type GsspHocResult<Data, Props> = { data?: Data } & (
+  | GetServerSidePropsResult<Props>
+  | { props: () => Props }
+)
 
+export type GsspHoc<Data = undefined, Props = Record<string, unknown>> = (
+  ctx: GetServerSidePropsContext,
+) => GsspHocResult<Data, Props>
+
+export * from './compose'
 export * from './withAuth'
 export * from './withReactQuery'
