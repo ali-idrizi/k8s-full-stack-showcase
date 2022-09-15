@@ -16,7 +16,7 @@
     "test:ci": "jest --ci",
     "test:cov": "jest --coverage",
     "test:debug": "node -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand --testTimeout=999999",
-    "gen:theme-typings": "chakra-cli tokens src/theme.ts"
+    "gen:theme-typings": "chakra-cli tokens src/theme"
   },
   "lint-staged": {
     "{src,__tests__}/**/*.{ts,tsx}": "eslint",
