@@ -1,4 +1,4 @@
-import { theme } from '@/theme'
+import theme from '@/theme'
 import { ChakraProvider } from '@chakra-ui/provider'
 import React from 'react'
 
