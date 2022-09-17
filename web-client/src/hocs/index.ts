@@ -9,7 +9,7 @@ type GsspHocResult<Data, Props> = { data?: Data } & (
 )
 
 export type GsspHoc<
-  Data = undefined,
+  Data = Record<string, unknown>,
   Props = Record<string, unknown>,
   IncomingData = Record<string, unknown>,
 > = (
