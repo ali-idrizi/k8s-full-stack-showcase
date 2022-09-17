@@ -1,7 +1,4 @@
-import { Auth } from '@/components/auth'
-import { Chakra } from '@/components/chakra'
-import { Header } from '@/components/header'
-import { ReactQuery } from '@/components/react-query'
+import { Auth, Chakra, Header, ReactQuery } from '@/components'
 import type { WithReactQueryProps } from '@/hocs'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
 import type { AppProps as NextAppProps } from 'next/app'

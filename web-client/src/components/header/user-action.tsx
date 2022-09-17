@@ -1,4 +1,4 @@
-import { Button } from '@/components/button'
+import { Button } from '@/components'
 import { useColorModeValue } from '@chakra-ui/color-mode'
 
 export const UserAction: React.FC = () => {
