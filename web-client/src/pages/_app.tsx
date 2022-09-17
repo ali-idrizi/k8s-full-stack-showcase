@@ -1,4 +1,5 @@
 import { Chakra } from '@/components/chakra'
+import { Header } from '@/components/header'
 import reactQueryConfig from '@/configs/react-query-config'
 import type { WithAuth, WithReactQueryProps } from '@/hocs'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
@@ -50,6 +51,7 @@ const App: React.FC<Props> = ({ Component, pageProps }) => {
       <Hydrate state={pageProps.dehydratedState}>
         <Chakra>
           <SkipNavLink id="main">Skip to content</SkipNavLink>
+          <Header />
           <SkipNavContent as="main" id="main">
             <Component {...pageProps} />
           </SkipNavContent>
