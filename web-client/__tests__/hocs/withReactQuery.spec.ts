@@ -1,4 +1,4 @@
-import { withReactQuery } from '@/hocs'
+import { withHocs, withReactQuery } from '@/hocs'
 import { createMockContext, MockContext } from '@/utils/test/mockContext'
 
 const getMockData = jest.fn().mockResolvedValue({
@@ -13,7 +13,7 @@ describe('With React Query GSSP HOC', () => {
   })
 
   it('should correctly dehydrate the state', async () => {
-    const gssp = withReactQuery(async ({ queryClient }) => {
+    const gssp = withHocs(withReactQuery)(async ({ queryClient }) => {
       await queryClient.prefetchQuery(['todos'], getMockData)
 
       return {
@@ -34,7 +34,7 @@ describe('With React Query GSSP HOC', () => {
   })
 
   it('should retain original props', async () => {
-    const gssp = withReactQuery(() => {
+    const gssp = withHocs(withReactQuery)(() => {
       return {
         props: {
           foo: 'bar',
@@ -53,7 +53,7 @@ describe('With React Query GSSP HOC', () => {
   })
 
   it('should return notFound and redirect from GSSP', async () => {
-    let gssp = withReactQuery(() => {
+    let gssp = withHocs(withReactQuery)(() => {
       return {
         notFound: true,
       }
@@ -61,7 +61,7 @@ describe('With React Query GSSP HOC', () => {
     let res = await gssp(ctx.context)
     expect('notFound' in res).toBe(true)
 
-    gssp = withReactQuery(() => {
+    gssp = withHocs(withReactQuery)(() => {
       return {
         redirect: {
           destination: '/',

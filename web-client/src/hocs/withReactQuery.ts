@@ -1,5 +1,5 @@
 import { dehydrate, DehydratedState, QueryClient } from '@tanstack/react-query'
-import { compose, GsspHoc } from '.'
+import { GsspHoc } from '.'
 
 export type WithReactQueryData = {
   queryClient: QueryClient
@@ -9,7 +9,7 @@ export type WithReactQueryProps = {
   dehydratedState?: DehydratedState
 }
 
-export const withReactQueryHoc: GsspHoc<WithReactQueryData, WithReactQueryProps> = () => {
+export const withReactQuery: GsspHoc<WithReactQueryData, WithReactQueryProps> = () => {
   const queryClient = new QueryClient()
 
   return {
@@ -21,5 +21,3 @@ export const withReactQueryHoc: GsspHoc<WithReactQueryData, WithReactQueryProps>
     }),
   }
 }
-
-export const withReactQuery = compose(withReactQueryHoc)

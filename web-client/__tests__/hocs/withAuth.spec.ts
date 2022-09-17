@@ -1,4 +1,4 @@
-import { withAuth } from '@/hocs'
+import { withAuth, withHocs } from '@/hocs'
 import { createMockContext, MockContext } from '@/utils/test/mockContext'
 
 describe('With Authentication GSSP HOC', () => {
@@ -12,7 +12,7 @@ describe('With Authentication GSSP HOC', () => {
     ctx.context.req.headers['x-user-id'] = undefined
     ctx.context.req.headers['x-authenticated'] = 'true'
 
-    const gssp = withAuth(() => {
+    const gssp = withHocs(withAuth)(() => {
       return {
         props: {},
       }
@@ -32,7 +32,7 @@ describe('With Authentication GSSP HOC', () => {
     ctx.context.req.headers['x-user-id'] = 'test-user-id'
     ctx.context.req.headers['x-authenticated'] = 'true'
 
-    const gssp = withAuth(() => {
+    const gssp = withHocs(withAuth)(() => {
       return {
         props: {
           foo: 'bar',
@@ -51,7 +51,7 @@ describe('With Authentication GSSP HOC', () => {
   })
 
   it('should return notFound and redirect from GSSP', async () => {
-    let gssp = withAuth(() => {
+    let gssp = withHocs(withAuth)(() => {
       return {
         notFound: true,
       }
@@ -59,7 +59,7 @@ describe('With Authentication GSSP HOC', () => {
     let res = await gssp(ctx.context)
     expect('notFound' in res).toBe(true)
 
-    gssp = withAuth(() => {
+    gssp = withHocs(withAuth)(() => {
       return {
         redirect: {
           destination: '/',

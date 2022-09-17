@@ -1,9 +1,9 @@
-import { withAuth } from '@/hocs'
+import { gssp, withAuth } from '@/hocs'
 import { InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
 
-export const getServerSideProps = withAuth(() => {
+export const getServerSideProps = gssp(() => {
   return {
     props: {},
   }

@@ -1,4 +1,4 @@
-import { compose, GsspHoc } from '.'
+import { GsspHoc } from '.'
 
 export type WithAuth = {
   auth: {
@@ -7,7 +7,7 @@ export type WithAuth = {
   }
 }
 
-export const withAuthHoc: GsspHoc<WithAuth, WithAuth> = (ctx) => {
+export const withAuth: GsspHoc<WithAuth, WithAuth> = (_, ctx) => {
   const userId = (ctx.req?.headers['x-user-id'] as string | undefined) ?? null
   const needsRefresh = !userId && ctx.req?.headers['x-authenticated'] === 'true'
 
@@ -18,5 +18,3 @@ export const withAuthHoc: GsspHoc<WithAuth, WithAuth> = (ctx) => {
     props: { auth },
   }
 }
-
-export const withAuth = compose(withAuthHoc)
