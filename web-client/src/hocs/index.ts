@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { withAuth } from './withAuth'
-import { withHocs } from './withHocs'
-import { withReactQuery } from './withReactQuery'
+import { withAuth } from './with-auth'
+import { withHocs } from './with-hocs'
+import { withReactQuery } from './with-react-query'
 
 type GsspHocResult<Data, Props> = { data?: Data } & (
   | GetServerSidePropsResult<Props>
@@ -17,8 +17,8 @@ export type GsspHoc<
   ctx: GetServerSidePropsContext,
 ) => GsspHocResult<Data, Props> | Promise<GsspHocResult<Data, Props>>
 
-export * from './withAuth'
-export * from './withHocs'
-export * from './withReactQuery'
+export * from './with-auth'
+export * from './with-hocs'
+export * from './with-react-query'
 
 export const gssp = withHocs(withReactQuery, withAuth)
