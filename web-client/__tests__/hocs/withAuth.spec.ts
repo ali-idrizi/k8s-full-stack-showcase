@@ -29,11 +29,10 @@ describe('With Authentication GSSP HOC', () => {
 
     const props = await Promise.resolve(res.props)
 
-    expect(props.dehydratedState?.queries.at(0)?.state.data).toEqual(
-      expect.objectContaining({
-        needsRefresh: true,
-      }),
-    )
+    expect(props.dehydratedState?.queries.at(0)?.state.data).toEqual({
+      userId: null,
+      needsRefresh: true,
+    })
   })
 
   it('should retain original props', async () => {
