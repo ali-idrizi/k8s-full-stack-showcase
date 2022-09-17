@@ -1,6 +1,6 @@
 import { QueryClientConfig } from '@tanstack/react-query'
 
-const config: QueryClientConfig = {
+export const reactQueryConfig: QueryClientConfig = {
   defaultOptions: {
     queries: {
       staleTime: 1 * 60 * 60 * 1000,
@@ -9,5 +9,3 @@ const config: QueryClientConfig = {
     },
   },
 }
-
-export default config
