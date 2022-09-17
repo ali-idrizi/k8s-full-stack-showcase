@@ -1,4 +1,5 @@
-import { gssp, withAuth } from '@/hocs'
+import { gssp } from '@/hocs'
+import { useAuth } from '@/hooks'
 import { InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 import React from 'react'
@@ -11,7 +12,9 @@ export const getServerSideProps = gssp(() => {
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const About: React.FC<Props> = ({ auth }) => {
+const About: React.FC<Props> = () => {
+  const auth = useAuth()
+
   return (
     <div>
       <h1>About Page {auth.userId}</h1>

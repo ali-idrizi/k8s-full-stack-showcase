@@ -1,4 +1,4 @@
-import { withAuth, withHocs } from '@/hocs'
+import { withAuth, withHocs, withReactQuery } from '@/hocs'
 import { createMockContext, MockContext } from '@/utils/test/mockContext'
 
 describe('With Authentication GSSP HOC', () => {
@@ -12,7 +12,10 @@ describe('With Authentication GSSP HOC', () => {
     ctx.context.req.headers['x-user-id'] = undefined
     ctx.context.req.headers['x-authenticated'] = 'true'
 
-    const gssp = withHocs(withAuth)(() => {
+    const gssp = withHocs(
+      withReactQuery,
+      withAuth,
+    )(() => {
       return {
         props: {},
       }
@@ -25,14 +28,22 @@ describe('With Authentication GSSP HOC', () => {
     }
 
     const props = await Promise.resolve(res.props)
-    expect(props.auth.needsRefresh).toBe(true)
+
+    expect(props.dehydratedState?.queries.at(0)?.state.data).toEqual(
+      expect.objectContaining({
+        needsRefresh: true,
+      }),
+    )
   })
 
   it('should retain original props', async () => {
     ctx.context.req.headers['x-user-id'] = 'test-user-id'
     ctx.context.req.headers['x-authenticated'] = 'true'
 
-    const gssp = withHocs(withAuth)(() => {
+    const gssp = withHocs(
+      withReactQuery,
+      withAuth,
+    )(() => {
       return {
         props: {
           foo: 'bar',
@@ -51,7 +62,10 @@ describe('With Authentication GSSP HOC', () => {
   })
 
   it('should return notFound and redirect from GSSP', async () => {
-    let gssp = withHocs(withAuth)(() => {
+    let gssp = withHocs(
+      withReactQuery,
+      withAuth,
+    )(() => {
       return {
         notFound: true,
       }
@@ -59,7 +73,10 @@ describe('With Authentication GSSP HOC', () => {
     let res = await gssp(ctx.context)
     expect('notFound' in res).toBe(true)
 
-    gssp = withHocs(withAuth)(() => {
+    gssp = withHocs(
+      withReactQuery,
+      withAuth,
+    )(() => {
       return {
         redirect: {
           destination: '/',

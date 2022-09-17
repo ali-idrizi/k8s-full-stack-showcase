@@ -1,3 +1,4 @@
+import { WithAuth } from '@/hocs'
 import Home from '@/pages/index'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
@@ -9,12 +10,17 @@ describe('Home', () => {
 
   beforeEach(async () => {
     await queryClient.fetchQuery(['todos'], getMockData)
+
+    queryClient.setQueryData<WithAuth>(['auth'], {
+      userId: 'test-user-id',
+      needsRefresh: false,
+    })
   })
 
   it('renders a heading', async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <Home auth={{ userId: 'test-user-id', needsRefresh: false }} />
+        <Home />
       </QueryClientProvider>,
     )
 

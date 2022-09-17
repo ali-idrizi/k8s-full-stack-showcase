@@ -1,20 +1,17 @@
-import { GsspHoc } from '.'
+import { GsspHoc, WithReactQueryData } from '.'
 
 export type WithAuth = {
-  auth: {
-    userId: string | null
-    needsRefresh: boolean
-  }
+  userId: string | null
+  needsRefresh: boolean
 }
 
-export const withAuth: GsspHoc<WithAuth, WithAuth> = (_, ctx) => {
+export const withAuth: GsspHoc<unknown, unknown, WithReactQueryData> = ({ queryClient }, ctx) => {
   const userId = (ctx.req?.headers['x-user-id'] as string | undefined) ?? null
   const needsRefresh = !userId && ctx.req?.headers['x-authenticated'] === 'true'
 
-  const auth = { userId, needsRefresh }
+  queryClient.setQueryData<WithAuth>(['auth'], { userId, needsRefresh })
 
   return {
-    data: { auth },
-    props: { auth },
+    props: {},
   }
 }

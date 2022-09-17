@@ -1,4 +1,5 @@
 import { gssp } from '@/hocs'
+import { useAuth } from '@/hooks'
 import { Button, useColorMode } from '@chakra-ui/react'
 import { useQuery } from '@tanstack/react-query'
 import { InferGetServerSidePropsType } from 'next'
@@ -30,10 +31,10 @@ export const getServerSideProps = gssp(async ({ queryClient }) => {
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const Home: React.FC<Props> = ({ auth }) => {
+const Home: React.FC<Props> = () => {
   const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
-
   const { colorMode, toggleColorMode } = useColorMode()
+  const auth = useAuth()
 
   return (
     <div>
