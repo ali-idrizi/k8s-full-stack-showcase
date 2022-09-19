@@ -25,6 +25,7 @@ describe('Auth', () => {
 
   it('should render the children', async () => {
     jest.spyOn(hooks, 'useAuth').mockReturnValueOnce({
+      loggedIn: false,
       userId: null,
       needsRefresh: false,
     })
@@ -49,6 +50,7 @@ describe('Auth', () => {
   it('should refresh the token and replace the route', async () => {
     fetchMock.mockResponse(async () => '')
     jest.spyOn(hooks, 'useAuth').mockReturnValueOnce({
+      loggedIn: true,
       userId: null,
       needsRefresh: true,
     })
