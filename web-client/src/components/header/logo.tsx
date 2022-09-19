@@ -8,7 +8,7 @@ export const Logo: React.FC = () => {
   const colorTo = useColorModeValue('blue.600', 'blue.200')
 
   return (
-    <Flex alignItems="center" userSelect="none" gap={2}>
+    <Flex data-testid="logo" alignItems="center" userSelect="none" gap={2}>
       <Icon as={FiCheckCircle} w={7} h={7} color={colorFrom} />
       <Text
         bgGradient={`linear(to-r, ${colorFrom}, ${colorTo})`}

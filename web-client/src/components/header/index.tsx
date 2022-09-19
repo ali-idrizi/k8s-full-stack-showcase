@@ -16,6 +16,7 @@ export const Header: React.FC = () => {
   return (
     <Box
       as="header"
+      data-testid="header"
       borderBottom={1}
       borderStyle="solid"
       borderColor={headerBorderColor}
