@@ -1,12 +1,16 @@
-import { mockDeep } from 'jest-mock-extended'
+import { WithAuth } from '@/hocs'
+import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { GetServerSidePropsContext } from 'next'
+import { NextRouter } from 'next/router'
 
 export type MockContext = {
-  context: GetServerSidePropsContext
+  context: DeepMockProxy<GetServerSidePropsContext>
+  router: DeepMockProxy<NextRouter>
 }
 
 export const createMockContext = (): MockContext => {
   return {
-    context: mockDeep<GetServerSidePropsContext>(),
+    context: mockDeep(),
+    router: mockDeep(),
   }
 }
