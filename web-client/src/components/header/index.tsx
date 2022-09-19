@@ -1,6 +1,6 @@
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode'
 import { Icon } from '@chakra-ui/icon'
-import { Box, Container, Flex } from '@chakra-ui/layout'
+import { Box, Container, Flex, HStack } from '@chakra-ui/layout'
 import { FiGithub, FiMoon, FiSun } from 'react-icons/fi'
 import { HeaderIconButton } from './icon-button'
 import { Logo } from './logo'
@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
     >
       <Container as={Flex} justifyContent="space-between" maxW="container.xl" py={7}>
         <Logo />
-        <Flex alignItems="center" gap={4}>
+        <HStack spacing={6}>
           <HeaderIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
           <HeaderIconButton
             onClick={toggleColorMode}
@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
           />
 
           <UserAction />
-        </Flex>
+        </HStack>
       </Container>
     </Box>
   )
