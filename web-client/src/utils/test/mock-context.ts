@@ -1,4 +1,3 @@
-import { WithAuth } from '@/hocs'
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { GetServerSidePropsContext } from 'next'
 import { NextRouter } from 'next/router'

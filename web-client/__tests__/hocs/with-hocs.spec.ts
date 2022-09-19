@@ -1,5 +1,5 @@
 import { withHocs, GsspHoc } from '@/hocs'
-import { createMockContext, MockContext } from '@/utils/test/mockContext'
+import { createMockContext, MockContext } from '@/utils/test'
 
 const testHoc: GsspHoc<{ foo: string }> = jest.fn().mockReturnValue({
   data: { foo: 'bar' },

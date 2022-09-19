@@ -1,5 +1,5 @@
 import { Auth } from '@/components'
-import { createMockContext, MockContext } from '@/utils/test/mockContext'
+import { createMockContext, MockContext } from '@/utils/test'
 import { render, screen, waitFor } from '@testing-library/react'
 
 import * as hooks from '@/hooks'

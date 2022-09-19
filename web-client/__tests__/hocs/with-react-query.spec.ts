@@ -1,5 +1,5 @@
 import { withHocs, withReactQuery } from '@/hocs'
-import { createMockContext, MockContext } from '@/utils/test/mockContext'
+import { createMockContext, MockContext } from '@/utils/test'
 
 const getMockData = jest.fn().mockResolvedValue({
   foo: 'bar',

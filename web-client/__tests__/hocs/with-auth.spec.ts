@@ -1,5 +1,5 @@
 import { withAuth, withHocs, withReactQuery } from '@/hocs'
-import { createMockContext, MockContext } from '@/utils/test/mockContext'
+import { createMockContext, MockContext } from '@/utils/test'
 
 describe('With Authentication GSSP HOC', () => {
   let ctx: MockContext
