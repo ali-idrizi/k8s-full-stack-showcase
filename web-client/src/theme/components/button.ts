@@ -17,7 +17,7 @@ const gradient = defineStyle(({ colorScheme, theme, ...props }) => {
 
   return {
     bgClip: 'padding-box !important',
-    border: `solid ${borderWidth} transparent`,
+    border: `solid transparent`,
     color: mode(`${colorScheme}.600`, `${colorScheme}.200`)(props),
     _after: {
       content: '""',
