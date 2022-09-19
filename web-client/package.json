@@ -53,6 +53,7 @@
     "jest-environment-jsdom": "29.0.3",
     "jest-fetch-mock": "^3.0.3",
     "jest-mock-extended": "github:moltar/jest-mock-extended#patch-1",
+    "jest-next-dynamic": "^1.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "ts-node": "^10.9.1",

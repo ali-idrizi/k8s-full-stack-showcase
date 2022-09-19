@@ -1,9 +1,15 @@
+import preloadAll from 'jest-next-dynamic'
+
 import { Header } from '@/components'
 import { render, screen } from '@testing-library/react'
 
 const logError = console.error
 
 describe('Header', () => {
+  beforeEach(async () => {
+    await preloadAll()
+  })
+
   it('should render the header', async () => {
     // ignore console.error thrown because of gradient button props,
     // see https://github.com/chakra-ui/chakra-ui/issues/6706
