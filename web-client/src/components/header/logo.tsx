@@ -11,6 +11,7 @@ export const Logo: React.FC = () => {
     <Flex data-testid="logo" alignItems="center" userSelect="none" gap={2}>
       <Icon as={FiCheckCircle} w={7} h={7} color={colorFrom} />
       <Text
+        as="span"
         bgGradient={`linear(to-r, ${colorFrom}, ${colorTo})`}
         bgClip="text"
         fontSize="xl"
