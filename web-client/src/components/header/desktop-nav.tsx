@@ -1,7 +1,8 @@
 import { Button } from '@/components'
 import { useColorModeValue } from '@chakra-ui/color-mode'
+import { HStack } from '@chakra-ui/layout'
 
-export const UserAction: React.FC = () => {
+export const DesktopNav: React.FC = () => {
   const textColor = useColorModeValue('grey.700', 'gray.200')
 
   const registerButtonProps = {
@@ -12,12 +13,12 @@ export const UserAction: React.FC = () => {
   }
 
   return (
-    <>
+    <HStack spacing={6} display={['none', null, 'block']}>
       <Button variant="solid" borderRadius="full" color={textColor} px={6} py={5}>
         Login
       </Button>
       <Button
-        variant={'gradient'}
+        variant="gradient"
         px={6}
         py={5}
         borderRadius="full"
@@ -26,6 +27,6 @@ export const UserAction: React.FC = () => {
       >
         Register
       </Button>
-    </>
+    </HStack>
   )
 }

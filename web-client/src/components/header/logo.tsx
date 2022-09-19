@@ -9,12 +9,13 @@ export const Logo: React.FC = () => {
 
   return (
     <HStack data-testid="logo" userSelect="none" spacing={2}>
-      <Icon as={FiCheckCircle} w={7} h={7} color={colorFrom} />
+      <Icon as={FiCheckCircle} w={[5, null, 7]} h={[5, null, 7]} color={colorFrom} />
       <Text
         as="span"
+        lineHeight="1"
         bgGradient={`linear(to-r, ${colorFrom}, ${colorTo})`}
         bgClip="text"
-        fontSize="xl"
+        fontSize={['lg', null, 'xl']}
         fontWeight="extrabold"
       >
         TODO

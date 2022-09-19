@@ -1,17 +1,34 @@
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode'
 import { Icon } from '@chakra-ui/icon'
 import { Box, Container, Flex, HStack } from '@chakra-ui/layout'
-import { FiGithub, FiMoon, FiSun } from 'react-icons/fi'
+import { IconButton, useDisclosure } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { FiGithub, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi'
+import { DesktopNav } from './desktop-nav'
 import { HeaderIconButton } from './icon-button'
 import { Logo } from './logo'
-import { UserAction } from './user-action'
+import { MobileNav } from './mobile-nav'
+
+const Collapse = dynamic(() => import('@chakra-ui/react').then((chakra) => chakra.Collapse))
 
 export const Header: React.FC = () => {
+  const router = useRouter()
   const { toggleColorMode } = useColorMode()
+  const {
+    isOpen: isMobileMenuOpen,
+    onToggle: toggleMobileMenu,
+    onClose: closeMobileMenu,
+  } = useDisclosure()
 
-  const ColorModeIcon = useColorModeValue(FiMoon, FiSun)
-  const colorModeToggle = useColorModeValue('Dark', 'Light')
-  const headerBorderColor = useColorModeValue('gray.200', 'gray.900')
+  useEffect(() => {
+    router.events.on('routeChangeStart', closeMobileMenu)
+
+    return () => {
+      router.events.off('routeChangeStart', closeMobileMenu)
+    }
+  }, [router, closeMobileMenu])
 
   return (
     <Box
@@ -19,22 +36,36 @@ export const Header: React.FC = () => {
       data-testid="header"
       borderBottom={1}
       borderStyle="solid"
-      borderColor={headerBorderColor}
+      borderColor={useColorModeValue('gray.200', 'gray.900')}
       boxShadow="sm"
     >
-      <Container as={Flex} justifyContent="space-between" maxW="container.xl" py={7}>
+      <Container as={Flex} justifyContent="space-between" maxW="container.xl" py={[5, null, 7]}>
         <Logo />
-        <HStack spacing={6}>
+
+        <HStack spacing={[4, null, 6]}>
           <HeaderIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
           <HeaderIconButton
             onClick={toggleColorMode}
-            icon={<Icon as={ColorModeIcon} />}
-            aria-label={`Switch to ${colorModeToggle} Mode`}
+            icon={<Icon as={useColorModeValue(FiMoon, FiSun)} />}
+            aria-label={`Switch to ${useColorModeValue('Dark', 'Light')} Mode`}
           />
 
-          <UserAction />
+          <DesktopNav />
+
+          <IconButton
+            variant="ghost"
+            rounded="full"
+            icon={<Icon as={isMobileMenuOpen ? FiX : FiMenu} />}
+            aria-label={'Toggle Navigation'}
+            display={['flex', null, 'none']}
+            onClick={toggleMobileMenu}
+          />
         </HStack>
       </Container>
+
+      <Collapse in={isMobileMenuOpen} animateOpacity>
+        <MobileNav />
+      </Collapse>
     </Box>
   )
 }

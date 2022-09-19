@@ -9,7 +9,7 @@ export const HeaderIconButton: React.FC<IconButtonProps> = ({
 }) => {
   return (
     <Tooltip label={ariaLabel}>
-      <IconButton variant="ghost" borderRadius="full" aria-label={ariaLabel} {...rest} />
+      <IconButton variant="ghost" rounded="full" aria-label={ariaLabel} {...rest} />
     </Tooltip>
   )
 }
