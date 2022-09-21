@@ -1,5 +1,5 @@
 import { GradientButtonProps } from '@/theme/components/button'
-import { Button as ChakraButton } from '@chakra-ui/button'
-import { chakra } from '@chakra-ui/system'
+import { Button as ChakraButton, ButtonProps } from '@chakra-ui/button'
+import { ComponentWithAs } from '@chakra-ui/react'
 
-export const Button = chakra<typeof ChakraButton, GradientButtonProps>(ChakraButton)
+export const Button = ChakraButton as ComponentWithAs<'button', ButtonProps & GradientButtonProps>
