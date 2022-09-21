@@ -1,5 +1,5 @@
 import { Button, Stack } from '@chakra-ui/react'
-import NextLink from 'next/link'
+import Link from 'next/link'
 import React from 'react'
 
 type NavItemProps = React.PropsWithChildren<{
@@ -8,19 +8,19 @@ type NavItemProps = React.PropsWithChildren<{
 
 const NavItem: React.FC<NavItemProps> = ({ href, children }) => {
   return (
-    <NextLink href={href} passHref>
+    <Link href={href} passHref>
       <Button as="a" display="flex" textAlign="start" variant="ghost" py={6} borderRadius="none">
         {children}
       </Button>
-    </NextLink>
+    </Link>
   )
 }
 
 export const MobileNav: React.FC = () => {
   return (
     <Stack role="navigation" py={2} spacing={0} display={{ md: 'none' }}>
-      <NavItem href="/">Login</NavItem>
-      <NavItem href="/">Register</NavItem>
+      <NavItem href="/login">Login</NavItem>
+      <NavItem href="/register">Register</NavItem>
     </Stack>
   )
 }
