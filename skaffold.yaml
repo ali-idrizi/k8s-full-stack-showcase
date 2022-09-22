@@ -4,7 +4,7 @@ metadata:
   name: todo-app
 build:
   local:
-    concurrency: 3
+    concurrency: 1
     useBuildkit: true
   artifacts:
     - image: gcr.io/k8s-full-stack-starter/auth
