@@ -1,4 +1,5 @@
-import { Button, Container, LabelInput } from '@/components'
+import { Button, Container, GradientHeading, LabelInput } from '@/components'
+import { useBrandColors } from '@/hooks'
 import {
   Box,
   FormControl,
@@ -22,8 +23,7 @@ const Login: React.FC = () => {
     },
   })
 
-  const colorFrom = useColorModeValue('green.600', 'green.200')
-  const colorTo = useColorModeValue('blue.600', 'blue.200')
+  const { primary } = useBrandColors()
 
   return (
     <Box
@@ -35,12 +35,10 @@ const Login: React.FC = () => {
     >
       <Container flexDir={{ base: 'column', lg: 'row' }} justifyContent={{ lg: 'space-between' }}>
         <Box flexGrow={{ lg: 1 }} bg={useColorModeValue('white', 'gray.800')}>
-          <Heading
+          <GradientHeading
             as="h2"
             lineHeight="tall"
             mt={{ base: 10, lg: 16 }}
-            bgGradient={`linear(to-r, ${colorFrom}, ${colorTo})`}
-            bgClip="text"
             fontSize={['2xl', '3xl', null, '4xl', '5xl']}
             textAlign={{ base: 'center', lg: 'left' }}
           >
@@ -61,10 +59,8 @@ const Login: React.FC = () => {
                 tasks and todos
               </Highlight>
             </Text>
-            <br />
-          </Heading>
+          </GradientHeading>
         </Box>
-
         <Box
           minW="28rem"
           px={8}
@@ -76,7 +72,7 @@ const Login: React.FC = () => {
           mx={{ base: -4, lg: 0 }}
           bg={{ base: useColorModeValue('gray.50', 'whiteAlpha.50'), lg: 'none' }}
         >
-          <Heading as="h1" mt={{ base: 10, lg: 16 }} mb={8} color={colorFrom} lineHeight="tall">
+          <Heading as="h1" mt={{ base: 10, lg: 16 }} mb={8} color={primary} lineHeight="tall">
             Login
           </Heading>
 
