@@ -1,4 +1,4 @@
-import { AuthInput, Button, Container } from '@/components'
+import { Button, Container, LabelInput } from '@/components'
 import {
   Box,
   FormControl,
@@ -83,7 +83,7 @@ const Login: React.FC = () => {
           <form onSubmit={formik.handleSubmit}>
             <VStack spacing={8} align="flex-start">
               <FormControl>
-                <AuthInput
+                <LabelInput
                   id="email"
                   label="Email Address"
                   type="text"
@@ -95,7 +95,7 @@ const Login: React.FC = () => {
               </FormControl>
 
               <FormControl>
-                <AuthInput
+                <LabelInput
                   id="password"
                   label="Password"
                   type="password"

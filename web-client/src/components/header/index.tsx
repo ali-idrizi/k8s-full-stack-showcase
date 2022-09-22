@@ -1,4 +1,4 @@
-import { Container } from '@/components'
+import { Container, TooltipIconButton } from '@/components'
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode'
 import { Icon } from '@chakra-ui/icon'
 import { Box, HStack } from '@chakra-ui/layout'
@@ -8,7 +8,6 @@ import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { FiGithub, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi'
 import { DesktopNav } from './desktop-nav'
-import { HeaderIconButton } from './icon-button'
 import { Logo } from './logo'
 import { MobileNav } from './mobile-nav'
 
@@ -44,8 +43,8 @@ export const Header: React.FC = () => {
         <Logo />
 
         <HStack spacing={[4, null, 6]}>
-          <HeaderIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
-          <HeaderIconButton
+          <TooltipIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
+          <TooltipIconButton
             onClick={toggleColorMode}
             icon={<Icon as={useColorModeValue(FiMoon, FiSun)} />}
             aria-label={`Switch to ${useColorModeValue('Dark', 'Light')} Mode`}

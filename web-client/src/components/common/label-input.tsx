@@ -13,27 +13,30 @@ type Props = {
   id: string
   type: string
   label: string
-  iconAs: As
   onChange: (e: React.ChangeEvent<unknown>) => void
   value: string
+  iconAs?: As
   autoFocus?: boolean
 }
 
-export const AuthInput: React.FC<Props> = ({ id, label, autoFocus, iconAs, ...rest }) => {
+export const LabelInput: React.FC<Props> = ({ id, label, autoFocus, iconAs, ...rest }) => {
   const autoFocusRef = useCallback((element: HTMLInputElement) => element?.focus(), [])
+  const color = useColorModeValue('gray.600', 'gray.300')
 
   return (
     <>
       <FormLabel htmlFor={id}>{label}</FormLabel>
       <InputGroup>
-        <InputLeftElement pointerEvents="none">
-          <Icon as={iconAs} color={useColorModeValue('gray.600', 'gray.300')} />
-        </InputLeftElement>
+        {iconAs && (
+          <InputLeftElement pointerEvents="none">
+            <Icon as={iconAs} color={color} />
+          </InputLeftElement>
+        )}
         <Input
           id={id}
           name={id}
           ref={autoFocus ? autoFocusRef : undefined}
-          borderColor={useColorModeValue('gray.300', 'gray.600')}
+          borderColor={color}
           focusBorderColor="green.400"
           variant="outline"
           {...rest}
