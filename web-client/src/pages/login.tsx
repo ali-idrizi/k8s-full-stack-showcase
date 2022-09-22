@@ -26,48 +26,45 @@ const Login: React.FC<Props> = () => {
   })
 
   return (
-    <Box h="100%">
-      <Container justifyContent="space-between">
-        <Box>
-          Create and manage your tasks and todos. Create different lists and organize your day
-          better!
-        </Box>
+    <Container justifyContent="space-between" minH="full">
+      <Box>
+        Create and manage your tasks and todos. Create different lists and organize your day better!
+      </Box>
 
-        <Box bg={useColorModeValue('white', 'gray.700')} p={6} rounded="md">
-          <form onSubmit={formik.handleSubmit}>
-            <VStack spacing={6} align="flex-start">
-              <FormControl>
-                <FormLabel htmlFor="email">Email Address</FormLabel>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  variant="filled"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                />
-              </FormControl>
+      <Box bg={useColorModeValue('white', 'gray.700')} p={6} rounded="md">
+        <form onSubmit={formik.handleSubmit}>
+          <VStack spacing={6} align="flex-start">
+            <FormControl>
+              <FormLabel htmlFor="email">Email Address</FormLabel>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                variant="filled"
+                onChange={formik.handleChange}
+                value={formik.values.email}
+              />
+            </FormControl>
 
-              <FormControl isInvalid={formik.touched.password}>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  variant="filled"
-                  onChange={formik.handleChange}
-                  value={formik.values.password}
-                />
-              </FormControl>
+            <FormControl isInvalid={formik.touched.password}>
+              <FormLabel htmlFor="password">Password</FormLabel>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                variant="filled"
+                onChange={formik.handleChange}
+                value={formik.values.password}
+              />
+            </FormControl>
 
-              <Button type="submit" colorScheme="green" width="full">
-                Login
-              </Button>
-            </VStack>
-          </form>
-        </Box>
-      </Container>
-    </Box>
+            <Button type="submit" colorScheme="green" width="full">
+              Login
+            </Button>
+          </VStack>
+        </form>
+      </Box>
+    </Container>
   )
 }
 
