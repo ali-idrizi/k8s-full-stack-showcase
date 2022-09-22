@@ -1,6 +1,7 @@
+import Container from '@/components/container'
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode'
 import { Icon } from '@chakra-ui/icon'
-import { Box, Container, Flex, HStack } from '@chakra-ui/layout'
+import { Box, HStack } from '@chakra-ui/layout'
 import { IconButton, useDisclosure } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
@@ -39,7 +40,7 @@ export const Header: React.FC = () => {
       borderColor={useColorModeValue('gray.200', 'gray.900')}
       boxShadow="sm"
     >
-      <Container as={Flex} justifyContent="space-between" maxW="container.xl" py={[5, null, 7]}>
+      <Container justifyContent="space-between" py={[5, null, 7]}>
         <Logo />
 
         <HStack spacing={[4, null, 6]}>
