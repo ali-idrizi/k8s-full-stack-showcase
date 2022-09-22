@@ -1,5 +1,7 @@
 import { Auth, Chakra, Header, ReactQuery } from '@/components'
+import Footer from '@/components/footer'
 import type { WithReactQueryProps } from '@/hocs'
+import { Flex } from '@chakra-ui/react'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
 import type { AppProps as NextAppProps } from 'next/app'
 
@@ -13,12 +15,15 @@ const App: React.FC<Props> = ({ Component, pageProps }) => {
     <ReactQuery dehydratedState={pageProps.dehydratedState}>
       <Chakra>
         <SkipNavLink id="main">Skip to content</SkipNavLink>
-        <Header />
-        <SkipNavContent as="main" id="main">
-          <Auth>
-            <Component {...pageProps} />
-          </Auth>
-        </SkipNavContent>
+        <Flex flexDir="column" minH="100vh">
+          <Header />
+          <SkipNavContent as="main" id="main" flexGrow="1">
+            <Auth>
+              <Component {...pageProps} />
+            </Auth>
+          </SkipNavContent>
+        </Flex>
+        <Footer />
       </Chakra>
     </ReactQuery>
   )

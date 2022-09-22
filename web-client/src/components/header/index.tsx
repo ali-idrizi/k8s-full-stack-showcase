@@ -12,7 +12,7 @@ import { HeaderIconButton } from './icon-button'
 import { Logo } from './logo'
 import { MobileNav } from './mobile-nav'
 
-const Collapse = dynamic(() => import('@chakra-ui/react').then((chakra) => chakra.Collapse))
+const Collapse = dynamic(() => import('@chakra-ui/transition').then((chakra) => chakra.Collapse))
 
 export const Header: React.FC = () => {
   const router = useRouter()
