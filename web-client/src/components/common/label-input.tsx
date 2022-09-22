@@ -21,7 +21,7 @@ type Props = {
 
 export const LabelInput: React.FC<Props> = ({ id, label, autoFocus, iconAs, ...rest }) => {
   const autoFocusRef = useCallback((element: HTMLInputElement) => element?.focus(), [])
-  const color = useColorModeValue('gray.600', 'gray.300')
+  const color = useColorModeValue('gray.400', 'gray.500')
 
   return (
     <>
