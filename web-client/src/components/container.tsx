@@ -1,12 +1,13 @@
 import { Container as ChakraContainer, ContainerProps, Flex } from '@chakra-ui/react'
 import React from 'react'
 
-const Container: React.FC<React.PropsWithChildren<ContainerProps>> = ({ children, ...rest }) => {
+export const Container: React.FC<React.PropsWithChildren<ContainerProps>> = ({
+  children,
+  ...rest
+}) => {
   return (
     <ChakraContainer as={Flex} maxW="container.xl" {...rest}>
       {children}
     </ChakraContainer>
   )
 }
-
-export default Container

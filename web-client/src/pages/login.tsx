@@ -1,20 +1,17 @@
-import { Button } from '@/components/button'
-import Container from '@/components/container'
-import { gssp } from '@/hocs'
-import { Box, FormControl, FormLabel, Input, useColorModeValue, VStack } from '@chakra-ui/react'
+import { AuthInput, Button, Container } from '@/components'
+import {
+  Box,
+  FormControl,
+  Heading,
+  Highlight,
+  Text,
+  useColorModeValue,
+  VStack,
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { InferGetServerSidePropsType } from 'next'
-import React from 'react'
+import { FiAtSign, FiKey } from 'react-icons/fi'
 
-export const getServerSideProps = gssp(() => {
-  return {
-    props: {},
-  }
-})
-
-type Props = InferGetServerSidePropsType<typeof getServerSideProps>
-
-const Login: React.FC<Props> = () => {
+const Login: React.FC = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -25,46 +22,97 @@ const Login: React.FC<Props> = () => {
     },
   })
 
+  const colorFrom = useColorModeValue('green.600', 'green.200')
+  const colorTo = useColorModeValue('blue.600', 'blue.200')
+
   return (
-    <Container justifyContent="space-between" minH="full">
-      <Box>
-        Create and manage your tasks and todos. Create different lists and organize your day better!
-      </Box>
+    <Box
+      bgGradient={{
+        lg: `linear(to-l, ${useColorModeValue('gray.50', 'whiteAlpha.50')} 50%, transparent 0%)`,
+      }}
+      display="flex"
+      minH="full"
+    >
+      <Container flexDir={{ base: 'column', lg: 'row' }} justifyContent={{ lg: 'space-between' }}>
+        <Box flexGrow={{ lg: 1 }} bg={useColorModeValue('white', 'gray.800')}>
+          <Heading
+            as="h2"
+            lineHeight="tall"
+            mt={{ base: 10, lg: 16 }}
+            bgGradient={`linear(to-r, ${colorFrom}, ${colorTo})`}
+            bgClip="text"
+            fontSize={['2xl', '3xl', null, '4xl', '5xl']}
+            textAlign={{ base: 'center', lg: 'left' }}
+          >
+            Create and manage your
+            <br />
+            <Text as="span" whiteSpace="nowrap">
+              <Highlight
+                query={['tasks', 'todos']}
+                styles={{
+                  px: '4',
+                  py: '1',
+                  bg: 'orange.100',
+                  rounded: 'full',
+                  transition: 'background .3s',
+                  _hover: { bg: 'red.100' },
+                }}
+              >
+                tasks and todos
+              </Highlight>
+            </Text>
+            <br />
+          </Heading>
+        </Box>
 
-      <Box bg={useColorModeValue('white', 'gray.700')} p={6} rounded="md">
-        <form onSubmit={formik.handleSubmit}>
-          <VStack spacing={6} align="flex-start">
-            <FormControl>
-              <FormLabel htmlFor="email">Email Address</FormLabel>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                variant="filled"
-                onChange={formik.handleChange}
-                value={formik.values.email}
-              />
-            </FormControl>
+        <Box
+          minW="28rem"
+          px={8}
+          borderLeftWidth={{ lg: 10 }}
+          borderStyle="solid"
+          borderColor={useColorModeValue('gray.100', 'gray.700')}
+          flexGrow={{ base: 1, lg: 0 }}
+          mt={{ base: 10, lg: 0 }}
+          mx={{ base: -4, lg: 0 }}
+          bg={{ base: useColorModeValue('gray.50', 'whiteAlpha.50'), lg: 'none' }}
+        >
+          <Heading as="h1" mt={{ base: 10, lg: 16 }} mb={8} color={colorFrom} lineHeight="tall">
+            Login
+          </Heading>
 
-            <FormControl isInvalid={formik.touched.password}>
-              <FormLabel htmlFor="password">Password</FormLabel>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                variant="filled"
-                onChange={formik.handleChange}
-                value={formik.values.password}
-              />
-            </FormControl>
+          <form onSubmit={formik.handleSubmit}>
+            <VStack spacing={8} align="flex-start">
+              <FormControl>
+                <AuthInput
+                  id="email"
+                  label="Email Address"
+                  type="text"
+                  autoFocus
+                  iconAs={FiAtSign}
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
+                />
+              </FormControl>
 
-            <Button type="submit" colorScheme="green" width="full">
-              Login
-            </Button>
-          </VStack>
-        </form>
-      </Box>
-    </Container>
+              <FormControl>
+                <AuthInput
+                  id="password"
+                  label="Password"
+                  type="password"
+                  iconAs={FiKey}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
+                />
+              </FormControl>
+
+              <Button type="submit" colorScheme="green" width="full">
+                Login
+              </Button>
+            </VStack>
+          </form>
+        </Box>
+      </Container>
+    </Box>
   )
 }
 

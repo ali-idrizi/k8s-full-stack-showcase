@@ -1,4 +1,4 @@
-import Container from '@/components/container'
+import { Container } from '@/components'
 import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode'
 import { Icon } from '@chakra-ui/icon'
 import { Box, HStack } from '@chakra-ui/layout'
