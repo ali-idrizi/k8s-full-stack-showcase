@@ -1,6 +1,6 @@
 import preloadAll from 'jest-next-dynamic'
 
-import { Header } from '@/components'
+import { Chakra, Header } from '@/components'
 import { createMockContext, MockContext } from '@/utils/test'
 import { render, screen } from '@testing-library/react'
 
@@ -31,7 +31,11 @@ describe('Header', () => {
       logError(error)
     })
 
-    render(<Header />)
+    render(
+      <Chakra>
+        <Header />
+      </Chakra>,
+    )
 
     const header = await screen.findByTestId('header')
     const logo = await screen.findByTestId('logo')
