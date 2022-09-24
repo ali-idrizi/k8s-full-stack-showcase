@@ -13,7 +13,7 @@ import { MobileNav } from './mobile-nav'
 
 const Collapse = dynamic(() => import('@chakra-ui/transition').then((chakra) => chakra.Collapse))
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const router = useRouter()
   const { toggleColorMode } = useColorMode()
   const {
@@ -69,3 +69,5 @@ export const Header: React.FC = () => {
     </Box>
   )
 }
+
+export default Header

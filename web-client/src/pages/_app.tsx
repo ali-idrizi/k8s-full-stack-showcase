@@ -1,5 +1,6 @@
-import { Auth, Chakra, Header, ReactQuery } from '@/components'
+import { Auth, Chakra, ReactQuery } from '@/components'
 import Footer from '@/components/footer'
+import Header from '@/components/header'
 import { AppProps, PageWithLayout } from '@/utils/types'
 import { Box, Flex } from '@chakra-ui/react'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
