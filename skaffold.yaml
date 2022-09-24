@@ -7,27 +7,6 @@ build:
     concurrency: 1
     useBuildkit: true
   artifacts:
-    - image: gcr.io/k8s-full-stack-starter/auth
-      context: auth
-      custom: &nestjsCustomBuild
-        dependencies:
-          paths:
-            - ../.k8s/docker/nestjs/*
-            - ./**/*
-        buildCommand: |
-          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$ENV
-      sync: &nestjsSync
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: gcr.io/k8s-full-stack-starter/todo
-      context: todo
-      custom: *nestjsCustomBuild
-      sync: *nestjsSync
-    - image: gcr.io/k8s-full-stack-starter/user
-      context: user
-      custom: *nestjsCustomBuild
-      sync: *nestjsSync
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
       custom:
@@ -41,16 +20,6 @@ build:
         manual:
           - src: "src/**/*.{ts,tsx}"
             dest: .
-    - image: gcr.io/k8s-full-stack-starter/auth-prisma
-      context: auth
-      docker: &prismaDocker
-        dockerfile: .k8s/docker/Dockerfile.prisma
-    - image: gcr.io/k8s-full-stack-starter/todo-prisma
-      context: todo
-      docker: *prismaDocker
-    - image: gcr.io/k8s-full-stack-starter/user-prisma
-      context: user
-      docker: *prismaDocker
 
 deploy:
   logs:
@@ -67,42 +36,12 @@ deploy:
         valuesFiles:
           - .k8s/values/dev/ingress-nginx-values.yaml
 
-      - name: nats
-        remoteChart: nats
-        repo: https://nats-io.github.io/k8s/helm/charts/
-        version: 0.17.3
-        namespace: dev
-        createNamespace: true
-        upgradeOnChange: true
-        valuesFiles:
-          - .k8s/values/dev/nats-values.yaml
-        wait: true
-
-      - name: dev-db
-        useHelmSecrets: true
-        chartPath: .k8s/helm-charts/db
-        namespace: dev
-        createNamespace: true
-        valuesFiles:
-          - .k8s/values/dev/db-values.yaml
-          - .k8s/values/dev/db-secrets.yaml
-        wait: true
-
       - name: dev-app
         useHelmSecrets: true
         chartPath: .k8s/helm-charts/app
         namespace: dev
         createNamespace: true
         artifactOverrides:
-          auth:
-            image: gcr.io/k8s-full-stack-starter/auth
-            db.prisma.image: gcr.io/k8s-full-stack-starter/auth-prisma
-          todo:
-            image: gcr.io/k8s-full-stack-starter/todo
-            db.prisma.image: gcr.io/k8s-full-stack-starter/todo-prisma
-          user:
-            image: gcr.io/k8s-full-stack-starter/user
-            db.prisma.image: gcr.io/k8s-full-stack-starter/user-prisma
           webClient:
             image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
@@ -113,16 +52,9 @@ deploy:
           - .k8s/values/dev/app-secrets.yaml
 
 test:
-  - image: gcr.io/k8s-full-stack-starter/auth
-    custom: &npmTestCommand
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-  - image: gcr.io/k8s-full-stack-starter/todo
-    custom: *npmTestCommand
-  - image: gcr.io/k8s-full-stack-starter/user
-    custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/web-client
-    custom: *npmTestCommand
-
+    custom:
+     - command: echo 'yea'
 profiles:
   - name: dev
     activation:
