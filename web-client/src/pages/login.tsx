@@ -26,7 +26,7 @@ const Login: PageWithLayout = () => {
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
-        <VStack spacing={8} align="flex-start">
+        <VStack spacing={8}>
           <FormControl>
             <LabelInput
               id="email"
