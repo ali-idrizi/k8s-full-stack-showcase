@@ -6,7 +6,7 @@ auth:
   db:
     prisma:
       migrate:
-        enabled: false
+        enabled: true
 
 todo:
   ingress:
@@ -14,7 +14,7 @@ todo:
   db:
     prisma:
       migrate:
-        enabled: false
+        enabled: true
 
 user:
   ingress:
@@ -22,9 +22,9 @@ user:
   db:
     prisma:
       migrate:
-        enabled: false
+        enabled: true
       seed:
-        enabled: false
+        enabled: true
 
 webClient:
   ingress:
