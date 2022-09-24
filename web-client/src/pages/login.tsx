@@ -2,7 +2,7 @@ import { Button, LabelInput } from '@/components'
 import { useBrandColors } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
-import { FormControl, Heading, VStack } from '@chakra-ui/react'
+import { Flex, FormControl, Heading, VStack } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
@@ -20,13 +20,13 @@ const Login: PageWithLayout = () => {
   })
 
   return (
-    <>
+    <Flex maxW={96} flexDir="column" alignItems="stretch" mx="auto" pb={12}>
       <Heading as="h1" mb={8} color={primary} lineHeight="tall">
         Login
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
-        <VStack spacing={8}>
+        <VStack spacing={8} mx="auto">
           <FormControl>
             <LabelInput
               id="email"
@@ -55,7 +55,7 @@ const Login: PageWithLayout = () => {
           </Button>
         </VStack>
       </form>
-    </>
+    </Flex>
   )
 }
 
