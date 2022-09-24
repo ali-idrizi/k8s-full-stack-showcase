@@ -1,8 +1,18 @@
 import { useColorModeValue } from '@chakra-ui/react'
 
-export const useBrandColors = (): { primary: string; secondary: string } => {
-  const primary = useColorModeValue('green.600', 'green.200')
-  const secondary = useColorModeValue('blue.600', 'blue.200')
+type BrandColors = {
+  primary: string
+  secondary: string
+  primaryScheme: string
+  secondaryScheme: string
+}
 
-  return { primary, secondary }
+export const useBrandColors = (): BrandColors => {
+  const primaryScheme = 'green'
+  const secondaryScheme = 'teal'
+
+  const primary = useColorModeValue(`${primaryScheme}.600`, `${primaryScheme}.200`)
+  const secondary = useColorModeValue(`${secondaryScheme}.600`, `${secondaryScheme}.200`)
+
+  return { primary, secondary, primaryScheme, secondaryScheme }
 }

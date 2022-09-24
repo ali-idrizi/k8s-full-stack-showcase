@@ -23,7 +23,7 @@ const Login: React.FC = () => {
     },
   })
 
-  const { primary } = useBrandColors()
+  const { primary, primaryScheme } = useBrandColors()
 
   return (
     <Box
@@ -102,7 +102,7 @@ const Login: React.FC = () => {
                 />
               </FormControl>
 
-              <Button type="submit" colorScheme="green" width="full">
+              <Button type="submit" colorScheme={primaryScheme} width="full">
                 Login
               </Button>
             </VStack>
