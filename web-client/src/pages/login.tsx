@@ -1,8 +1,8 @@
-import { Button, LabelInput } from '@/components'
+import { LabelInput } from '@/components'
 import { useBrandColors } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
-import { Flex, FormControl, Heading, VStack } from '@chakra-ui/react'
+import { Button, Flex, FormControl, Heading, VStack } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
