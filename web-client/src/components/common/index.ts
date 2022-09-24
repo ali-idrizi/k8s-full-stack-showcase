@@ -1,4 +1,3 @@
-export * from './button'
 export * from './container'
 export * from './gradient-heading'
 export * from './label-input'
