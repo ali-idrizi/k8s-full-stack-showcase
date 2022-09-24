@@ -2,7 +2,7 @@ import { Chakra } from '@/components'
 import { render, screen } from '@testing-library/react'
 import { AuthLayout } from '@/layouts'
 
-describe('Header', () => {
+describe('AuthLayout', () => {
   it('should render the content', async () => {
     render(
       <Chakra>
