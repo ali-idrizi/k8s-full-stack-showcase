@@ -19,7 +19,7 @@
     "gen:theme-typings": "chakra-cli tokens src/theme"
   },
   "lint-staged": {
-    "{src,__tests__}/**/*.{ts,tsx}": "eslint",
+    "{src,__tests__}/**/*.{ts,tsx}": "eslint --max-warnings=0",
     "src/**/*.{ts,tsx}": "jest --bail --findRelatedTests --passWithNoTests"
   },
   "dependencies": {
