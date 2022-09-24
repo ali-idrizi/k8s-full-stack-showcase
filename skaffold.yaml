@@ -36,6 +36,27 @@ deploy:
         valuesFiles:
           - .k8s/values/dev/ingress-nginx-values.yaml
 
+      - name: nats
+        remoteChart: nats
+        repo: https://nats-io.github.io/k8s/helm/charts/
+        version: 0.17.3
+        namespace: dev
+        createNamespace: true
+        upgradeOnChange: true
+        valuesFiles:
+          - .k8s/values/dev/nats-values.yaml
+        wait: true
+
+      - name: dev-db
+        useHelmSecrets: true
+        chartPath: .k8s/helm-charts/db
+        namespace: dev
+        createNamespace: true
+        valuesFiles:
+          - .k8s/values/dev/db-values.yaml
+          - .k8s/values/dev/db-secrets.yaml
+        wait: true
+
       - name: dev-app
         useHelmSecrets: true
         chartPath: .k8s/helm-charts/app
