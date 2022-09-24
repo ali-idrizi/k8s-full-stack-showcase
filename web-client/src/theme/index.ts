@@ -3,6 +3,7 @@ import { ThemeConfig } from '@chakra-ui/theme'
 import Button from './components/button'
 
 const config: ThemeConfig = {
+  cssVarPrefix: 'ck',
   initialColorMode: 'dark',
   useSystemColorMode: false,
 }
