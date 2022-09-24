@@ -63,11 +63,12 @@ const Login: React.FC = () => {
         </Box>
         <Box
           minW="28rem"
-          px={8}
-          borderLeftWidth={{ lg: 10 }}
           borderStyle="solid"
           borderColor={useColorModeValue('gray.100', 'gray.700')}
+          borderLeftWidth={{ lg: 10 }}
           flexGrow={{ base: 1, lg: 0 }}
+          pl={{ base: 8, lg: 12 }}
+          pr={{ base: 8, lg: 0 }}
           mt={{ base: 10, lg: 0 }}
           mx={{ base: -4, lg: 0 }}
           bg={{ base: useColorModeValue('gray.50', 'whiteAlpha.50'), lg: 'none' }}
