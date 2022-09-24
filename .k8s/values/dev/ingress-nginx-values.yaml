@@ -2,3 +2,6 @@ controller:
   service:
     nodePorts:
       http: 30000
+    
+  admissionWebhooks:
+    enabled: false
