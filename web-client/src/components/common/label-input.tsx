@@ -1,3 +1,4 @@
+import { useBrandColors } from '@/hooks'
 import {
   As,
   FormLabel,
@@ -22,6 +23,7 @@ type Props = {
 export const LabelInput: React.FC<Props> = ({ id, label, autoFocus, iconAs, ...rest }) => {
   const autoFocusRef = useCallback((element: HTMLInputElement) => element?.focus(), [])
   const color = useColorModeValue('gray.400', 'gray.500')
+  const { primary } = useBrandColors()
 
   return (
     <>
@@ -37,7 +39,7 @@ export const LabelInput: React.FC<Props> = ({ id, label, autoFocus, iconAs, ...r
           name={id}
           ref={autoFocus ? autoFocusRef : undefined}
           borderColor={color}
-          focusBorderColor="green.400"
+          focusBorderColor={primary}
           variant="outline"
           {...rest}
         />
