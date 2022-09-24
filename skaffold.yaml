@@ -7,6 +7,27 @@ build:
     concurrency: 1
     useBuildkit: true
   artifacts:
+    - image: gcr.io/k8s-full-stack-starter/auth
+      context: auth
+      custom: &nestjsCustomBuild
+        dependencies:
+          paths:
+            - ../.k8s/docker/nestjs/*
+            - ./**/*
+        buildCommand: |
+          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$ENV
+      sync: &nestjsSync
+        manual:
+          - src: "src/**/*.ts"
+            dest: .
+    - image: gcr.io/k8s-full-stack-starter/todo
+      context: todo
+      custom: *nestjsCustomBuild
+      sync: *nestjsSync
+    - image: gcr.io/k8s-full-stack-starter/user
+      context: user
+      custom: *nestjsCustomBuild
+      sync: *nestjsSync
     - image: gcr.io/k8s-full-stack-starter/web-client
       context: web-client
       custom:
@@ -20,6 +41,16 @@ build:
         manual:
           - src: "src/**/*.{ts,tsx}"
             dest: .
+    - image: gcr.io/k8s-full-stack-starter/auth-prisma
+      context: auth
+      docker: &prismaDocker
+        dockerfile: .k8s/docker/Dockerfile.prisma
+    - image: gcr.io/k8s-full-stack-starter/todo-prisma
+      context: todo
+      docker: *prismaDocker
+    - image: gcr.io/k8s-full-stack-starter/user-prisma
+      context: user
+      docker: *prismaDocker
 
 deploy:
   logs:
@@ -63,6 +94,15 @@ deploy:
         namespace: dev
         createNamespace: true
         artifactOverrides:
+          auth:
+            image: gcr.io/k8s-full-stack-starter/auth
+            db.prisma.image: gcr.io/k8s-full-stack-starter/auth-prisma
+          todo:
+            image: gcr.io/k8s-full-stack-starter/todo
+            db.prisma.image: gcr.io/k8s-full-stack-starter/todo-prisma
+          user:
+            image: gcr.io/k8s-full-stack-starter/user
+            db.prisma.image: gcr.io/k8s-full-stack-starter/user-prisma
           webClient:
             image: gcr.io/k8s-full-stack-starter/web-client
         imageStrategy:
@@ -73,9 +113,16 @@ deploy:
           - .k8s/values/dev/app-secrets.yaml
 
 test:
+  - image: gcr.io/k8s-full-stack-starter/auth
+    custom: &npmTestCommand
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+  - image: gcr.io/k8s-full-stack-starter/todo
+    custom: *npmTestCommand
+  - image: gcr.io/k8s-full-stack-starter/user
+    custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/web-client
-    custom:
-     - command: echo 'yea'
+    custom: *npmTestCommand
+
 profiles:
   - name: dev
     activation:
