@@ -1,27 +1,21 @@
 import { Auth, Chakra, Header, ReactQuery } from '@/components'
 import Footer from '@/components/footer'
-import type { WithReactQueryProps } from '@/hocs'
+import { AppProps, PageWithLayout } from '@/utils/types'
 import { Box, Flex } from '@chakra-ui/react'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
-import type { AppProps as NextAppProps } from 'next/app'
 
-type AppProps<P = unknown> = {
-  pageProps: P
-} & Omit<NextAppProps<P>, 'pageProps'>
-type Props = AppProps<WithReactQueryProps>
+const App: React.FC<AppProps> = ({ Component, pageProps: { dehydratedState, ...pageProps } }) => {
+  const getLayout: PageWithLayout['getLayout'] = Component.getLayout ?? ((page) => page)
 
-const App: React.FC<Props> = ({ Component, pageProps }) => {
   return (
-    <ReactQuery dehydratedState={pageProps.dehydratedState}>
+    <ReactQuery dehydratedState={dehydratedState}>
       <Chakra>
         <SkipNavLink id="main">Skip to content</SkipNavLink>
         <Flex flexDir="column" minH="100vh">
           <Header />
           <SkipNavContent as="main" id="main" display="flex" flexDir="row" flexGrow="1">
             <Box w="full" minH="full">
-              <Auth>
-                <Component {...pageProps} />
-              </Auth>
+              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
             </Box>
           </SkipNavContent>
         </Flex>

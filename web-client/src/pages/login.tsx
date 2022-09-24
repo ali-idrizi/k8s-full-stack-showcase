@@ -1,5 +1,7 @@
 import { Button, Container, GradientHeading, LabelInput } from '@/components'
 import { useBrandColors } from '@/hooks'
+import { AuthLayout } from '@/layouts'
+import { PageWithLayout } from '@/utils/types'
 import {
   Box,
   FormControl,
@@ -12,7 +14,7 @@ import {
 import { useFormik } from 'formik'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
-const Login: React.FC = () => {
+const Login: PageWithLayout = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -111,6 +113,10 @@ const Login: React.FC = () => {
       </Container>
     </Box>
   )
+}
+
+Login.getLayout = (page) => {
+  return <AuthLayout>{page}</AuthLayout>
 }
 
 export default Login
