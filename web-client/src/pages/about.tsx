@@ -1,8 +1,9 @@
 import { gssp } from '@/hocs'
 import { useAuth } from '@/hooks'
+import { EmptyLayout } from '@/layouts'
+import { PageWithLayout } from '@/utils/types'
 import { InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
-import React from 'react'
 
 export const getServerSideProps = gssp(() => {
   return {
@@ -12,7 +13,7 @@ export const getServerSideProps = gssp(() => {
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 
-const About: React.FC<Props> = () => {
+const About: PageWithLayout<Props> = () => {
   const auth = useAuth()
 
   return (
@@ -23,6 +24,10 @@ const About: React.FC<Props> = () => {
       <Link href="/about">ABOUT</Link>
     </div>
   )
+}
+
+About.getLayout = (page) => {
+  return <EmptyLayout>{page}</EmptyLayout>
 }
 
 export default About
