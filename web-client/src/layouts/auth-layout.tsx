@@ -12,8 +12,9 @@ export const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     >
       <Container flexDir={{ base: 'column', lg: 'row' }}>
         <Box
+          data-testid="auth-layout-content"
           flexGrow={{ lg: 1 }}
-          bg={useColorModeValue('white', 'gray.800')}
+          bgColor={useColorModeValue('white', 'gray.800')}
           pt={{ base: 10, lg: 16 }}
         >
           <GradientHeading
