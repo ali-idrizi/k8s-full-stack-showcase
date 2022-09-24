@@ -1,7 +1,6 @@
 import preloadAll from 'jest-next-dynamic'
 
-import { Chakra } from '@/components'
-import Header from '@/components/header'
+import { Chakra, Header } from '@/components'
 import { createMockContext, MockContext } from '@/utils/test'
 import { render, screen } from '@testing-library/react'
 
