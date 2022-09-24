@@ -16,10 +16,15 @@ const colors = {
   },
 }
 
+const fontSizes = {
+  md: '1.05rem',
+}
+
 export default extendTheme({
   colors,
   config,
   components: {
     Button,
   },
+  fontSizes,
 })
