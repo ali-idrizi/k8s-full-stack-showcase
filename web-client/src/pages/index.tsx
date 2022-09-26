@@ -7,24 +7,7 @@ import { Button, Heading, Highlight, Stack, Text, VStack } from '@chakra-ui/reac
 import { InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
 
-type Todo = {
-  title: string
-}
-
-const getTodos = async (): Promise<Todo[]> => {
-  return [
-    {
-      title: 'delectus aut autem',
-    },
-    {
-      title: 'quis ut nam facilis et officia qui',
-    },
-  ]
-}
-
-export const getServerSideProps = gssp(async ({ queryClient }) => {
-  await queryClient.prefetchQuery(['todos'], getTodos)
-
+export const getServerSideProps = gssp(async () => {
   return {
     props: {},
   }
