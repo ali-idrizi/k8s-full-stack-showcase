@@ -57,6 +57,8 @@ export const Header: React.FC = () => {
             rounded="full"
             icon={<Icon as={isMobileMenuOpen ? FiX : FiMenu} />}
             aria-label={'Toggle Navigation'}
+            aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
+            aria-controls="mobile-nav"
             display={['flex', null, 'none']}
             onClick={toggleMobileMenu}
           />
