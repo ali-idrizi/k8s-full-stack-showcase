@@ -4,15 +4,17 @@ import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
 import { Button, Flex, FormControl, Heading, VStack } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { FiAtSign, FiKey } from 'react-icons/fi'
+import { FiAtSign, FiKey, FiUser } from 'react-icons/fi'
 
-const Login: PageWithLayout = () => {
-  const { primary, primaryScheme } = useBrandColors()
+const Register: PageWithLayout = () => {
+  const { secondary, secondaryScheme } = useBrandColors()
 
   const formik = useFormik({
     initialValues: {
+      name: '',
       email: '',
       password: '',
+      confirmPassword: '',
     },
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2))
@@ -21,22 +23,34 @@ const Login: PageWithLayout = () => {
 
   return (
     <Flex maxW={96} flexDir="column" alignItems="stretch" mx="auto">
-      <Heading as="h1" mb={8} color={primary} lineHeight="tall">
-        Login
+      <Heading as="h1" mb={8} color={secondary} lineHeight="tall">
+        Register
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
         <VStack spacing={8} mx="auto">
           <FormControl>
             <LabelInput
+              id="name"
+              label="Name"
+              type="text"
+              autoFocus
+              iconAs={FiUser}
+              onChange={formik.handleChange}
+              value={formik.values.name}
+              focusBorderColor={secondary}
+            />
+          </FormControl>
+
+          <FormControl>
+            <LabelInput
               id="email"
               label="Email Address"
               type="text"
-              autoFocus
               iconAs={FiAtSign}
               onChange={formik.handleChange}
               value={formik.values.email}
-              focusBorderColor={primary}
+              focusBorderColor={secondary}
             />
           </FormControl>
 
@@ -48,12 +62,24 @@ const Login: PageWithLayout = () => {
               iconAs={FiKey}
               onChange={formik.handleChange}
               value={formik.values.password}
-              focusBorderColor={primary}
+              focusBorderColor={secondary}
             />
           </FormControl>
 
-          <Button type="submit" colorScheme={primaryScheme} width="full">
-            Login
+          <FormControl>
+            <LabelInput
+              id="confirmPassword"
+              label="Confirm Password"
+              type="password"
+              iconAs={FiKey}
+              onChange={formik.handleChange}
+              value={formik.values.confirmPassword}
+              focusBorderColor={secondary}
+            />
+          </FormControl>
+
+          <Button type="submit" colorScheme={secondaryScheme} width="full">
+            Register
           </Button>
         </VStack>
       </form>
@@ -61,8 +87,8 @@ const Login: PageWithLayout = () => {
   )
 }
 
-Login.getLayout = (page) => {
+Register.getLayout = (page) => {
   return <AuthLayout>{page}</AuthLayout>
 }
 
-export default Login
+export default Register
