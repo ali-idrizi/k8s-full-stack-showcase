@@ -1,3 +1,4 @@
+import { Chakra } from '@/components'
 import { WithAuth } from '@/hocs'
 import Home from '@/pages/index'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -13,7 +14,9 @@ it('renders homepage unchanged', () => {
 
   const { container } = render(
     <QueryClientProvider client={queryClient}>
-      <Home />
+      <Chakra>
+        <Home />
+      </Chakra>
     </QueryClientProvider>,
   )
   expect(container).toMatchSnapshot()

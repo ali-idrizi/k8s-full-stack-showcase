@@ -1,12 +1,11 @@
+import { GradientHeading } from '@/components'
 import { gssp } from '@/hocs'
-import { useAuth } from '@/hooks'
+import { useBrandColors } from '@/hooks'
 import { EmptyLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
-import { Button, useColorMode } from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
+import { Button, Heading, Highlight, Stack, Text, VStack } from '@chakra-ui/react'
 import { InferGetServerSidePropsType } from 'next'
 import Link from 'next/link'
-import React from 'react'
 
 type Todo = {
   title: string
@@ -34,36 +33,82 @@ export const getServerSideProps = gssp(async ({ queryClient }) => {
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 
 const Home: PageWithLayout<Props> = () => {
-  const { data, isSuccess, isError } = useQuery<Todo[]>(['todos'], getTodos)
-  const { colorMode, toggleColorMode } = useColorMode()
-  const auth = useAuth()
+  const { primaryScheme, secondaryScheme } = useBrandColors()
 
   return (
-    <div>
-      <h1>Welcome {auth.userId}</h1>
+    <VStack spacing={{ base: 16, md: 20 }}>
+      <GradientHeading
+        as="h2"
+        mt={20}
+        flexGrow={1}
+        lineHeight="tall"
+        fontSize={['2xl', '4xl', null, '5xl', '5xl']}
+        textAlign="center"
+      >
+        Create and manage your{' '}
+        <Text as="span" whiteSpace="nowrap">
+          <Highlight
+            query={['tasks', 'todos']}
+            styles={{
+              px: '4',
+              py: '1',
+              rounded: 'full',
+              transition: 'background .3s',
+              bg: 'orange.100',
+              _hover: { bg: 'red.100' },
+            }}
+          >
+            tasks and todos
+          </Highlight>
+        </Text>
+      </GradientHeading>
 
-      <Button onClick={toggleColorMode} rounded="full">
-        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
-      </Button>
+      <Heading textAlign="center" fontSize="3xl">
+        Create different lists and organize your day better!
+      </Heading>
 
-      {isError && <p>Failed to fetch data</p>}
+      <Stack
+        direction={{ base: 'column', md: 'row' }}
+        alignItems="center"
+        justifyContent="center"
+        spacing={2}
+        w="full"
+      >
+        <Link href="/login" passHref>
+          <Button
+            as="a"
+            variant="solid"
+            size="lg"
+            colorScheme={primaryScheme}
+            borderRadius="full"
+            px={14}
+            py={7}
+            fontSize="xl"
+            w={{ base: 'full', md: 52 }}
+            maxW={64}
+          >
+            Login
+          </Button>
+        </Link>
 
-      {isSuccess && (
-        <div data-testid="todos">
-          {data.map((todo, index) => {
-            return (
-              <React.Fragment key={index}>
-                {todo.title}
-                <br />
-              </React.Fragment>
-            )
-          })}
-        </div>
-      )}
-
-      <Link href="/">HOME</Link>
-      <Link href="/about">ABOUT</Link>
-    </div>
+        <Link href="/login" passHref>
+          <Button
+            as="a"
+            variant="solid"
+            size="lg"
+            colorScheme={secondaryScheme}
+            borderRadius="full"
+            px={14}
+            py={7}
+            fontSize="xl"
+            w={{ base: 'full', md: 52 }}
+            maxW={64}
+          >
+            Register
+          </Button>
+        </Link>
+      </Stack>
+    </VStack>
   )
 }
 

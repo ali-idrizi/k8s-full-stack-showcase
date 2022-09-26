@@ -43,7 +43,6 @@ export const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
           </GradientHeading>
         </Box>
         <Box
-          minW="26rem"
           flexGrow={{ base: 1, lg: 0 }}
           py={{ base: 10, lg: 16 }}
           pl={{ base: 8, lg: 12 }}

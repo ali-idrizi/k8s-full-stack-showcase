@@ -1,3 +1,4 @@
+import { Chakra } from '@/components'
 import { WithAuth } from '@/hocs'
 import Home from '@/pages/index'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -20,18 +21,17 @@ describe('Home', () => {
   it('renders a heading', async () => {
     render(
       <QueryClientProvider client={queryClient}>
-        <Home />
+        <Chakra>
+          <Home />
+        </Chakra>
       </QueryClientProvider>,
     )
 
     const heading = screen.getByRole('heading', {
-      name: /welcome test-user-id/i,
+      name: /create and manage your tasks and todos/i,
     })
-
-    const todos = await screen.findByTestId('todos')
 
     expect(getMockData).toHaveBeenCalledTimes(1)
     expect(heading).toBeInTheDocument()
-    expect(todos).toHaveTextContent('Test')
   })
 })
