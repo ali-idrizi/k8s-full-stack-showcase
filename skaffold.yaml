@@ -124,6 +124,14 @@ test:
   - image: gcr.io/k8s-full-stack-starter/web-client
     custom: *npmTestCommand
 
+portForward:
+  - resourceType: service
+    resourceName: ingress-nginx-controller
+    namespace: ingress-nginx
+    port: 80
+    address: 0.0.0.0
+    localPort: 3000
+
 profiles:
   - name: dev
     activation:
