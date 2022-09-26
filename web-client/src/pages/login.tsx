@@ -20,7 +20,7 @@ const Login: PageWithLayout = () => {
   })
 
   return (
-    <Flex maxW={96} flexDir="column" alignItems="stretch" mx="auto" pb={12}>
+    <Flex maxW={96} flexDir="column" alignItems="stretch" mx="auto">
       <Heading as="h1" mb={8} color={primary} lineHeight="tall">
         Login
       </Heading>

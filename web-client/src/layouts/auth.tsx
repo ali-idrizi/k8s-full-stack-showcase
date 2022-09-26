@@ -45,7 +45,7 @@ export const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <Box
           minW="26rem"
           flexGrow={{ base: 1, lg: 0 }}
-          pt={{ base: 10, lg: 16 }}
+          py={{ base: 10, lg: 16 }}
           pl={{ base: 8, lg: 12 }}
           pr={{ base: 8, lg: 0 }}
           mt={{ base: 10, lg: 0 }}
