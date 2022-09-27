@@ -1,5 +1,5 @@
-import { compose, GsspHoc } from '@/hocs'
-import { createMockContext, MockContext } from '@/utils/test/mockContext'
+import { withHocs, GsspHoc } from '@/hocs'
+import { createMockContext, MockContext } from '@/utils/test'
 
 const testHoc: GsspHoc<{ foo: string }> = jest.fn().mockReturnValue({
   data: { foo: 'bar' },
@@ -26,7 +26,7 @@ describe('Compose GSSP HOCs', () => {
   })
 
   it('should call hoc and return props', async () => {
-    const gssp = compose(testHoc)(({ foo }) => {
+    const gssp = withHocs(testHoc)(({ foo }) => {
       return {
         props: {
           foo,
@@ -46,7 +46,7 @@ describe('Compose GSSP HOCs', () => {
   })
 
   it('should call multiple hocs and return all props', async () => {
-    const gssp = compose(
+    const gssp = withHocs(
       testHoc,
       propsHoc,
     )(({ foo }) => {
@@ -70,7 +70,7 @@ describe('Compose GSSP HOCs', () => {
   })
 
   it('should return when props is not passed from HOC', async () => {
-    const gssp = compose(notFoundHoc)(() => {
+    const gssp = withHocs(notFoundHoc)(() => {
       return {
         props: {},
       }

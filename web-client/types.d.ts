@@ -4,3 +4,8 @@ declare module '*module.css' {
   }
   export default styles
 }
+
+declare module 'jest-next-dynamic' {
+  const preloadAll = async () => Promise<void>
+  export default preloadAll
+}

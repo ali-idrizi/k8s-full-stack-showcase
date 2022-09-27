@@ -6,61 +6,63 @@ type Next<Props, Data> = (
   ctx: GetServerSidePropsContext,
 ) => GetServerSidePropsResult<Props> | Promise<GetServerSidePropsResult<Props>>
 
-export function compose<A, B, C, D, E, F, G, H>(
+export function withHocs<A, B, C, D, E, F, G, H>(
   hoc1: GsspHoc<A, B>,
-  hoc2: GsspHoc<C, D>,
-  hoc3: GsspHoc<E, F>,
-  hoc4: GsspHoc<G, H>,
+  hoc2: GsspHoc<C, D, A>,
+  hoc3: GsspHoc<E, F, A & C>,
+  hoc4: GsspHoc<G, H, A & C & E>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
   next: Next<Props, A & C & E & G>,
 ) => GetServerSideProps<Props & B & D & F & H>
 
-export function compose<A, B, C, D, E, F>(
+export function withHocs<A, B, C, D, E, F>(
   hoc1: GsspHoc<A, B>,
-  hoc2: GsspHoc<C, D>,
-  hoc3: GsspHoc<E, F>,
+  hoc2: GsspHoc<C, D, A>,
+  hoc3: GsspHoc<E, F, A & C>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
   next: Next<Props, A & C & E>,
 ) => GetServerSideProps<Props & B & D & F>
 
-export function compose<A, B, C, D>(
+export function withHocs<A, B, C, D>(
   hoc1: GsspHoc<A, B>,
-  hoc2: GsspHoc<C, D>,
+  hoc2: GsspHoc<C, D, A>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
   next: Next<Props, A & C>,
 ) => GetServerSideProps<Props & B & D>
 
-export function compose<A, B>(
+export function withHocs<A, B>(
   hoc1: GsspHoc<A, B>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(next: Next<Props, A>) => GetServerSideProps<Props & B>
 
-export function compose(
+export function withHocs(
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
   next: Next<Props, unknown>,
 ) => GetServerSideProps<Props> {
   return (next) => {
     return async (ctx) => {
-      const hocResults = hocs.map((hoc) => hoc(ctx))
-
       const hocProps = []
       const data = {}
 
-      for (const result of hocResults) {
+      for (const hoc of hocs) {
+        const result = await Promise.resolve(hoc(data, ctx))
+
         // if any of the hocs retuned `notFound` or `redirect` then return immediately
-        if (!('props' in result)) {
+        if ('notFound' in result || 'redirect' in result) {
           return result
         }
 
-        if (result.data !== undefined) {
+        if ('data' in result) {
           Object.assign(data, result.data)
         }
 
-        hocProps.push(result.props)
+        if ('props' in result) {
+          hocProps.push(result.props)
+        }
       }
 
       const nextResult = await Promise.resolve(next(data, ctx))

@@ -2,28 +2,55 @@
 
 exports[`renders homepage unchanged 1`] = `
 <div>
-  <div>
-    <h1>
-      Welcome 
-      test-user-id
-    </h1>
-    <button
-      class="chakra-button css-1yyoqsc"
-      type="button"
+  <div
+    class="chakra-stack css-4m2dmu"
+  >
+    <h2
+      class="chakra-heading css-1s5dc0k"
     >
-      Toggle 
-      Light
-    </button>
-    <a
-      href="/"
+      Create and manage your
+       
+      <span
+        class="chakra-text css-epvm6"
+      >
+        <mark
+          class="css-14ksbrr"
+        >
+          tasks
+        </mark>
+         and 
+        <mark
+          class="css-14ksbrr"
+        >
+          todos
+        </mark>
+      </span>
+    </h2>
+    <h2
+      class="chakra-heading css-19wzjxi"
     >
-      HOME
-    </a>
-    <a
-      href="/about"
+      Create different lists and organize your day better!
+    </h2>
+    <div
+      class="chakra-stack css-1jin9mk"
     >
-      ABOUT
-    </a>
+      <a
+        class="chakra-button css-b1otln"
+        href="/login"
+      >
+        Login
+      </a>
+      <a
+        class="chakra-button css-1mbzm3s"
+        href="/register"
+      >
+        Register
+      </a>
+    </div>
   </div>
+  <span
+    hidden=""
+    id="__chakra_env"
+  />
 </div>
 `;

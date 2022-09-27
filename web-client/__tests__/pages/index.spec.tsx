@@ -1,31 +1,19 @@
+import { Chakra } from '@/components'
 import Home from '@/pages/index'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
-const getMockData = jest.fn().mockResolvedValue([{ title: 'Test' }])
-
 describe('Home', () => {
-  const queryClient = new QueryClient()
-
-  beforeEach(async () => {
-    await queryClient.fetchQuery(['todos'], getMockData)
-  })
-
   it('renders a heading', async () => {
     render(
-      <QueryClientProvider client={queryClient}>
-        <Home auth={{ userId: 'test-user-id', needsRefresh: false }} />
-      </QueryClientProvider>,
+      <Chakra>
+        <Home />
+      </Chakra>,
     )
 
     const heading = screen.getByRole('heading', {
-      name: /welcome test-user-id/i,
+      name: /create and manage your tasks and todos/i,
     })
 
-    const todos = await screen.findByTestId('todos')
-
-    expect(getMockData).toHaveBeenCalledTimes(1)
     expect(heading).toBeInTheDocument()
-    expect(todos).toHaveTextContent('Test')
   })
 })
