@@ -1,9 +1,11 @@
 import { Container, TooltipIconButton } from '@/components'
+import { useAuth } from '@/hooks'
 import {
   Box,
   HStack,
   Icon,
   IconButton,
+  Text,
   useColorMode,
   useColorModeValue,
   useDisclosure,
@@ -27,6 +29,8 @@ export const Header: React.FC = () => {
     onClose: closeMobileMenu,
   } = useDisclosure()
 
+  const { loggedIn } = useAuth()
+
   useEffect(() => {
     router.events.on('routeChangeStart', closeMobileMenu)
 
@@ -48,6 +52,8 @@ export const Header: React.FC = () => {
         <Logo />
 
         <HStack spacing={[4, null, 6]}>
+          {loggedIn && <Text>Logged In</Text>}
+
           <TooltipIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
           <TooltipIconButton
             onClick={toggleColorMode}
