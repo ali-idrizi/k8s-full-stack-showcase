@@ -13,12 +13,13 @@ export const CTAButton: React.FC<React.PropsWithChildren<Props>> = ({ href, ...r
         as="a"
         variant="solid"
         borderRadius="full"
-        px={14}
-        py={7}
-        fontSize="xl"
+        px="14"
+        py="7"
         textTransform="uppercase"
         fontWeight="bold"
+        fontSize={{ base: 'lg', md: 'xl' }}
         w={{ base: 'full', md: 52 }}
+        maxW="80"
         {...rest}
       />
     </Link>

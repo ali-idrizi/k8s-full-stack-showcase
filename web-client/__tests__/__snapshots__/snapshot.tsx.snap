@@ -35,13 +35,13 @@ exports[`renders homepage unchanged 1`] = `
       class="chakra-stack css-1jin9mk"
     >
       <a
-        class="chakra-button css-1e2y2hj"
+        class="chakra-button css-b1otln"
         href="/login"
       >
         Login
       </a>
       <a
-        class="chakra-button css-16o7134"
+        class="chakra-button css-1mbzm3s"
         href="/register"
       >
         Register
