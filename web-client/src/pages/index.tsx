@@ -18,10 +18,9 @@ const Home: PageWithLayout<Props> = () => {
   const { primaryScheme, secondaryScheme } = useBrandColors()
 
   return (
-    <VStack spacing={{ base: 16, md: 20 }}>
+    <VStack spacing={{ base: 14, md: 20 }} py={{ base: 14, md: 20 }}>
       <GradientHeading
         as="h2"
-        mt={20}
         flexGrow={1}
         lineHeight="tall"
         fontSize={['2xl', '4xl', null, '5xl']}
@@ -45,7 +44,7 @@ const Home: PageWithLayout<Props> = () => {
         </Text>
       </GradientHeading>
 
-      <Heading as="h2" textAlign="center" fontSize="3xl">
+      <Heading as="h2" textAlign="center" fontSize={['2xl', '3xl']}>
         Create different lists and organize your day better!
       </Heading>
 
