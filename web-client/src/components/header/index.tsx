@@ -1,8 +1,13 @@
 import { Container, TooltipIconButton } from '@/components'
-import { useColorMode, useColorModeValue } from '@chakra-ui/color-mode'
-import { Icon } from '@chakra-ui/icon'
-import { Box, HStack } from '@chakra-ui/layout'
-import { IconButton, useDisclosure } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Icon,
+  IconButton,
+  useColorMode,
+  useColorModeValue,
+  useDisclosure,
+} from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'

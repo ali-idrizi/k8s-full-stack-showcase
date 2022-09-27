@@ -1,4 +1,4 @@
-import { IconButton, IconButtonProps } from '@chakra-ui/button'
+import { IconButton, IconButtonProps } from '@chakra-ui/react'
 import dynamic from 'next/dynamic'
 
 const Tooltip = dynamic(() => import('@chakra-ui/tooltip').then((chakra) => chakra.Tooltip))
