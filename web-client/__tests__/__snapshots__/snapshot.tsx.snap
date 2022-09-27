@@ -3,10 +3,10 @@
 exports[`renders homepage unchanged 1`] = `
 <div>
   <div
-    class="chakra-stack css-i7u3b3"
+    class="chakra-stack css-4m2dmu"
   >
     <h2
-      class="chakra-heading css-1owmer4"
+      class="chakra-heading css-1s5dc0k"
     >
       Create and manage your
        
@@ -27,7 +27,7 @@ exports[`renders homepage unchanged 1`] = `
       </span>
     </h2>
     <h2
-      class="chakra-heading css-93mtar"
+      class="chakra-heading css-19wzjxi"
     >
       Create different lists and organize your day better!
     </h2>
