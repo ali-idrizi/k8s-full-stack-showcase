@@ -8,13 +8,13 @@ export const DesktopNav: React.FC = () => {
   return (
     <HStack spacing={6} display={['none', null, 'block']}>
       <Link href="/login" passHref>
-        <Button as="a" variant="ghost" colorScheme={primaryScheme} borderRadius="full" px={6}>
+        <Button as="a" variant="ghost" colorScheme={primaryScheme} borderRadius="full" px="6">
           Login
         </Button>
       </Link>
 
       <Link href="/register" passHref>
-        <Button as="a" variant="solid" colorScheme={primaryScheme} borderRadius="full" px={6}>
+        <Button as="a" variant="solid" colorScheme={primaryScheme} borderRadius="full" px="6">
           Register
         </Button>
       </Link>

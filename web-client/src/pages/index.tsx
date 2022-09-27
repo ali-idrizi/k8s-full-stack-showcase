@@ -21,7 +21,7 @@ const Home: PageWithLayout<Props> = () => {
     <VStack spacing={{ base: 14, md: 20 }} py={{ base: 14, md: 20 }}>
       <GradientHeading
         as="h2"
-        flexGrow={1}
+        flexGrow="1"
         lineHeight="tall"
         fontSize={['2xl', '4xl', null, '5xl']}
         textAlign="center"
@@ -52,7 +52,7 @@ const Home: PageWithLayout<Props> = () => {
         direction={{ base: 'column', md: 'row' }}
         alignItems="center"
         justifyContent="center"
-        spacing={2}
+        spacing="2"
         w="full"
       >
         <CTAButton href="/login" colorScheme={primaryScheme}>

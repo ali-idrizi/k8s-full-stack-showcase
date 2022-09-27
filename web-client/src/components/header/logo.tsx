@@ -13,7 +13,7 @@ export const Logo: React.FC = () => {
         data-testid="logo"
         _hover={{ textDecoration: 'none' }}
         display="flex"
-        gap={2}
+        gap="2"
         userSelect="none"
         alignItems="center"
       >

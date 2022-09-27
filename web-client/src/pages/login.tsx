@@ -20,13 +20,13 @@ const Login: PageWithLayout = () => {
   })
 
   return (
-    <Flex w={{ base: 'full', lg: 96 }} maxW={96} flexDir="column" alignItems="stretch" mx="auto">
-      <Heading as="h1" mb={8} color={primary} lineHeight="tall">
+    <Flex w={{ base: 'full', lg: 96 }} maxW="96" flexDir="column" alignItems="stretch" mx="auto">
+      <Heading as="h1" mb="8" color={primary} lineHeight="tall">
         Login
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
-        <VStack spacing={8} mx="auto">
+        <VStack spacing="8" mx="auto">
           <FormControl>
             <LabelInput
               id="email"

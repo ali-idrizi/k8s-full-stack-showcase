@@ -34,7 +34,7 @@ export const Header: React.FC = () => {
     <Box
       as="header"
       data-testid="header"
-      borderBottom={1}
+      borderBottom="1px"
       borderStyle="solid"
       borderColor={useColorModeValue('gray.200', 'gray.900')}
       boxShadow="sm"
