@@ -6,7 +6,7 @@ exports[`renders homepage unchanged 1`] = `
     class="chakra-stack css-i7u3b3"
   >
     <h2
-      class="chakra-heading css-euj6n1"
+      class="chakra-heading css-1owmer4"
     >
       Create and manage your
        
@@ -35,14 +35,14 @@ exports[`renders homepage unchanged 1`] = `
       class="chakra-stack css-1jin9mk"
     >
       <a
-        class="chakra-button css-iapjkw"
+        class="chakra-button css-1e2y2hj"
         href="/login"
       >
         Login
       </a>
       <a
-        class="chakra-button css-1hdp791"
-        href="/login"
+        class="chakra-button css-16o7134"
+        href="/register"
       >
         Register
       </a>

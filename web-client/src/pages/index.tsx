@@ -1,11 +1,10 @@
-import { GradientHeading } from '@/components'
+import { CTAButton, GradientHeading } from '@/components'
 import { gssp } from '@/hocs'
 import { useBrandColors } from '@/hooks'
 import { EmptyLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
-import { Button, Heading, Highlight, Stack, Text, VStack } from '@chakra-ui/react'
+import { Heading, Highlight, Stack, Text, VStack } from '@chakra-ui/react'
 import { InferGetServerSidePropsType } from 'next'
-import Link from 'next/link'
 
 export const getServerSideProps = gssp(async () => {
   return {
@@ -25,7 +24,7 @@ const Home: PageWithLayout<Props> = () => {
         mt={20}
         flexGrow={1}
         lineHeight="tall"
-        fontSize={['2xl', '4xl', null, '5xl', '5xl']}
+        fontSize={['2xl', '4xl', null, '5xl']}
         textAlign="center"
       >
         Create and manage your{' '}
@@ -46,7 +45,7 @@ const Home: PageWithLayout<Props> = () => {
         </Text>
       </GradientHeading>
 
-      <Heading textAlign="center" fontSize="3xl">
+      <Heading as="h2" textAlign="center" fontSize="3xl">
         Create different lists and organize your day better!
       </Heading>
 
@@ -57,39 +56,13 @@ const Home: PageWithLayout<Props> = () => {
         spacing={2}
         w="full"
       >
-        <Link href="/login" passHref>
-          <Button
-            as="a"
-            variant="solid"
-            size="lg"
-            colorScheme={primaryScheme}
-            borderRadius="full"
-            px={14}
-            py={7}
-            fontSize="xl"
-            w={{ base: 'full', md: 52 }}
-            maxW={64}
-          >
-            Login
-          </Button>
-        </Link>
+        <CTAButton href="/login" colorScheme={primaryScheme}>
+          Login
+        </CTAButton>
 
-        <Link href="/login" passHref>
-          <Button
-            as="a"
-            variant="solid"
-            size="lg"
-            colorScheme={secondaryScheme}
-            borderRadius="full"
-            px={14}
-            py={7}
-            fontSize="xl"
-            w={{ base: 'full', md: 52 }}
-            maxW={64}
-          >
-            Register
-          </Button>
-        </Link>
+        <CTAButton href="/register" colorScheme={secondaryScheme}>
+          Register
+        </CTAButton>
       </Stack>
     </VStack>
   )
