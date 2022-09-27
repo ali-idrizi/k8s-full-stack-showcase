@@ -1,4 +1,5 @@
 import { WithAuth } from '@/hocs'
+import { QUERY_KEY } from '@/utils/constants'
 import { useQueryClient } from '@tanstack/react-query'
 
 export type UseAuth = WithAuth & {
@@ -8,7 +9,7 @@ export type UseAuth = WithAuth & {
 export const useAuth = (): UseAuth => {
   const queryClient = useQueryClient()
 
-  const authData = queryClient.getQueryData<WithAuth>(['auth']) ?? {
+  const authData = queryClient.getQueryData<WithAuth>([QUERY_KEY.AUTH]) ?? {
     userId: null,
     needsRefresh: false,
   }

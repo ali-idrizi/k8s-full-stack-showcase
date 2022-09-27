@@ -1,4 +1,5 @@
 import { UseAuth, useAuth } from '@/hooks'
+import { QUERY_KEY } from '@/utils/constants'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
@@ -18,7 +19,7 @@ describe('Use Authentication Hook', () => {
   it('should return authentication details', () => {
     const queryClient = new QueryClient()
 
-    queryClient.setQueryData<UseAuth>(['auth'], {
+    queryClient.setQueryData<UseAuth>([QUERY_KEY.AUTH], {
       loggedIn: true,
       userId: 'test-user-id',
       needsRefresh: false,
