@@ -1,12 +1,12 @@
 import preloadAll from 'jest-next-dynamic'
 
 import { Chakra, Header } from '@/components'
-import { UseAuth } from '@/hooks'
 import { QUERY_KEY } from '@/utils/constants'
 import { createMockContext, MockContext } from '@/utils/test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
+import { WithAuth } from '@/hocs'
 import * as router from 'next/router'
 
 describe('Header', () => {
@@ -23,8 +23,7 @@ describe('Header', () => {
   it('should render the header', async () => {
     const queryClient = new QueryClient()
 
-    queryClient.setQueryData<UseAuth>([QUERY_KEY.AUTH], {
-      loggedIn: true,
+    queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: 'test-user-id',
       needsRefresh: false,
     })

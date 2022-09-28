@@ -24,7 +24,7 @@ describe('Auth', () => {
   })
 
   it('should render the children', async () => {
-    jest.spyOn(hooks, 'useAuth').mockReturnValueOnce({
+    jest.spyOn(hooks, 'useAuthQuery').mockReturnValueOnce({
       loggedIn: false,
       userId: null,
       needsRefresh: false,
@@ -42,14 +42,14 @@ describe('Auth', () => {
 
     expect(heading).toBeInTheDocument()
 
-    expect(hooks.useAuth).toHaveBeenCalledTimes(1)
+    expect(hooks.useAuthQuery).toHaveBeenCalledTimes(1)
     expect(ctx.router.replace).toHaveBeenCalledTimes(0)
     expect(ctx.router.push).toHaveBeenCalledTimes(0)
   })
 
   it('should refresh the token and replace the route', async () => {
     fetchMock.mockResponse(async () => '')
-    jest.spyOn(hooks, 'useAuth').mockReturnValueOnce({
+    jest.spyOn(hooks, 'useAuthQuery').mockReturnValueOnce({
       loggedIn: true,
       userId: null,
       needsRefresh: true,
@@ -72,7 +72,7 @@ describe('Auth', () => {
 
     expect(heading).not.toBeInTheDocument()
 
-    expect(hooks.useAuth).toHaveBeenCalledTimes(1)
+    expect(hooks.useAuthQuery).toHaveBeenCalledTimes(1)
     expect(fetch).toHaveBeenCalledTimes(1)
 
     await waitFor(() => expect(ctx.router.replace).toHaveBeenCalledTimes(1))

@@ -1,10 +1,11 @@
-import { UseAuth, useAuth } from '@/hooks'
+import { WithAuth } from '@/hocs'
+import { useAuthQuery } from '@/hooks'
 import { QUERY_KEY } from '@/utils/constants'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
 const TestComponent: React.FC = () => {
-  const { loggedIn, userId, needsRefresh } = useAuth()
+  const { loggedIn, userId, needsRefresh } = useAuthQuery()
 
   return (
     <>
@@ -19,8 +20,7 @@ describe('Use Authentication Hook', () => {
   it('should return authentication details', () => {
     const queryClient = new QueryClient()
 
-    queryClient.setQueryData<UseAuth>([QUERY_KEY.AUTH], {
-      loggedIn: true,
+    queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: 'test-user-id',
       needsRefresh: false,
     })

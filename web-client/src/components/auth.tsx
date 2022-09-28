@@ -1,10 +1,10 @@
-import { useAuth } from '@/hooks'
+import { useAuthQuery } from '@/hooks'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 
 export const Auth: React.FC<React.PropsWithChildren> = ({ children }) => {
   const router = useRouter()
-  const { needsRefresh } = useAuth()
+  const { needsRefresh } = useAuthQuery()
 
   useEffect(() => {
     const refreshToken = async (): Promise<void> => {
