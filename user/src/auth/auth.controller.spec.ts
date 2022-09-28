@@ -47,7 +47,7 @@ describe('AuthController', () => {
         .calledWith(objectContainsValue(Command.REFRESH_JWT), any())
         .mockReturnValue(of({ jwt: 'new-test-jwt', refreshToken: 'new-test-refresh-token' }))
 
-      await authController.refreshToken(ctx.req)
+      const res = await authController.refreshToken(ctx.req)
 
       expect(ctx.clientProxy.send).toHaveBeenCalledWith(
         { cmd: Command.REFRESH_JWT },
@@ -68,6 +68,8 @@ describe('AuthController', () => {
         'new-test-refresh-token',
         expect.anything(),
       )
+
+      expect(res).toEqual({ userId: 'test-user-id' })
     })
   })
 })
