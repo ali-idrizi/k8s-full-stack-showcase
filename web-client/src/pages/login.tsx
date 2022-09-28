@@ -1,5 +1,5 @@
 import { LabelInput } from '@/components'
-import { useBrandColors } from '@/hooks'
+import { useBrandColors, useLoginMutation } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
 import { Button, Flex, FormControl, Heading, VStack } from '@chakra-ui/react'
@@ -8,14 +8,15 @@ import { FiAtSign, FiKey } from 'react-icons/fi'
 
 const Login: PageWithLayout = () => {
   const { primary, primaryScheme } = useBrandColors()
+  const loginMutation = useLoginMutation()
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: 'rachelc.howell@reqres.in',
+      password: 'rachelxx',
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2))
+      loginMutation.mutate(values)
     },
   })
 
