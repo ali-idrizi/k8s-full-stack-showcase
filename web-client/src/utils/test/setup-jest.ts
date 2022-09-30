@@ -1,7 +1,3 @@
-import fetchMock from 'jest-fetch-mock'
-
-fetchMock.enableMocks()
-
 // https://stackoverflow.com/a/71817340/1354378
 jest.mock('next/dynamic', () => ({
   __esModule: true,
@@ -13,3 +9,5 @@ jest.mock('next/dynamic', () => ({
     return RequiredComponent
   },
 }))
+
+export {}
