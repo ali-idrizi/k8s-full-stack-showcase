@@ -1,9 +1,24 @@
 import { Auth } from '@/components'
+import { WithAuth } from '@/hocs'
+import { QUERY_KEY } from '@/utils/constants'
 import { createMockContext, MockContext } from '@/utils/test'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 
 import * as hooks from '@/hooks'
 import * as router from 'next/router'
+
+const mockAxios = jest.fn()
+jest.mock('@/api', () => {
+  const originalModule = jest.requireActual('@/api')
+
+  return {
+    UserApi: originalModule.UserApi,
+    get axios() {
+      return mockAxios()
+    },
+  }
+})
 
 jest.mock('@/hooks', () => ({
   __esModule: true,
@@ -16,7 +31,10 @@ describe('Auth', () => {
   beforeEach(() => {
     ctx = createMockContext()
 
+    mockAxios.mockReturnValue(ctx.axios)
     jest.spyOn(router, 'useRouter').mockReturnValue(ctx.router)
+    jest.spyOn(hooks, 'useAuthQuery')
+    jest.spyOn(hooks, 'useRefreshTokenMutation')
   })
 
   afterEach(() => {
@@ -24,16 +42,19 @@ describe('Auth', () => {
   })
 
   it('should render the children', async () => {
-    jest.spyOn(hooks, 'useAuthQuery').mockReturnValueOnce({
-      loggedIn: false,
+    const queryClient = new QueryClient()
+
+    queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
       needsRefresh: false,
     })
 
     render(
-      <Auth>
-        <h1>heading</h1>
-      </Auth>,
+      <QueryClientProvider client={queryClient}>
+        <Auth>
+          <h1>heading</h1>
+        </Auth>
+      </QueryClientProvider>,
     )
 
     const heading = screen.getByRole('heading', {
@@ -43,14 +64,25 @@ describe('Auth', () => {
     expect(heading).toBeInTheDocument()
 
     expect(hooks.useAuthQuery).toHaveBeenCalledTimes(1)
-    expect(ctx.router.replace).toHaveBeenCalledTimes(0)
-    expect(ctx.router.push).toHaveBeenCalledTimes(0)
+    expect(hooks.useRefreshTokenMutation).toHaveBeenCalledTimes(1)
+
+    await waitFor(() => {
+      expect(ctx.router.replace).toHaveBeenCalledTimes(0)
+    })
   })
 
   it('should refresh the token and replace the route', async () => {
-    fetchMock.mockResponse(async () => '')
-    jest.spyOn(hooks, 'useAuthQuery').mockReturnValueOnce({
-      loggedIn: true,
+    ctx.axios.post.mockImplementation(async () => {
+      return {
+        data: {
+          userId: 'test',
+        },
+      }
+    })
+
+    const queryClient = new QueryClient()
+
+    queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
       needsRefresh: true,
     })
@@ -59,22 +91,25 @@ describe('Auth', () => {
     ctx.router.replace.mockResolvedValue(true)
 
     render(
-      <Auth>
-        <h1>heading</h1>
-      </Auth>,
+      <QueryClientProvider client={queryClient}>
+        <Auth>
+          <h1>heading</h1>
+        </Auth>
+      </QueryClientProvider>,
     )
 
-    const heading = screen.queryByRole('heading', {
-      name: /heading/i,
+    const getHeading = () => screen.queryByRole('heading', { name: /heading/i })
+
+    // Expired JWT, the children should not in the document
+    expect(getHeading()).not.toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(ctx.axios.post).toHaveBeenCalledWith('/user/auth/refresh-token')
     })
 
-    await new Promise((res) => setTimeout(res, 2000))
+    expect(ctx.router.replace).toHaveBeenCalledWith('/test-route')
 
-    expect(heading).not.toBeInTheDocument()
-
-    expect(hooks.useAuthQuery).toHaveBeenCalledTimes(1)
-    expect(fetch).toHaveBeenCalledTimes(1)
-
-    await waitFor(() => expect(ctx.router.replace).toHaveBeenCalledTimes(1))
+    // Token has been refreshed, the children should now be in the document
+    expect(getHeading()).toBeInTheDocument()
   })
 })
