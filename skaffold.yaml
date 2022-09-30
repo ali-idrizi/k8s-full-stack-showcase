@@ -4,7 +4,7 @@ metadata:
   name: todo-app
 build:
   local:
-    concurrency: 3
+    concurrency: 1
     useBuildkit: true
   artifacts:
     - image: gcr.io/k8s-full-stack-starter/auth
@@ -60,17 +60,18 @@ deploy:
       - name: ingress-nginx
         remoteChart: ingress-nginx
         repo: https://kubernetes.github.io/ingress-nginx
-        version: 4.2.1
+        version: 4.2.5
         namespace: ingress-nginx
         createNamespace: true
         upgradeOnChange: true
         valuesFiles:
           - .k8s/values/dev/ingress-nginx-values.yaml
+        wait: true
 
       - name: nats
         remoteChart: nats
         repo: https://nats-io.github.io/k8s/helm/charts/
-        version: 0.17.3
+        version: 0.18.0
         namespace: dev
         createNamespace: true
         upgradeOnChange: true
@@ -122,6 +123,14 @@ test:
     custom: *npmTestCommand
   - image: gcr.io/k8s-full-stack-starter/web-client
     custom: *npmTestCommand
+
+portForward:
+  - resourceType: service
+    resourceName: ingress-nginx-controller
+    namespace: ingress-nginx
+    port: 80
+    address: 0.0.0.0
+    localPort: 3000
 
 profiles:
   - name: dev
