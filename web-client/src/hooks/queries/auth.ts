@@ -14,10 +14,10 @@ export const useAuthQuery = (): UseAuthQuery => {
     },
   })
 
-  const loggedIn = data.userId !== null || data.needsRefresh
+  const isLoggedIn = data.userId !== null || data.needsRefresh
 
   return {
-    isLoggedIn: loggedIn,
+    isLoggedIn,
     ...data,
   }
 }
