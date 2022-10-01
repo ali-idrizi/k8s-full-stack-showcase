@@ -29,7 +29,7 @@ const Login: PageWithLayout = () => {
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
-        <ApiErrorAlert error={error} />
+        <ApiErrorAlert mt="8" w="full" error={error} />
 
         <VStack spacing="8" pt="8" mx="auto">
           <FormControl isInvalid={!!formik.errors.email && formik.touched.email}>
