@@ -12,8 +12,8 @@ const Login: PageWithLayout = () => {
 
   const formik = useFormik({
     initialValues: {
-      email: 'rachelc.howell@reqres.in',
-      password: 'rachelxx',
+      email: 'rachel.howell@reqres.in',
+      password: 'rachel',
     },
     onSubmit: (values) => {
       loginMutation.mutate(values)
