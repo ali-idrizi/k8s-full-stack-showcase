@@ -8,14 +8,12 @@ import { render, screen, waitFor } from '@testing-library/react'
 import * as hooks from '@/hooks'
 import * as router from 'next/router'
 
-const mockAxios = jest.fn()
+const mockUserApi = jest.fn()
 jest.mock('@/api', () => {
-  const originalModule = jest.requireActual('@/api')
-
   return {
-    UserApi: originalModule.UserApi,
-    get axios() {
-      return mockAxios()
+    ...jest.requireActual('@/api'),
+    get UserApi() {
+      return mockUserApi()
     },
   }
 })
@@ -31,7 +29,7 @@ describe('Auth', () => {
   beforeEach(() => {
     ctx = createMockContext()
 
-    mockAxios.mockReturnValue(ctx.axios)
+    mockUserApi.mockReturnValue(ctx.api.user)
     jest.spyOn(router, 'useRouter').mockReturnValue(ctx.router)
     jest.spyOn(hooks, 'useAuthQuery')
     jest.spyOn(hooks, 'useRefreshTokenMutation')
@@ -72,23 +70,15 @@ describe('Auth', () => {
   })
 
   it('should refresh the token and replace the route', async () => {
-    ctx.axios.post.mockImplementation(async () => {
-      return {
-        data: {
-          userId: 'test',
-        },
-      }
-    })
+    ctx.router.asPath = '/test-route'
+    ctx.router.replace.mockResolvedValue(true)
+    ctx.api.user.refreshToken.mockResolvedValue({ userId: 'test-user-id' })
 
     const queryClient = new QueryClient()
-
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
       needsRefresh: true,
     })
-
-    ctx.router.asPath = '/test-route'
-    ctx.router.replace.mockResolvedValue(true)
 
     render(
       <QueryClientProvider client={queryClient}>
@@ -104,12 +94,14 @@ describe('Auth', () => {
     expect(getHeading()).not.toBeInTheDocument()
 
     await waitFor(() => {
-      expect(ctx.axios.post).toHaveBeenCalledWith('/user/auth/refresh-token')
+      expect(ctx.api.user.refreshToken).toHaveBeenCalled()
     })
 
     expect(ctx.router.replace).toHaveBeenCalledWith('/test-route')
-
-    // Token has been refreshed, the children should now be in the document
     expect(getHeading()).toBeInTheDocument()
+    expect(queryClient.getQueryData<WithAuth>([QUERY_KEY.AUTH])).toEqual({
+      userId: 'test-user-id',
+      needsRefresh: false,
+    })
   })
 })

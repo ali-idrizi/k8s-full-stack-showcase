@@ -1,11 +1,11 @@
-import { axios } from '@/api'
+import { UserClient } from '@/api'
 
 export type RefreshTokenResponse = {
   userId: string
 }
 
 export const refreshToken = async (): Promise<RefreshTokenResponse> => {
-  const res = await axios.post<RefreshTokenResponse>('/user/auth/refresh-token')
+  const res = await UserClient.post<RefreshTokenResponse>('/auth/refresh-token')
 
   return res.data
 }

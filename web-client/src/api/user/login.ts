@@ -1,4 +1,4 @@
-import { axios } from '@/api'
+import { UserClient } from '@/api'
 
 export type LoginPayload = {
   email: string
@@ -12,7 +12,7 @@ export type LoginResponse = {
 }
 
 export const login = async (payload: LoginPayload): Promise<LoginResponse> => {
-  const res = await axios.post<LoginResponse>('/user/login', payload)
+  const res = await UserClient.post<LoginResponse>('/login', payload)
 
   return res.data
 }
