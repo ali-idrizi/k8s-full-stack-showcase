@@ -1,8 +1,9 @@
+import { LoginSchema } from '@/api/user/login'
 import { ApiErrorAlert, LabelInput } from '@/components'
 import { useBrandColors, useLoginMutation } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
-import { Button, Flex, FormControl, Heading, VStack } from '@chakra-ui/react'
+import { Button, Flex, FormControl, FormErrorMessage, Heading, VStack } from '@chakra-ui/react'
 import { useFormik } from 'formik'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
@@ -18,6 +19,7 @@ const Login: PageWithLayout = () => {
     onSubmit: (values) => {
       mutate(values)
     },
+    validationSchema: LoginSchema,
   })
 
   return (
@@ -27,10 +29,10 @@ const Login: PageWithLayout = () => {
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
-        <VStack spacing="8" mx="auto">
-          <ApiErrorAlert error={error} />
+        <ApiErrorAlert error={error} />
 
-          <FormControl>
+        <VStack spacing="8" mx="auto">
+          <FormControl isInvalid={!!formik.errors.email && formik.touched.email}>
             <LabelInput
               id="email"
               label="Email Address"
@@ -38,21 +40,27 @@ const Login: PageWithLayout = () => {
               autoFocus
               iconAs={FiAtSign}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.email}
               focusBorderColor={primary}
             />
+
+            <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
           </FormControl>
 
-          <FormControl>
+          <FormControl isInvalid={!!formik.errors.password && formik.touched.password}>
             <LabelInput
               id="password"
               label="Password"
               type="password"
               iconAs={FiKey}
               onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
               value={formik.values.password}
               focusBorderColor={primary}
             />
+
+            <FormErrorMessage>{formik.errors.password}</FormErrorMessage>
           </FormControl>
 
           <Button type="submit" isLoading={isLoading} colorScheme={primaryScheme} width="full">
