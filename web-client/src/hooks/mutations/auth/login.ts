@@ -1,10 +1,10 @@
-import { UserApi } from '@/api'
+import { ApiError, UserApi } from '@/api'
 import { LoginPayload, LoginResponse } from '@/api/user/login'
 import { WithAuth } from '@/hocs'
 import { QUERY_KEY } from '@/utils/constants'
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'
 
-export const useLoginMutation = (): UseMutationResult<LoginResponse, unknown, LoginPayload> => {
+export const useLoginMutation = (): UseMutationResult<LoginResponse, ApiError, LoginPayload> => {
   const queryClient = useQueryClient()
 
   return useMutation(UserApi.login, {

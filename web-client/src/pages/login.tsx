@@ -1,4 +1,4 @@
-import { LabelInput } from '@/components'
+import { ApiErrorAlert, LabelInput } from '@/components'
 import { useBrandColors, useLoginMutation } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
@@ -8,7 +8,7 @@ import { FiAtSign, FiKey } from 'react-icons/fi'
 
 const Login: PageWithLayout = () => {
   const { primary, primaryScheme } = useBrandColors()
-  const loginMutation = useLoginMutation()
+  const { mutate, error, isLoading } = useLoginMutation()
 
   const formik = useFormik({
     initialValues: {
@@ -16,7 +16,7 @@ const Login: PageWithLayout = () => {
       password: 'rachel',
     },
     onSubmit: (values) => {
-      loginMutation.mutate(values)
+      mutate(values)
     },
   })
 
@@ -28,6 +28,8 @@ const Login: PageWithLayout = () => {
 
       <form onSubmit={formik.handleSubmit}>
         <VStack spacing="8" mx="auto">
+          <ApiErrorAlert error={error} />
+
           <FormControl>
             <LabelInput
               id="email"
@@ -53,7 +55,7 @@ const Login: PageWithLayout = () => {
             />
           </FormControl>
 
-          <Button type="submit" colorScheme={primaryScheme} width="full">
+          <Button type="submit" isLoading={isLoading} colorScheme={primaryScheme} width="full">
             Login
           </Button>
         </VStack>
