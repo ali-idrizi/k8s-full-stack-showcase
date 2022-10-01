@@ -29,7 +29,7 @@ export const Header: React.FC = () => {
     onClose: closeMobileMenu,
   } = useDisclosure()
 
-  const { loggedIn } = useAuthQuery()
+  const { isLoggedIn } = useAuthQuery()
 
   useEffect(() => {
     router.events.on('routeChangeStart', closeMobileMenu)
@@ -52,7 +52,7 @@ export const Header: React.FC = () => {
         <Logo />
 
         <HStack spacing={[4, null, 6]}>
-          {loggedIn && <Text>Logged In</Text>}
+          {isLoggedIn && <Text>Logged In</Text>}
 
           <TooltipIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
           <TooltipIconButton

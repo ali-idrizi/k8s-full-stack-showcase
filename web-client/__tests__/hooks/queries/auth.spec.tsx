@@ -5,11 +5,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
 const TestComponent: React.FC = () => {
-  const { loggedIn, userId, needsRefresh } = useAuthQuery()
+  const { isLoggedIn, userId, needsRefresh } = useAuthQuery()
 
   return (
     <>
-      <h2>loggedIn: {String(loggedIn)}</h2>
+      <h2>isLoggedIn: {String(isLoggedIn)}</h2>
       <h2>userId: {userId ?? 'null'}</h2>
       <h2>needsRefresh: {String(needsRefresh)}</h2>
     </>
@@ -31,8 +31,8 @@ describe('Use Authentication Hook', () => {
       </QueryClientProvider>,
     )
 
-    const loggedInHeading = screen.getByRole('heading', {
-      name: /loggedIn: true/i,
+    const isLoggedInHeading = screen.getByRole('heading', {
+      name: /isLoggedIn: true/i,
     })
 
     const userIdHeading = screen.getByRole('heading', {
@@ -43,7 +43,7 @@ describe('Use Authentication Hook', () => {
       name: /needsRefresh: false/i,
     })
 
-    expect(loggedInHeading).toBeInTheDocument()
+    expect(isLoggedInHeading).toBeInTheDocument()
     expect(userIdHeading).toBeInTheDocument()
     expect(needsRefreshHeading).toBeInTheDocument()
   })
@@ -55,8 +55,8 @@ describe('Use Authentication Hook', () => {
       </QueryClientProvider>,
     )
 
-    const loggedInHeading = screen.getByRole('heading', {
-      name: /loggedIn: false/i,
+    const isLoggedInHeading = screen.getByRole('heading', {
+      name: /isLoggedIn: false/i,
     })
 
     const userIdHeading = screen.getByRole('heading', {
@@ -67,7 +67,7 @@ describe('Use Authentication Hook', () => {
       name: /needsRefresh: false/i,
     })
 
-    expect(loggedInHeading).toBeInTheDocument()
+    expect(isLoggedInHeading).toBeInTheDocument()
     expect(userIdHeading).toBeInTheDocument()
     expect(needsRefreshHeading).toBeInTheDocument()
   })

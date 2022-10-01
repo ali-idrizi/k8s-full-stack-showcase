@@ -3,7 +3,7 @@ import { QUERY_KEY } from '@/utils/constants'
 import { useQuery } from '@tanstack/react-query'
 
 export type UseAuthQuery = WithAuth & {
-  loggedIn: boolean
+  isLoggedIn: boolean
 }
 
 export const useAuthQuery = (): UseAuthQuery => {
@@ -17,7 +17,7 @@ export const useAuthQuery = (): UseAuthQuery => {
   const loggedIn = data.userId !== null || data.needsRefresh
 
   return {
-    loggedIn,
+    isLoggedIn: loggedIn,
     ...data,
   }
 }
