@@ -3,5 +3,6 @@ export const QUERY_KEY = {
 } as const
 
 export const MUTATION_KEY = {
+  LOGIN: 'LOGIN',
   REFRESH_TOKEN: 'REFRESH_TOKEN',
 }
