@@ -24,14 +24,14 @@ const Login: PageWithLayout = () => {
 
   return (
     <Flex w={{ base: 'full', lg: 96 }} maxW="96" flexDir="column" alignItems="stretch" mx="auto">
-      <Heading as="h1" mb="8" color={primary} lineHeight="tall">
+      <Heading as="h1" color={primary} lineHeight="tall">
         Login
       </Heading>
 
       <form onSubmit={formik.handleSubmit}>
         <ApiErrorAlert error={error} />
 
-        <VStack spacing="8" mx="auto">
+        <VStack spacing="8" pt="8" mx="auto">
           <FormControl isInvalid={!!formik.errors.email && formik.touched.email}>
             <LabelInput
               id="email"

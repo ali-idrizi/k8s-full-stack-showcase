@@ -1,42 +1,41 @@
 import { ApiError } from '@/api'
-import { Alert, AlertIcon, List, ListItem } from '@chakra-ui/react'
+import { Alert, AlertIcon, Box, List, ListItem } from '@chakra-ui/react'
+import dynamic from 'next/dynamic'
 
-type ErrorAlertProps = {
-  error: ApiError
+const Collapse = dynamic(() => import('@chakra-ui/transition').then((chakra) => chakra.Collapse))
+
+type Props = {
+  error: ApiError | null
 }
 
-const ErrorAlert: React.FC<Required<ErrorAlertProps>> = ({ error }) => {
-  if (typeof error.data === 'string') {
-    return (
-      <Alert status="error">
-        <AlertIcon />
-
-        {error.data}
-      </Alert>
-    )
+const ErrorAlert: React.FC<Required<Props>> = ({ error }) => {
+  if (error === null) {
+    return null
   }
 
   return (
     <Alert status="error">
       <AlertIcon />
 
-      <List>
-        {error.data.map((item, index) => {
-          return <ListItem key={index}>{item}</ListItem>
-        })}
-      </List>
+      {typeof error.data === 'string' ? (
+        error.data
+      ) : (
+        <List>
+          {error.data.map((item, index) => (
+            <ListItem key={index}>{item}</ListItem>
+          ))}
+        </List>
+      )}
     </Alert>
   )
 }
 
-type ApiErrorAlertProps = {
-  error: ApiError | null
-}
-
-export const ApiErrorAlert: React.FC<ApiErrorAlertProps> = ({ error }) => {
-  if (!error) {
-    return null
-  }
-
-  return <ErrorAlert error={error} />
+export const ApiErrorAlert: React.FC<Props> = ({ error }) => {
+  return (
+    <Collapse in={error !== null} unmountOnExit>
+      <Box mt="8" w="full">
+        <ErrorAlert error={error} />
+      </Box>
+    </Collapse>
+  )
 }
