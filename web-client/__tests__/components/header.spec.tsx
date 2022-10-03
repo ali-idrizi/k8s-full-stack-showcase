@@ -33,8 +33,10 @@ describe('Header', () => {
 
     const header = screen.getByTestId('header')
     const logo = screen.getByTestId('logo')
+    const accountActionButton = screen.getByTestId('account-action-button')
 
     expect(header).toBeInTheDocument()
     expect(logo).toHaveTextContent('TODO')
+    expect(accountActionButton).toBeInTheDocument()
   })
 })
