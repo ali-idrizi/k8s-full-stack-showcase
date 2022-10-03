@@ -20,6 +20,6 @@ export class ApiError extends Error {
   get data(): string | string[] {
     const message = this.error.response?.data?.message
 
-    return message ?? 'An unknown error occured. Please try again later!'
+    return message ?? 'An unknown error occured! Please try again later.'
   }
 }
