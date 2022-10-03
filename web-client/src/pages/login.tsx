@@ -3,11 +3,22 @@ import { ApiErrorAlert, LabelInput } from '@/components'
 import { useBrandColors, useLoginMutation } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
-import { Button, Flex, FormControl, FormErrorMessage, Heading, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  useToast,
+  VStack,
+} from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
 const Login: PageWithLayout = () => {
+  const router = useRouter()
+  const toast = useToast()
   const { primary, primaryScheme } = useBrandColors()
   const { mutate, error, isLoading } = useLoginMutation()
 
@@ -17,7 +28,19 @@ const Login: PageWithLayout = () => {
       password: 'rachel',
     },
     onSubmit: (values) => {
-      mutate(values)
+      mutate(values, {
+        onSuccess: () => {
+          toast({
+            position: 'bottom-right',
+            description: 'You have successfully logged in!',
+            status: 'success',
+            isClosable: true,
+            duration: 5000,
+            variant: 'subtle',
+          })
+          router.push('/')
+        },
+      })
     },
     validationSchema: LoginSchema,
   })
