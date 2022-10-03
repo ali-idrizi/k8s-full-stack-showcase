@@ -27,7 +27,7 @@
     "@chakra-ui/skip-nav": "^2.0.10",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
-    "@tanstack/react-query": "^4.8.0",
+    "@tanstack/react-query": "^4.9.0",
     "formik": "^2.2.9",
     "framer-motion": "^7.5.1",
     "next": "^12.3.1",
