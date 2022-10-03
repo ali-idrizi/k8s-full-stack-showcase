@@ -12,7 +12,7 @@ export function withHocs<A, B, C, D, E, F, G, H>(
   hoc3: GsspHoc<E, F, A & C>,
   hoc4: GsspHoc<G, H, A & C & E>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
   next?: Next<Props, A & C & E & G>,
 ) => GetServerSideProps<Props & B & D & F & H>
 
@@ -21,7 +21,7 @@ export function withHocs<A, B, C, D, E, F>(
   hoc2: GsspHoc<C, D, A>,
   hoc3: GsspHoc<E, F, A & C>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
   next?: Next<Props, A & C & E>,
 ) => GetServerSideProps<Props & B & D & F>
 
@@ -29,14 +29,16 @@ export function withHocs<A, B, C, D>(
   hoc1: GsspHoc<A, B>,
   hoc2: GsspHoc<C, D, A>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
   next?: Next<Props, A & C>,
 ) => GetServerSideProps<Props & B & D>
 
 export function withHocs<A, B>(
   hoc1: GsspHoc<A, B>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(next: Next<Props, A>) => GetServerSideProps<Props & B>
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next: Next<Props, A>,
+) => GetServerSideProps<Props & B>
 
 export function withHocs(
   ...hocs: GsspHoc[]
