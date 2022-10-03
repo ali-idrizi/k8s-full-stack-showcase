@@ -14,15 +14,12 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
 export const getServerSideProps = withHocs(withReactQuery, withAuth, withUnauthenticated)()
 
-type Props = InferGetServerSidePropsType<typeof getServerSideProps>
-
-const Login: PageWithLayout<Props> = () => {
+const Login: PageWithLayout = () => {
   const router = useRouter()
   const toast = useToast()
   const { primary, primaryScheme } = useBrandColors()
