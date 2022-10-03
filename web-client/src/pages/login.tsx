@@ -1,5 +1,6 @@
 import { LoginSchema } from '@/api/user/login'
 import { ApiErrorAlert, LabelInput } from '@/components'
+import { withAuth, withHocs, withReactQuery, withUnauthenticated } from '@/hocs'
 import { useBrandColors, useLoginMutation } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
@@ -13,10 +14,23 @@ import {
   VStack,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import { InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
-const Login: PageWithLayout = () => {
+export const getServerSideProps = withHocs(
+  withReactQuery,
+  withAuth,
+  withUnauthenticated,
+)(async () => {
+  return {
+    props: {},
+  }
+})
+
+type Props = InferGetServerSidePropsType<typeof getServerSideProps>
+
+const Login: PageWithLayout<Props> = () => {
   const router = useRouter()
   const toast = useToast()
   const { primary, primaryScheme } = useBrandColors()
