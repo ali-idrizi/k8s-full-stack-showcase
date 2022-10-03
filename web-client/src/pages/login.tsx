@@ -18,15 +18,7 @@ import { InferGetServerSidePropsType } from 'next'
 import { useRouter } from 'next/router'
 import { FiAtSign, FiKey } from 'react-icons/fi'
 
-export const getServerSideProps = withHocs(
-  withReactQuery,
-  withAuth,
-  withUnauthenticated,
-)(async () => {
-  return {
-    props: {},
-  }
-})
+export const getServerSideProps = withHocs(withReactQuery, withAuth, withUnauthenticated)()
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 

@@ -13,7 +13,7 @@ export function withHocs<A, B, C, D, E, F, G, H>(
   hoc4: GsspHoc<G, H, A & C & E>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
-  next: Next<Props, A & C & E & G>,
+  next?: Next<Props, A & C & E & G>,
 ) => GetServerSideProps<Props & B & D & F & H>
 
 export function withHocs<A, B, C, D, E, F>(
@@ -22,7 +22,7 @@ export function withHocs<A, B, C, D, E, F>(
   hoc3: GsspHoc<E, F, A & C>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
-  next: Next<Props, A & C & E>,
+  next?: Next<Props, A & C & E>,
 ) => GetServerSideProps<Props & B & D & F>
 
 export function withHocs<A, B, C, D>(
@@ -30,7 +30,7 @@ export function withHocs<A, B, C, D>(
   hoc2: GsspHoc<C, D, A>,
   ...hocs: GsspHoc[]
 ): <Props extends Record<string, unknown>>(
-  next: Next<Props, A & C>,
+  next?: Next<Props, A & C>,
 ) => GetServerSideProps<Props & B & D>
 
 export function withHocs<A, B>(
@@ -40,9 +40,7 @@ export function withHocs<A, B>(
 
 export function withHocs(
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
-  next: Next<Props, unknown>,
-) => GetServerSideProps<Props> {
+): (next?: Next<unknown, unknown>) => GetServerSideProps {
   return (next) => {
     return async (ctx) => {
       const hocProps = []
@@ -65,14 +63,18 @@ export function withHocs(
         }
       }
 
-      const nextResult = await Promise.resolve(next(data, ctx))
-
-      if (!('props' in nextResult)) {
-        return nextResult
+      const result = {
+        props: {},
       }
 
-      const result = {
-        props: await Promise.resolve(nextResult.props),
+      if (next !== undefined) {
+        const nextResult = await Promise.resolve(next(data, ctx))
+
+        if (!('props' in nextResult)) {
+          return nextResult
+        }
+
+        Object.assign(result.props, await Promise.resolve(nextResult.props))
       }
 
       for (const props of hocProps) {
