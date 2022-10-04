@@ -4,5 +4,6 @@ export const QUERY_KEY = {
 
 export const MUTATION_KEY = {
   LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
   REFRESH_TOKEN: 'REFRESH_TOKEN',
 }
