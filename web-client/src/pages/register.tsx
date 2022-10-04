@@ -1,5 +1,6 @@
 import { RegisterSchema } from '@/api/user/register'
 import { ApiErrorAlert, LabelInput } from '@/components'
+import { withAuth, withHocs, withReactQuery, withUnauthenticatedRoute } from '@/hocs'
 import { useBrandColors, useRegisterMutation } from '@/hooks'
 import { AuthLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
@@ -15,6 +16,8 @@ import {
 import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { FiAtSign, FiKey, FiUser } from 'react-icons/fi'
+
+export const getServerSideProps = withHocs(withReactQuery, withAuth, withUnauthenticatedRoute)()
 
 const Register: PageWithLayout = () => {
   const router = useRouter()
