@@ -1,4 +1,5 @@
 import { Container, TooltipIconButton } from '@/components'
+import { useAuthQuery } from '@/hooks'
 import {
   Box,
   HStack,
@@ -17,6 +18,7 @@ import { Logo } from './logo'
 import { MobileNav } from './mobile-nav'
 
 const Collapse = dynamic(() => import('@chakra-ui/transition').then((chakra) => chakra.Collapse))
+const AccountActionButton = dynamic(() => import('./account-action-button'))
 
 export const Header: React.FC = () => {
   const router = useRouter()
@@ -26,6 +28,8 @@ export const Header: React.FC = () => {
     onToggle: toggleMobileMenu,
     onClose: closeMobileMenu,
   } = useDisclosure()
+
+  const { isLoggedIn } = useAuthQuery()
 
   useEffect(() => {
     router.events.on('routeChangeStart', closeMobileMenu)
@@ -44,7 +48,7 @@ export const Header: React.FC = () => {
       borderColor={useColorModeValue('gray.200', 'gray.900')}
       boxShadow="sm"
     >
-      <Container justifyContent="space-between" py={[5, null, 7]}>
+      <Container as="nav" display="flex" justifyContent="space-between" py={[5, null, 7]}>
         <Logo />
 
         <HStack spacing={[4, null, 6]}>
@@ -55,24 +59,31 @@ export const Header: React.FC = () => {
             aria-label={`Switch to ${useColorModeValue('Dark', 'Light')} Mode`}
           />
 
-          <DesktopNav />
-
-          <IconButton
-            variant="ghost"
-            rounded="full"
-            icon={<Icon as={isMobileMenuOpen ? FiX : FiMenu} />}
-            aria-label={'Toggle Navigation'}
-            aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
-            aria-controls="mobile-nav"
-            display={['flex', null, 'none']}
-            onClick={toggleMobileMenu}
-          />
+          {isLoggedIn ? (
+            <AccountActionButton />
+          ) : (
+            <>
+              <DesktopNav />
+              <IconButton
+                variant="ghost"
+                rounded="full"
+                icon={<Icon as={isMobileMenuOpen ? FiX : FiMenu} />}
+                aria-label={'Toggle Navigation'}
+                aria-expanded={isMobileMenuOpen ? 'true' : 'false'}
+                aria-controls="mobile-nav"
+                display={['flex', null, 'none']}
+                onClick={toggleMobileMenu}
+              />
+            </>
+          )}
         </HStack>
       </Container>
 
-      <Collapse in={isMobileMenuOpen} animateOpacity>
-        <MobileNav />
-      </Collapse>
+      {!isLoggedIn && (
+        <Collapse in={isMobileMenuOpen} animateOpacity>
+          <MobileNav />
+        </Collapse>
+      )}
     </Box>
   )
 }

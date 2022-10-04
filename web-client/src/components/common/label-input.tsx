@@ -13,8 +13,9 @@ type Props = {
   id: string
   type: string
   label: string
-  onChange: (e: React.ChangeEvent<unknown>) => void
   value: string
+  onChange: (e: React.ChangeEvent<unknown>) => void
+  onBlur?: (e: React.ChangeEvent<unknown>) => void
   iconAs?: As
   autoFocus?: boolean
   focusBorderColor?: string

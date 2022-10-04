@@ -6,14 +6,25 @@ type Next<Props, Data> = (
   ctx: GetServerSidePropsContext,
 ) => GetServerSidePropsResult<Props> | Promise<GetServerSidePropsResult<Props>>
 
+export function withHocs<A, B, C, D, E, F, G, H, I, J>(
+  hoc1: GsspHoc<A, B>,
+  hoc2: GsspHoc<C, D, A>,
+  hoc3: GsspHoc<E, F, A & C>,
+  hoc4: GsspHoc<G, H, A & C & E>,
+  hoc5: GsspHoc<I, J, A & C & E & G>,
+  ...hocs: GsspHoc[]
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next?: Next<Props, A & C & E & G & I>,
+) => GetServerSideProps<Props & B & D & F & H & J>
+
 export function withHocs<A, B, C, D, E, F, G, H>(
   hoc1: GsspHoc<A, B>,
   hoc2: GsspHoc<C, D, A>,
   hoc3: GsspHoc<E, F, A & C>,
   hoc4: GsspHoc<G, H, A & C & E>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
-  next: Next<Props, A & C & E & G>,
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next?: Next<Props, A & C & E & G>,
 ) => GetServerSideProps<Props & B & D & F & H>
 
 export function withHocs<A, B, C, D, E, F>(
@@ -21,28 +32,28 @@ export function withHocs<A, B, C, D, E, F>(
   hoc2: GsspHoc<C, D, A>,
   hoc3: GsspHoc<E, F, A & C>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
-  next: Next<Props, A & C & E>,
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next?: Next<Props, A & C & E>,
 ) => GetServerSideProps<Props & B & D & F>
 
 export function withHocs<A, B, C, D>(
   hoc1: GsspHoc<A, B>,
   hoc2: GsspHoc<C, D, A>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
-  next: Next<Props, A & C>,
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next?: Next<Props, A & C>,
 ) => GetServerSideProps<Props & B & D>
 
 export function withHocs<A, B>(
   hoc1: GsspHoc<A, B>,
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(next: Next<Props, A>) => GetServerSideProps<Props & B>
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next: Next<Props, A>,
+) => GetServerSideProps<Props & B>
 
 export function withHocs(
   ...hocs: GsspHoc[]
-): <Props extends Record<string, unknown>>(
-  next: Next<Props, unknown>,
-) => GetServerSideProps<Props> {
+): (next?: Next<unknown, unknown>) => GetServerSideProps {
   return (next) => {
     return async (ctx) => {
       const hocProps = []
@@ -65,14 +76,18 @@ export function withHocs(
         }
       }
 
-      const nextResult = await Promise.resolve(next(data, ctx))
-
-      if (!('props' in nextResult)) {
-        return nextResult
+      const result = {
+        props: {},
       }
 
-      const result = {
-        props: await Promise.resolve(nextResult.props),
+      if (next !== undefined) {
+        const nextResult = await Promise.resolve(next(data, ctx))
+
+        if (!('props' in nextResult)) {
+          return nextResult
+        }
+
+        Object.assign(result.props, await Promise.resolve(nextResult.props))
       }
 
       for (const props of hocProps) {

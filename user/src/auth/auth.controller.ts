@@ -1,6 +1,7 @@
 import { Controller, Get, HttpCode, HttpStatus, Post, Req } from '@nestjs/common'
 import { Request } from 'express'
 import { Header } from './auth.constant'
+import { RefreshTokenRes } from './auth.interface'
 import { AuthService } from './auth.service'
 
 @Controller('auth')
@@ -8,8 +9,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('refresh-token')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async refreshToken(@Req() req: Request): Promise<void> {
+  @HttpCode(HttpStatus.OK)
+  async refreshToken(@Req() req: Request): Promise<RefreshTokenRes> {
     const tokens = this.authService.getTokensFromCookies(req.cookies)
 
     const { userId } = await this.authService.validateJwt(tokens.jwt)
@@ -18,6 +19,8 @@ export class AuthController {
     cookies.forEach((cookie) => {
       req.res?.cookie(cookie.name, cookie.value, cookie.options)
     })
+
+    return { userId }
   }
 
   /**

@@ -20,5 +20,6 @@ export type GsspHoc<
 export * from './with-auth'
 export * from './with-hocs'
 export * from './with-react-query'
+export * from './with-unauthenticated-route'
 
 export const gssp = withHocs(withReactQuery, withAuth)

@@ -12,7 +12,6 @@ const customJestConfig = {
   testEnvironment: 'jest-environment-jsdom',
   automock: false,
   resetMocks: false,
-  setupFiles: ['./src/utils/test/setup-jest.ts'],
 }
 
 module.exports = createJestConfig(customJestConfig)
