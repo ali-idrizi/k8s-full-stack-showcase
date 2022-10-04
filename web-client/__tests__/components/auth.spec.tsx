@@ -90,7 +90,6 @@ describe('Auth', () => {
 
     const getHeading = () => screen.queryByRole('heading', { name: /heading/i })
 
-    // Expired JWT, the children should not in the document
     expect(getHeading()).not.toBeInTheDocument()
 
     await waitFor(() => {
