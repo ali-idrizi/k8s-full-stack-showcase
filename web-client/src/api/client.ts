@@ -1,4 +1,5 @@
 import { axiosConfig } from '@/configs'
+import { isDev } from '@/utils/env'
 import axios, { Axios, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ApiError } from './error'
 
@@ -46,6 +47,8 @@ export class ApiClient implements ApiClientImpl {
       if (error instanceof AxiosError) {
         throw new ApiError(error)
       } else {
+        if (isDev()) console.error(error)
+
         throw new ApiError(new AxiosError('Unexpected Error!'))
       }
     }
