@@ -8,7 +8,7 @@ export const TooltipIconButton: React.FC<IconButtonProps> = ({
   ...rest
 }) => {
   return (
-    <Tooltip label={ariaLabel}>
+    <Tooltip hasArrow label={ariaLabel} closeOnClick={false} mt="2">
       <IconButton variant="ghost" rounded="full" aria-label={ariaLabel} {...rest} />
     </Tooltip>
   )
