@@ -1,5 +1,4 @@
 import { AxiosRequestConfig } from 'axios'
-import { GetServerSidePropsContext } from 'next'
 import { TodoApi } from './todo'
 import { UserApi } from './user'
 
@@ -8,22 +7,7 @@ export type Api = {
   todo: TodoApi
 }
 
-export const createApi = (context?: GetServerSidePropsContext): Api => {
-  let config: AxiosRequestConfig | undefined
-
-  if (context) {
-    const userId = context.req.headers['x-user-id']
-
-    if (userId && typeof userId === 'string') {
-      config = {
-        headers: {
-          'x-user-id': userId,
-          'x-authenticated': 'true',
-        },
-      }
-    }
-  }
-
+export const createApi = (config?: AxiosRequestConfig): Api => {
   return {
     user: new UserApi(config),
     todo: new TodoApi(config),
