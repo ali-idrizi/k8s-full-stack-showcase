@@ -1,5 +1,8 @@
 export const QUERY_KEY = {
   AUTH: 'AUTH',
+  TODO: 'TODO',
+  TODO_LISTS: 'TODO_LISTS',
+  TODO_LIST: 'TODO_LIST',
 } as const
 
 export const MUTATION_KEY = {
