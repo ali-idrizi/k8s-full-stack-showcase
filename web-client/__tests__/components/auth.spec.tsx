@@ -5,15 +5,15 @@ import { createMockContext, MockContext } from '@/utils/test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 
+import * as api from '@/api'
 import * as hooks from '@/hooks'
 import * as router from 'next/router'
 
-const mockApi = jest.fn()
 jest.mock('@/api', () => ({
   __esModule: true,
   ...jest.requireActual('@/api'),
   get API() {
-    return mockApi()
+    return null
   },
 }))
 
@@ -28,7 +28,7 @@ describe('Auth', () => {
   beforeEach(() => {
     ctx = createMockContext()
 
-    mockApi.mockReturnValue(ctx.api)
+    jest.spyOn(api, 'API', 'get').mockReturnValue(ctx.api)
     jest.spyOn(router, 'useRouter').mockReturnValue(ctx.router)
     jest.spyOn(hooks, 'useAuthQuery')
     jest.spyOn(hooks, 'useRefreshTokenMutation')
