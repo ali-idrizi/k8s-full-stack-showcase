@@ -8,15 +8,14 @@ import { render, screen, waitFor } from '@testing-library/react'
 import * as hooks from '@/hooks'
 import * as router from 'next/router'
 
-const mockUserApi = jest.fn()
-jest.mock('@/api', () => {
-  return {
-    ...jest.requireActual('@/api'),
-    get UserApi() {
-      return mockUserApi()
-    },
-  }
-})
+const mockApi = jest.fn()
+jest.mock('@/api', () => ({
+  __esModule: true,
+  ...jest.requireActual('@/api'),
+  get API() {
+    return mockApi()
+  },
+}))
 
 jest.mock('@/hooks', () => ({
   __esModule: true,
@@ -29,7 +28,7 @@ describe('Auth', () => {
   beforeEach(() => {
     ctx = createMockContext()
 
-    mockUserApi.mockReturnValue(ctx.api.user)
+    mockApi.mockReturnValue(ctx.api)
     jest.spyOn(router, 'useRouter').mockReturnValue(ctx.router)
     jest.spyOn(hooks, 'useAuthQuery')
     jest.spyOn(hooks, 'useRefreshTokenMutation')

@@ -1,10 +1,10 @@
-import { ApiClient } from '../client'
-import { list } from './list'
+import { AxiosRequestConfig } from 'axios'
+import { TodoListApi } from './list'
 
-export const TodoClient = new ApiClient({
-  baseURL: '/api/todo',
-})
+export class TodoApi {
+  list: TodoListApi
 
-export const TodoApi = {
-  list,
+  constructor(config?: AxiosRequestConfig) {
+    this.list = new TodoListApi(config)
+  }
 }

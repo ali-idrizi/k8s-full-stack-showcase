@@ -1,16 +1,9 @@
 import { axiosConfig } from '@/configs'
 import { isDev } from '@/utils/env'
-import axios, { Axios, AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { ApiError } from './error'
 
-interface ApiClientImpl {
-  get: Axios['get']
-  post: Axios['post']
-  put: Axios['put']
-  delete: Axios['delete']
-}
-
-export class ApiClient implements ApiClientImpl {
+export class ApiClient {
   private axiosClient: AxiosInstance
 
   constructor(config?: AxiosRequestConfig) {
@@ -25,22 +18,22 @@ export class ApiClient implements ApiClientImpl {
   }
 
   get<T = unknown, R = AxiosResponse<T, unknown>>(url: string): Promise<R> {
-    return this.withErrorHandler(() => this.axios.get(url))
+    return this.handleRequest(() => this.axios.get(url))
   }
 
   post<T = unknown, R = AxiosResponse<T, unknown>, D = unknown>(url: string, data?: D): Promise<R> {
-    return this.withErrorHandler(() => this.axios.post(url, data))
+    return this.handleRequest(() => this.axios.post(url, data))
   }
 
   put<T = unknown, R = AxiosResponse<T, unknown>, D = unknown>(url: string, data?: D): Promise<R> {
-    return this.withErrorHandler(() => this.axios.put(url, data))
+    return this.handleRequest(() => this.axios.put(url, data))
   }
 
   delete<T = unknown, R = AxiosResponse<T, unknown>>(url: string): Promise<R> {
-    return this.withErrorHandler(() => this.axios.delete(url))
+    return this.handleRequest(() => this.axios.delete(url))
   }
 
-  private async withErrorHandler<T>(fn: () => Promise<T>): Promise<T> {
+  private async handleRequest<T>(fn: () => Promise<T>): Promise<T> {
     try {
       return await fn()
     } catch (error) {

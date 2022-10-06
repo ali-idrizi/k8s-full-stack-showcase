@@ -1,19 +1,26 @@
 import { TodoList } from '@/utils/types'
-import { TodoClient } from '.'
+import { AxiosRequestConfig } from 'axios'
+import { ApiClient } from '../client'
 
-const getAll = async (): Promise<TodoList[]> => {
-  const res = await TodoClient.get<TodoList[]>('/list')
+export class TodoListApi {
+  private client: ApiClient
 
-  return res.data
-}
+  constructor(config?: AxiosRequestConfig) {
+    this.client = new ApiClient({
+      baseURL: '/api/todo/list',
+      ...config,
+    })
+  }
 
-const getOne = async (id: string): Promise<TodoList> => {
-  const res = await TodoClient.get<TodoList>(`/list/${id}`)
+  async getAll(): Promise<TodoList[]> {
+    const res = await this.client.get<TodoList[]>('/')
 
-  return res.data
-}
+    return res.data
+  }
 
-export const list = {
-  getAll,
-  getOne,
+  async getOne(id: string): Promise<TodoList> {
+    const res = await this.client.get<TodoList>(`/${id}`)
+
+    return res.data
+  }
 }
