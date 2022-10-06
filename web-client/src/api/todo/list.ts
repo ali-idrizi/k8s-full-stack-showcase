@@ -12,13 +12,13 @@ export class TodoListApi {
     })
   }
 
-  async getAll(): Promise<TodoList[]> {
+  getAll = async (): Promise<TodoList[]> => {
     const res = await this.client.get<TodoList[]>('/')
 
     return res.data
   }
 
-  async getOne(id: string): Promise<TodoList> {
+  getOne = async (id: string): Promise<TodoList> => {
     const res = await this.client.get<TodoList>(`/${id}`)
 
     return res.data
