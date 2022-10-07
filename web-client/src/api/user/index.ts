@@ -1,4 +1,5 @@
 import { ApiClient } from '@/api/client'
+import { isServer } from '@/utils/env'
 import { AxiosRequestConfig } from 'axios'
 import { LoginPayload, LoginResponse } from './login'
 import { RefreshTokenResponse } from './refresh-token'
@@ -9,7 +10,7 @@ export class UserApi {
 
   constructor(config?: AxiosRequestConfig) {
     this.client = new ApiClient({
-      baseURL: '/api/user',
+      baseURL: isServer() ? 'http://app-user' : '/api/user',
       ...config,
     })
   }
