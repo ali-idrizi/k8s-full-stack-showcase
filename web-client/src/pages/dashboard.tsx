@@ -10,6 +10,7 @@ import { InferGetServerSidePropsType } from 'next'
 export const getServerSideProps = withHocs(
   withReactQuery,
   withAuth,
+  withAuthenticatedRoute,
   withApi,
 )(async ({ queryClient, api }) => {
   await queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], api.todo.list.getAll)

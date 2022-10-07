@@ -6,6 +6,18 @@ type Next<Props, Data> = (
   ctx: GetServerSidePropsContext,
 ) => GetServerSidePropsResult<Props> | Promise<GetServerSidePropsResult<Props>>
 
+export function withHocs<A, B, C, D, E, F, G, H, I, J, K, L>(
+  hoc1: GsspHoc<A, B>,
+  hoc2: GsspHoc<C, D, A>,
+  hoc3: GsspHoc<E, F, A & C>,
+  hoc4: GsspHoc<G, H, A & C & E>,
+  hoc5: GsspHoc<I, J, A & C & E & G>,
+  hoc6: GsspHoc<K, L, A & C & E & G & I>,
+  ...hocs: GsspHoc[]
+): <Props extends Record<string, unknown> = {}>( // eslint-disable-line
+  next?: Next<Props, A & C & E & G & I & K>,
+) => GetServerSideProps<Props & B & D & F & H & J & L>
+
 export function withHocs<A, B, C, D, E, F, G, H, I, J>(
   hoc1: GsspHoc<A, B>,
   hoc2: GsspHoc<C, D, A>,
