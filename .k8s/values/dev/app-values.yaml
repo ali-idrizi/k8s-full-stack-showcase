@@ -1,6 +1,6 @@
 ingress: &ingress
   auth:
-    url: http://dev-app-user.dev.svc.cluster.local/auth
+    url: http://app-user.dev.svc.cluster.local/auth
 
 auth:
   db:

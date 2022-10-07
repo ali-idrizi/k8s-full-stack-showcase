@@ -87,7 +87,7 @@ deploy:
           - .k8s/values/dev/nats-values.yaml
         wait: true
 
-      - name: dev-db
+      - name: db
         useHelmSecrets: true
         chartPath: .k8s/helm-charts/db
         namespace: dev
@@ -97,7 +97,7 @@ deploy:
           - .k8s/values/dev/db-secrets.yaml
         wait: true
 
-      - name: dev-app
+      - name: app
         useHelmSecrets: true
         chartPath: .k8s/helm-charts/app
         namespace: dev
