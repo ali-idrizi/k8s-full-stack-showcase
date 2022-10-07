@@ -72,19 +72,19 @@ export function withHocs(
       const data = {}
 
       for (const hoc of hocs) {
-        const result = await Promise.resolve(hoc(data, ctx))
+        const hocResult = await Promise.resolve(hoc(data, ctx))
 
         // if any of the hocs retuned `notFound` or `redirect` then return immediately
-        if ('notFound' in result || 'redirect' in result) {
-          return result
+        if ('notFound' in hocResult || 'redirect' in hocResult) {
+          return hocResult
         }
 
-        if ('data' in result) {
-          Object.assign(data, result.data)
+        if ('data' in hocResult) {
+          Object.assign(data, hocResult.data)
         }
 
-        if ('props' in result) {
-          hocProps.push(result.props)
+        if ('props' in hocResult) {
+          hocProps.push(hocResult.props)
         }
       }
 
