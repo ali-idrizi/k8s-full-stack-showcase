@@ -13,9 +13,7 @@ export type MockContext = {
 
 export const createMockContext = (): MockContext => {
   return {
-    api: {
-      user: mockDeep(),
-    },
+    api: mockDeep(),
     context: mockDeep(),
     router: mockDeep(),
     axios: mockDeep(),
