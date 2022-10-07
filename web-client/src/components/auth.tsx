@@ -1,17 +1,10 @@
-import { useAuthQuery, useRefreshTokenMutation } from '@/hooks'
-import { useRouter } from 'next/router'
-import { useEffect, useRef } from 'react'
+import { useAuthQuery, useRefreshTokenMutation, useRouterRef } from '@/hooks'
+import { useEffect } from 'react'
 
 export const Auth: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { mutate } = useRefreshTokenMutation()
   const { needsRefresh } = useAuthQuery()
-
-  const router = useRouter()
-  const routerRef = useRef(router)
-
-  useEffect(() => {
-    routerRef.current = router
-  }, [router])
+  const routerRef = useRouterRef()
 
   useEffect(() => {
     // Refresh the access token if a GSSP call requested it
@@ -29,7 +22,7 @@ export const Auth: React.FC<React.PropsWithChildren> = ({ children }) => {
         },
       })
     }
-  }, [needsRefresh, mutate])
+  }, [needsRefresh, mutate, routerRef])
 
   if (needsRefresh) {
     return <noscript>Authentication failed</noscript>

@@ -1,13 +1,13 @@
 import { TodoTabs } from '@/components'
 import { withAuth, withAuthenticatedRoute, withHocs, withReactQuery } from '@/hocs'
 import { withApi } from '@/hocs/with-api'
+import { useRouterRef } from '@/hooks'
 import { EmptyLayout } from '@/layouts'
 import { QUERY_KEY } from '@/utils/constants'
 import { PageWithLayout, TodoList } from '@/utils/types'
 import { Alert, AlertIcon, Flex } from '@chakra-ui/react'
 import { InferGetServerSidePropsType } from 'next'
-import { useRouter } from 'next/router'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 
 export const getServerSideProps = withHocs(
   withReactQuery,
@@ -46,12 +46,7 @@ export const getServerSideProps = withHocs(
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 
 const Dashboard: PageWithLayout<Props> = ({ paramListId, listId }) => {
-  const router = useRouter()
-  const routerRef = useRef(router)
-
-  useEffect(() => {
-    routerRef.current = router
-  }, [router])
+  const routerRef = useRouterRef()
 
   useEffect(() => {
     if (listId !== paramListId) {
@@ -59,7 +54,7 @@ const Dashboard: PageWithLayout<Props> = ({ paramListId, listId }) => {
         shallow: true,
       })
     }
-  }, [listId, paramListId])
+  }, [listId, paramListId, routerRef])
 
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
