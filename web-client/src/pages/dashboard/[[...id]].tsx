@@ -49,7 +49,7 @@ const Dashboard: PageWithLayout<Props> = ({ paramListId, listId }) => {
   const routerRef = useRouterRef()
 
   useEffect(() => {
-    if (listId !== paramListId) {
+    if (listId && listId !== paramListId) {
       routerRef.current.replace(`/dashboard/${listId}`, undefined, {
         shallow: true,
       })
