@@ -14,6 +14,9 @@ build:
           paths:
             - ../.k8s/docker/nestjs/*
             - ./**/*
+          ignore:
+            - dist/**/*
+            - node_modules/**/*
         buildCommand: |
           docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$ENV
       sync: &nestjsSync
@@ -35,6 +38,11 @@ build:
           paths:
             - ../.k8s/docker/nextjs/*
             - ./**/*
+          ignore:
+            - __tests__/**/*
+            - .next/**/*
+            - node_modules/**/*
+            - coverage/**/*
         buildCommand: |
           docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$ENV
       sync:
@@ -79,7 +87,7 @@ deploy:
           - .k8s/values/dev/nats-values.yaml
         wait: true
 
-      - name: dev-db
+      - name: db
         useHelmSecrets: true
         chartPath: .k8s/helm-charts/db
         namespace: dev
@@ -89,7 +97,7 @@ deploy:
           - .k8s/values/dev/db-secrets.yaml
         wait: true
 
-      - name: dev-app
+      - name: app
         useHelmSecrets: true
         chartPath: .k8s/helm-charts/app
         namespace: dev
