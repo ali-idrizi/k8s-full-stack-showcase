@@ -1,13 +1,13 @@
 export const QUERY_KEY = {
-  AUTH: 'AUTH',
-  TODO: 'TODO',
-  TODO_LISTS: 'TODO_LISTS',
-  TODO_LIST: 'TODO_LIST',
+  AUTH: 'auth',
+  TODO: 'todo',
+  TODO_LISTS: 'todo-lists',
+  TODO_LIST: 'todo-list',
 } as const
 
 export const MUTATION_KEY = {
-  LOGIN: 'LOGIN',
-  LOGOUT: 'LOGOUT',
-  REFRESH_TOKEN: 'REFRESH_TOKEN',
-  REGISTER: 'REGISTER',
+  LOGIN: 'login',
+  LOGOUT: 'logout',
+  REFRESH_TOKEN: 'refresh-token',
+  REGISTER: 'register',
 }
