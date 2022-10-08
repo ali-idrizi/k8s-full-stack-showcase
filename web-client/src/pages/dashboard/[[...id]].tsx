@@ -1,20 +1,21 @@
 import { TodoTabs } from '@/components'
 import { withAuth, withAuthenticatedRoute, withHocs, withReactQuery } from '@/hocs'
 import { withApi } from '@/hocs/with-api'
-import { useRouterRef } from '@/hooks'
 import { EmptyLayout } from '@/layouts'
 import { QUERY_KEY } from '@/utils/constants'
 import { PageWithLayout, TodoList } from '@/utils/types'
 import { Alert, AlertIcon, Flex } from '@chakra-ui/react'
-import { InferGetServerSidePropsType } from 'next'
-import { useEffect } from 'react'
+
+type Props = {
+  listId: string | null
+}
 
 export const getServerSideProps = withHocs(
   withReactQuery,
   withAuth,
   withAuthenticatedRoute(),
   withApi,
-)(async ({ queryClient, api }, ctx) => {
+)<Props>(async ({ queryClient, api }, ctx) => {
   let lists: TodoList[] = []
   try {
     lists = await queryClient.fetchQuery(
@@ -28,8 +29,18 @@ export const getServerSideProps = withHocs(
   const paramListId = ctx.params?.id?.[0] ?? null
   const activeList =
     lists.find((list) => list.id === paramListId) ?? lists.find((list) => list.default) ?? lists[0]
+  const listId = activeList?.id ?? null
 
   if (activeList) {
+    if (listId !== paramListId) {
+      return {
+        redirect: {
+          destination: `/dashboard/${listId}`,
+          permanent: false,
+        },
+      }
+    }
+
     await queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, activeList.id], () =>
       api.todo.list.getOne(activeList.id),
     )
@@ -37,25 +48,12 @@ export const getServerSideProps = withHocs(
 
   return {
     props: {
-      paramListId,
-      listId: activeList?.id ?? null,
+      listId,
     },
   }
 })
 
-type Props = InferGetServerSidePropsType<typeof getServerSideProps>
-
-const Dashboard: PageWithLayout<Props> = ({ paramListId, listId }) => {
-  const routerRef = useRouterRef()
-
-  useEffect(() => {
-    if (listId && listId !== paramListId) {
-      routerRef.current.replace(`/dashboard/${listId}`, undefined, {
-        shallow: true,
-      })
-    }
-  }, [listId, paramListId, routerRef])
-
+const Dashboard: PageWithLayout<Props> = ({ listId }) => {
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
       {listId ? (
