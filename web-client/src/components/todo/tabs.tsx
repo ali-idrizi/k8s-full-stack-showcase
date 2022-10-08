@@ -1,9 +1,7 @@
-import { TooltipIconButton } from '@/components'
+import { ApiErrorAlert, TooltipIconButton } from '@/components'
 import { useBrandColors } from '@/hooks'
 import { useTodoLists } from '@/hooks/queries/todo-list'
 import {
-  Alert,
-  AlertIcon,
   Spinner,
   Tab,
   TabList,
@@ -12,16 +10,18 @@ import {
   Tabs,
   useColorModeValue,
 } from '@chakra-ui/react'
+import { AnimatePresence, motion } from 'framer-motion'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import { FiPlus } from 'react-icons/fi'
+import { TodoList } from './list'
 
 type Props = {
   listId: string
 }
 
 export const TodoTabs: React.FC<Props> = ({ listId }) => {
-  const { data: todoLists, isLoading, isError } = useTodoLists()
+  const { data: todoLists, isLoading, isError, error } = useTodoLists()
   const { primaryScheme } = useBrandColors()
   const tabListBorderColor = useColorModeValue('gray.100', 'gray.700')
 
@@ -34,17 +34,11 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
   }
 
   if (isError) {
-    return (
-      <Alert status="error" rounded="md">
-        <AlertIcon />
-        An error occurred! Please try again later.
-      </Alert>
-    )
+    return <ApiErrorAlert error={error} />
   }
 
   return (
     <Tabs
-      isLazy
       colorScheme={primaryScheme}
       variant="solid-rounded"
       alignSelf="center"
@@ -65,12 +59,24 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
           </Link>
         ))}
 
-        <TooltipIconButton ml="auto" aria-label="Add New List" icon={<FiPlus />} />
+        <TooltipIconButton ml="auto" aria-label="Create a New List" icon={<FiPlus />} />
       </TabList>
 
       <TabPanels>
         {todoLists.map((list) => (
-          <TabPanel key={list.id}>{list.title}</TabPanel>
+          <TabPanel key={list.id} mt="6">
+            <AnimatePresence initial={false}>
+              {list.id === listId && (
+                <motion.div
+                  initial={{ marginTop: 15, opacity: 0 }}
+                  animate={{ marginTop: 0, opacity: 1 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <TodoList listId={list.id} />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </TabPanel>
         ))}
       </TabPanels>
     </Tabs>
