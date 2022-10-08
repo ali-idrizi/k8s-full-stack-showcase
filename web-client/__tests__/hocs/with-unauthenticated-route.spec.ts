@@ -12,13 +12,13 @@ describe('With Unauthentication Route GSSP HOC', () => {
     ctx.context.req.headers['x-user-id'] = undefined
     ctx.context.req.headers['x-authenticated'] = 'true'
 
-    const gssp = withHocs(withReactQuery, withAuth, withUnauthenticatedRoute)()
+    const gssp = withHocs(withReactQuery, withAuth, withUnauthenticatedRoute('/test-route'))()
 
     const res = await gssp(ctx.context)
 
     expect(res).toEqual({
       redirect: {
-        destination: '/',
+        destination: '/test-route',
         permanent: false,
       },
     })
@@ -31,7 +31,7 @@ describe('With Unauthentication Route GSSP HOC', () => {
     const gssp = withHocs(
       withReactQuery,
       withAuth,
-      withUnauthenticatedRoute,
+      withUnauthenticatedRoute(),
     )(() => ({
       props: {
         foo: 'bar',

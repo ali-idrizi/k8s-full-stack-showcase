@@ -1,21 +1,23 @@
 import { GsspHoc, WithAuthData } from '.'
 
 /**
- * Redirects to homepage is the user is authenticated
+ * Redirects to the specified destination if the user is authenticated
  */
-export const withUnauthenticatedRoute: GsspHoc<unknown, unknown, WithAuthData> = ({
-  auth: { isLoggedIn },
-}) => {
-  if (isLoggedIn) {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
+export const withUnauthenticatedRoute: (
+  destination?: string,
+) => GsspHoc<unknown, unknown, WithAuthData> = (destination = '/dashboard') => {
+  return ({ auth: { isLoggedIn } }) => {
+    if (isLoggedIn) {
+      return {
+        redirect: {
+          destination,
+          permanent: false,
+        },
+      }
     }
-  }
 
-  return {
-    props: {},
+    return {
+      props: {},
+    }
   }
 }

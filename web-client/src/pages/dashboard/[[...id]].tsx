@@ -12,7 +12,7 @@ import { useEffect } from 'react'
 export const getServerSideProps = withHocs(
   withReactQuery,
   withAuth,
-  withAuthenticatedRoute,
+  withAuthenticatedRoute(),
   withApi,
 )(async ({ queryClient, api }, ctx) => {
   let lists: TodoList[] = []

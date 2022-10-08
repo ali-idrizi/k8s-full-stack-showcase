@@ -1,21 +1,23 @@
 import { GsspHoc, WithAuthData } from '.'
 
 /**
- * Redirects to login is the user is not authenticated
+ * Redirects to the specified destination if the user is not authenticated
  */
-export const withAuthenticatedRoute: GsspHoc<unknown, unknown, WithAuthData> = ({
-  auth: { isLoggedIn },
-}) => {
-  if (!isLoggedIn) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
+export const withAuthenticatedRoute: (
+  destination?: string,
+) => GsspHoc<unknown, unknown, WithAuthData> = (destination = '/login') => {
+  return ({ auth: { isLoggedIn } }) => {
+    if (!isLoggedIn) {
+      return {
+        redirect: {
+          destination,
+          permanent: false,
+        },
+      }
     }
-  }
 
-  return {
-    props: {},
+    return {
+      props: {},
+    }
   }
 }
