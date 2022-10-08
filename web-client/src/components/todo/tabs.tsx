@@ -1,4 +1,4 @@
-import { ApiErrorAlert, TooltipIconButton } from '@/components'
+import { ApiErrorAlert } from '@/components'
 import { useBrandColors } from '@/hooks'
 import { useTodoLists } from '@/hooks/queries/todo-list'
 import {
@@ -11,10 +11,12 @@ import {
   useColorModeValue,
 } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useMemo } from 'react'
-import { FiPlus } from 'react-icons/fi'
 import { TodoList } from './list'
+
+const CreateTodoList = dynamic(import('./create-list').then((mod) => mod.CreateTodoList))
 
 type Props = {
   listId: string
@@ -59,7 +61,7 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
           </Link>
         ))}
 
-        <TooltipIconButton ml="auto" aria-label="Create a New List" icon={<FiPlus />} />
+        <CreateTodoList />
       </TabList>
 
       <TabPanels>
