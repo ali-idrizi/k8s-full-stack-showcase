@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer'
 import { IsDefined, IsNotEmpty } from 'class-validator'
 
 export abstract class CreateDto {
@@ -7,5 +8,6 @@ export abstract class CreateDto {
   @IsNotEmpty({
     message: 'Title cannot be empty',
   })
+  @Transform(({ value }) => (value as string).trim())
   title: string
 }
