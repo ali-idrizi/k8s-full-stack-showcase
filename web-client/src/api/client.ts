@@ -29,6 +29,13 @@ export class ApiClient {
     return this.handleRequest(() => this.axios.put(url, data))
   }
 
+  patch<T = unknown, R = AxiosResponse<T, unknown>, D = unknown>(
+    url: string,
+    data?: D,
+  ): Promise<R> {
+    return this.handleRequest(() => this.axios.patch(url, data))
+  }
+
   delete<T = unknown, R = AxiosResponse<T, unknown>>(url: string): Promise<R> {
     return this.handleRequest(() => this.axios.delete(url))
   }
