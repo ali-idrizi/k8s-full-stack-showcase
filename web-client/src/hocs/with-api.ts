@@ -19,6 +19,7 @@ export const withApi: GsspHoc<WithApiData, unknown, unknown> = (_, ctx) => {
     data: {
       api: createApi({
         headers: authHeaders,
+        withRefreshTokenInterceptor: false,
       }),
     },
   }

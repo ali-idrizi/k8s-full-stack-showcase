@@ -1,6 +1,6 @@
-import { ApiClient } from '@/api/client'
+import { ApiClient, ApiClientConfig } from '@/api/client'
 import { isServer } from '@/utils/env'
-import { AxiosRequestConfig } from 'axios'
+import { AxiosResponse } from 'axios'
 import { LoginPayload, LoginResponse } from './login'
 import { RefreshTokenResponse } from './refresh-token'
 import { RegisterPayload, RegisterResponse } from './register'
@@ -8,10 +8,14 @@ import { RegisterPayload, RegisterResponse } from './register'
 export class UserApi {
   private client: ApiClient
 
-  constructor(config?: AxiosRequestConfig) {
+  private refreshTokenPromise: Promise<AxiosResponse<RefreshTokenResponse>> | null = null
+
+  constructor(config?: ApiClientConfig) {
     this.client = new ApiClient({
       baseURL: isServer() ? 'http://app-user' : '/api/user',
       ...config,
+      // Always disable refreshing the token for UserApi calls
+      withRefreshTokenInterceptor: false,
     })
   }
 
@@ -26,8 +30,10 @@ export class UserApi {
   }
 
   refreshToken = async (): Promise<RefreshTokenResponse> => {
-    const res = await this.client.post<RefreshTokenResponse>('/auth/refresh-token')
-
+    this.refreshTokenPromise =
+      this.refreshTokenPromise ?? this.client.post<RefreshTokenResponse>('/auth/refresh-token')
+    const res = await this.refreshTokenPromise
+    this.refreshTokenPromise = null
     return res.data
   }
 

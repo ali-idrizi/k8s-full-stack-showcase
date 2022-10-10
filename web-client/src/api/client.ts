@@ -1,16 +1,40 @@
 import { axiosConfig } from '@/configs'
 import { isDev } from '@/utils/env'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { API } from '.'
 import { ApiError } from './error'
+
+export type ApiClientConfig = AxiosRequestConfig & {
+  withRefreshTokenInterceptor?: boolean
+
+  _isRetry?: boolean
+}
 
 export class ApiClient {
   private axiosClient: AxiosInstance
 
-  constructor(config?: AxiosRequestConfig) {
+  constructor(config?: ApiClientConfig) {
     this.axiosClient = axios.create({
       ...axiosConfig,
       ...config,
     })
+
+    if (config?.withRefreshTokenInterceptor) {
+      this.axios.interceptors.response.use(
+        (res) => res,
+        async (error: AxiosError) => {
+          const req = error.config as ApiClientConfig
+
+          if (error?.response?.status === 401 && !req._isRetry) {
+            req._isRetry = true
+            await API.user.refreshToken()
+            return this.axios(req)
+          }
+
+          return Promise.reject(error)
+        },
+      )
+    }
   }
 
   get axios(): AxiosInstance {

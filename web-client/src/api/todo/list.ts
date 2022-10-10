@@ -1,12 +1,11 @@
 import { isServer } from '@/utils/env'
 import { TodoList } from '@/utils/types'
-import { AxiosRequestConfig } from 'axios'
-import { ApiClient } from '../client'
+import { ApiClient, ApiClientConfig } from '../client'
 
 export class TodoListApi {
   private client: ApiClient
 
-  constructor(config?: AxiosRequestConfig) {
+  constructor(config?: ApiClientConfig) {
     this.client = new ApiClient({
       baseURL: isServer() ? 'http://app-todo/list' : '/api/todo/list',
       ...config,
