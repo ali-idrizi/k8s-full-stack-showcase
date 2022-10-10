@@ -14,7 +14,7 @@ const ErrorAlert: React.FC<Required<Props>> = ({ error }) => {
   }
 
   return (
-    <Alert status="error">
+    <Alert rounded="md" status="error">
       <AlertIcon />
 
       {typeof error.data === 'string' ? (
