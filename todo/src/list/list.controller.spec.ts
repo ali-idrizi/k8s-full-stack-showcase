@@ -106,6 +106,7 @@ describe('ListController', () => {
         where: {
           userIndex: { userId: 'test-user-id', id: 'id' },
         },
+        include: { items: true },
         data: updateData,
       })
     })
