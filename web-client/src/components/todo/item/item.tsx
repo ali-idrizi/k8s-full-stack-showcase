@@ -30,7 +30,7 @@ export const TodoListItem: React.FC<TodoListItemProps> = ({ todo }) => {
           onChange={onCheckboxChange}
         />
         <TodoTitle checkboxRef={checkboxRef} todo={todo} />
-        <DeleteTodoItem />
+        <DeleteTodoItem todo={todo} />
       </ListItem>
       <Divider orientation="horizontal" />
     </>

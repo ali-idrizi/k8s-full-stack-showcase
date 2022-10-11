@@ -37,7 +37,9 @@ export class TodoItemApi {
     return res.data
   }
 
-  delete = async (id: string): Promise<void> => {
-    await this.client.delete(`/${id}`)
+  delete = async (id: string): Promise<TodoItem> => {
+    const res = await this.client.delete<TodoItem>(`/${id}`)
+
+    return res.data
   }
 }
