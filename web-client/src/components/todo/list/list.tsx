@@ -1,7 +1,7 @@
 import { useTodoList } from '@/hooks/queries/todo-list'
 import { Alert, AlertIcon, Center, Spinner } from '@chakra-ui/react'
-import { ApiErrorAlert } from '../common'
-import { TodoListHeader } from './list-header'
+import { ApiErrorAlert } from '@/components/common'
+import { TodoListHeader } from './header'
 
 type Props = {
   listId: string

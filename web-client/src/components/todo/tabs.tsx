@@ -16,7 +16,7 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import { TodoList } from './list'
 
-const CreateTodoList = dynamic(import('./create-list').then((mod) => mod.CreateTodoList))
+const CreateTodoList = dynamic(import('./list').then((mod) => mod.CreateTodoList))
 
 type Props = {
   listId: string

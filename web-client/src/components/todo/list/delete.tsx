@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { FiTrash } from 'react-icons/fi'
-import { ApiErrorAlert, TooltipIconButton } from '../common'
+import { ApiErrorAlert, TooltipIconButton } from '@/components/common'
 
 type DeleteModalProps = {
   list: TodoList

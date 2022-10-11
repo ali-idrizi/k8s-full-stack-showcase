@@ -13,8 +13,8 @@ import {
 import { useFormik } from 'formik'
 import { FiCheck, FiEdit } from 'react-icons/fi'
 import { ValidationError } from 'yup'
-import { TooltipIconButton } from '../common'
-import { DeleteTodoList } from './delete-list'
+import { TooltipIconButton } from '@/components/common'
+import { DeleteTodoList } from './delete'
 
 type Props = {
   list: TodoList
