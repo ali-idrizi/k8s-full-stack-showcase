@@ -1,4 +1,4 @@
-import { useUpdateItemMutation } from '@/hooks/mutations/todo/item/update'
+import { useUpdateItemMutation } from '@/hooks/mutations'
 import { TodoItem } from '@/utils/types'
 import { Checkbox, Divider, ListItem } from '@chakra-ui/react'
 import { useRef } from 'react'
