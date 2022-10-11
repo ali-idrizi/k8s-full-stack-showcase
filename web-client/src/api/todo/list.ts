@@ -46,4 +46,8 @@ export class TodoListApi {
 
     return res.data
   }
+
+  delete = async (id: string): Promise<void> => {
+    await this.client.delete(`/${id}`)
+  }
 }

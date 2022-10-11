@@ -12,4 +12,5 @@ export const MUTATION_KEY = {
   REGISTER: 'register',
   TODO_LIST_CREATE: 'todo-list-create',
   TODO_LIST_UPDATE: 'todo-list-update',
+  TODO_LIST_DELETE: 'todo-list-delete',
 }

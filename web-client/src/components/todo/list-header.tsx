@@ -116,7 +116,7 @@ export const TodoListHeader: React.FC<Props> = ({ list }) => {
         <EditTitleControls isLoading={isLoading} isInvalid={!!formik.errors.title} />
       </Editable>
 
-      <DeleteTodoList />
+      <DeleteTodoList list={list} />
     </HStack>
   )
 }
