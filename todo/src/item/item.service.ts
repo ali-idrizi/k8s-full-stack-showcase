@@ -36,7 +36,7 @@ export class ItemService {
     }
   }
 
-  async delete(userId: string, id: string): Promise<void> {
+  async delete(userId: string, id: string): Promise<Item> {
     try {
       const item = await this.prisma.item.findUniqueOrThrow({
         where: {
@@ -51,7 +51,7 @@ export class ItemService {
         throw new ItemNotFoundException()
       }
 
-      await this.prisma.item.delete({
+      return await this.prisma.item.delete({
         where: {
           id,
         },
