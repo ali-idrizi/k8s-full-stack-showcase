@@ -1,4 +1,5 @@
 import { UpdateTodoListSchema } from '@/api/todo/list'
+import { TooltipIconButton } from '@/components/common'
 import { useUpdateListMutation } from '@/hooks'
 import { TodoList } from '@/utils/types'
 import {
@@ -13,7 +14,6 @@ import {
 import { useFormik } from 'formik'
 import { FiCheck, FiEdit } from 'react-icons/fi'
 import { ValidationError } from 'yup'
-import { TooltipIconButton } from '@/components/common'
 import { DeleteTodoList } from './delete'
 
 type Props = {

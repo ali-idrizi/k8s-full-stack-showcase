@@ -1,6 +1,7 @@
-import { useTodoList } from '@/hooks/queries/todo-list'
-import { Alert, AlertIcon, Center, Spinner } from '@chakra-ui/react'
 import { ApiErrorAlert } from '@/components/common'
+import { useTodoList } from '@/hooks/queries/todo-list'
+import { Alert, AlertIcon, Center, List, Spinner } from '@chakra-ui/react'
+import { TodoListItem } from '../item'
 import { TodoListHeader } from './header'
 
 type Props = {
@@ -35,9 +36,11 @@ export const TodoList: React.FC<Props> = ({ listId }) => {
         </Alert>
       )}
 
-      {todoItems.map((item) => (
-        <p key={item.id}>{item.title}</p>
-      ))}
+      <List>
+        {todoItems.map((item) => (
+          <TodoListItem key={item.id} todo={item} />
+        ))}
+      </List>
     </>
   )
 }
