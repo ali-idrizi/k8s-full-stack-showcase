@@ -43,7 +43,7 @@ const Form: React.FC<FormProps> = ({ onClose, firstFieldRef }) => {
 
           toast({
             position: 'bottom-right',
-            description: `List ${data.title} has been created!`,
+            description: `List "${data.title}" has been created!`,
             status: 'success',
             isClosable: true,
             duration: 5000,
@@ -106,6 +106,7 @@ export const CreateTodoList: React.FC = () => {
         <IconButton
           ml="auto"
           aria-label="Create a New List"
+          aria-haspopup="dialog"
           variant="ghost"
           rounded="full"
           title="Create a New List"
