@@ -1,3 +1,5 @@
+import { UpdateTodoItemSchema } from '@/api/todo/item'
+import { useUpdateItemMutation } from '@/hooks/mutations/todo/item/update'
 import { TodoItem } from '@/utils/types'
 import {
   Editable,
@@ -8,7 +10,9 @@ import {
   useEditableControls,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import { MutableRefObject } from 'react'
 import { FiCheck, FiEdit } from 'react-icons/fi'
+import { ValidationError } from 'yup'
 import { HoverVisibleBox } from './hover-visible-box'
 
 type EditTitleControlsProps = {
@@ -46,19 +50,48 @@ const EditTitleControls: React.FC<EditTitleControlsProps> = ({ isLoading, isInva
 }
 
 type TodoTitleProps = {
+  checkboxRef: MutableRefObject<HTMLInputElement | null>
   todo: TodoItem
 }
-export const TodoTitle: React.FC<TodoTitleProps> = ({ todo }) => {
+export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
+  const { mutate, isLoading } = useUpdateItemMutation(todo.id)
+
   const formik = useFormik({
     initialValues: {
       title: todo.title,
     },
+    /**
+     * Using `validate` instead of `validationSchema` since we need to differentiate between
+     * empty string and undefined. There is currently an issue where empty strings are sent
+     * as undefined to the validator only when using `validationSchema`. See:
+     * https://github.com/jaredpalmer/formik/issues/1357
+     */
+    validate: async (values) => {
+      try {
+        await UpdateTodoItemSchema.validate(values)
+      } catch (e) {
+        if (e instanceof ValidationError) {
+          return {
+            title: e.message,
+          }
+        }
+      }
+    },
     onSubmit: (values) => {
-      console.log(values)
+      mutate(values, {
+        onSettled: () => {
+          if (checkboxRef.current) {
+            checkboxRef.current.focus()
+          }
+        },
+      })
     },
   })
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    if (!!formik.errors.title) {
+      await formik.setFieldValue('title', todo.title, true)
+    }
     formik.handleSubmit()
   }
 
@@ -85,7 +118,7 @@ export const TodoTitle: React.FC<TodoTitleProps> = ({ todo }) => {
         focusBorderColor="none"
       />
       <HoverVisibleBox>
-        <EditTitleControls isLoading={false} isInvalid={!!formik.errors.title} />
+        <EditTitleControls isLoading={isLoading} isInvalid={!!formik.errors.title} />
       </HoverVisibleBox>
     </Editable>
   )

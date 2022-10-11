@@ -67,21 +67,25 @@ export class ItemService {
 
   async update(userId: string, id: string, updateDto: UpdateDto): Promise<Item> {
     try {
-      const item = await this.prisma.item.update({
+      const item = await this.prisma.item.findUniqueOrThrow({
         where: {
           id,
         },
         include: {
           list: true,
         },
-        data: updateDto,
       })
 
       if (item.list.userId !== userId) {
         throw new ItemNotFoundException()
       }
 
-      return item
+      return await this.prisma.item.update({
+        where: {
+          id,
+        },
+        data: updateDto,
+      })
     } catch (error) {
       if (ErrorUtil.isNotFoundError(error)) {
         throw new ItemNotFoundException()

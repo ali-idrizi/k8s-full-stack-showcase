@@ -13,4 +13,7 @@ export const MUTATION_KEY = {
   TODO_LIST_CREATE: 'todo-list-create',
   TODO_LIST_UPDATE: 'todo-list-update',
   TODO_LIST_DELETE: 'todo-list-delete',
+  TODO_ITEM_CREATE: 'todo-item-create',
+  TODO_ITEM_UPDATE: 'todo-item-update',
+  TODO_ITEM_DELETE: 'todo-item-delete',
 }
