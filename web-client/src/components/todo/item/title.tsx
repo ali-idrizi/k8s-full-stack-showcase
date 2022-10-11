@@ -109,7 +109,14 @@ export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
       onSubmit={handleSubmit}
       isPreviewFocusable={false}
     >
-      <EditablePreview as="span" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" />
+      <EditablePreview
+        as="span"
+        textOverflow="ellipsis"
+        overflow="hidden"
+        whiteSpace="nowrap"
+        textDecor={todo.completed ? 'line-through' : undefined}
+        opacity={todo.completed ? '0.65' : undefined}
+      />
       <Input
         isInvalid={!!formik.errors.title}
         name="title"
