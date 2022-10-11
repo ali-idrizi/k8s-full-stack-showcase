@@ -56,7 +56,7 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
         borderColor={tabListBorderColor}
       >
         {todoLists.map((list) => (
-          <Link key={list.id} href={`/dashboard/${list.id}`} passHref>
+          <Link key={list.id} href={`/dashboard/${list.id}`} shallow passHref>
             <Tab as="a">{list.title}</Tab>
           </Link>
         ))}

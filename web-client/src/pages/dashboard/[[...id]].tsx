@@ -5,9 +5,11 @@ import { EmptyLayout } from '@/layouts'
 import { QUERY_KEY } from '@/utils/constants'
 import { PageWithLayout, TodoList } from '@/utils/types'
 import { Alert, AlertIcon, Flex } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 type Props = {
-  listId: string | null
+  initialListId: string | null
 }
 
 export const getServerSideProps = withHocs(
@@ -48,12 +50,19 @@ export const getServerSideProps = withHocs(
 
   return {
     props: {
-      listId,
+      initialListId: listId,
     },
   }
 })
 
-const Dashboard: PageWithLayout<Props> = ({ listId }) => {
+const Dashboard: PageWithLayout<Props> = ({ initialListId }) => {
+  const router = useRouter()
+  const [listId, setListId] = useState(initialListId)
+
+  useEffect(() => {
+    setListId(router.query.id?.[0] ?? null)
+  }, [router])
+
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
       {listId ? (

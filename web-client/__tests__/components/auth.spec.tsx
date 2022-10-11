@@ -11,7 +11,6 @@ import * as router from 'next/router'
 
 jest.mock('@/api', () => ({
   __esModule: true,
-  ...jest.requireActual('@/api'),
   get API() {
     return null
   },

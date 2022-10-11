@@ -1,6 +1,7 @@
 import { useTodoList } from '@/hooks/queries/todo-list'
 import { Alert, AlertIcon, Center, Spinner } from '@chakra-ui/react'
 import { ApiErrorAlert } from '../common'
+import { TodoListHeader } from './list-header'
 
 type Props = {
   listId: string
@@ -25,6 +26,8 @@ export const TodoList: React.FC<Props> = ({ listId }) => {
 
   return (
     <>
+      <TodoListHeader list={list} />
+
       {todoItems.length === 0 && (
         <Alert status="info" rounded="md">
           <AlertIcon />

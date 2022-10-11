@@ -1,8 +1,11 @@
-import { LabelInput } from '@/components'
-import { useBrandColors } from '@/hooks'
+import { CreateTodoListSchema } from '@/api/todo/list'
+import { ApiErrorAlert, LabelInput } from '@/components'
+import { useBrandColors, useCreateListMutation } from '@/hooks'
 import {
   Button,
   ButtonGroup,
+  FormControl,
+  FormErrorMessage,
   IconButton,
   Popover,
   PopoverArrow,
@@ -10,46 +13,73 @@ import {
   PopoverContent,
   PopoverTrigger,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
+import { useRouter } from 'next/router'
 import { MutableRefObject, useRef } from 'react'
 import FocusLock from 'react-focus-lock'
 import { FiPlus } from 'react-icons/fi'
 
 type FormProps = {
-  onCancel: () => void
+  onClose: () => void
   firstFieldRef: MutableRefObject<HTMLInputElement | null>
 }
 
-const Form: React.FC<FormProps> = ({ onCancel, firstFieldRef }) => {
+const Form: React.FC<FormProps> = ({ onClose, firstFieldRef }) => {
+  const { mutate, error, isLoading } = useCreateListMutation()
   const { secondary, secondaryScheme } = useBrandColors()
+  const router = useRouter()
+  const toast = useToast()
+
   const formik = useFormik({
     initialValues: {
       title: '',
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values))
+      mutate(values, {
+        onSuccess: (data) => {
+          onClose()
+
+          toast({
+            position: 'bottom-right',
+            description: `List ${data.title} has been created!`,
+            status: 'success',
+            isClosable: true,
+            duration: 5000,
+            variant: 'subtle',
+          })
+
+          router.push(`/dashboard/${data.id}`, undefined, { shallow: true })
+        },
+      })
     },
+    validationSchema: CreateTodoListSchema,
   })
 
   return (
     <form onSubmit={formik.handleSubmit}>
-      <LabelInput
-        id="title"
-        label="New List Title"
-        type="text"
-        ref={firstFieldRef}
-        onChange={formik.handleChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.title}
-        focusBorderColor={secondary}
-      />
+      <FormControl isInvalid={!!formik.errors.title && formik.touched.title}>
+        <LabelInput
+          id="title"
+          label="New List Title"
+          type="text"
+          ref={firstFieldRef}
+          onChange={formik.handleChange}
+          value={formik.values.title}
+          focusBorderColor={secondary}
+        />
+
+        <FormErrorMessage>{formik.errors.title}</FormErrorMessage>
+      </FormControl>
+
+      <ApiErrorAlert mt="4" w="full" borderRadius="md" error={error} />
 
       <ButtonGroup display="flex" justifyContent="flex-end" mt={5}>
-        <Button variant="ghost" colorScheme="red" onClick={onCancel}>
+        <Button variant="ghost" colorScheme="red" onClick={onClose}>
           Cancel
         </Button>
-        <Button type="submit" isDisabled={!formik.isValid} colorScheme={secondaryScheme}>
+        <Button type="submit" isLoading={isLoading} colorScheme={secondaryScheme}>
           Create
         </Button>
       </ButtonGroup>
@@ -87,7 +117,7 @@ export const CreateTodoList: React.FC = () => {
         <FocusLock returnFocus persistentFocus={false}>
           <PopoverArrow />
           <PopoverCloseButton />
-          <Form onCancel={onClose} firstFieldRef={firstFieldRef} />
+          <Form onClose={onClose} firstFieldRef={firstFieldRef} />
         </FocusLock>
       </PopoverContent>
     </Popover>

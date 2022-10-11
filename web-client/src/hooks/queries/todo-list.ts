@@ -4,9 +4,15 @@ import { TodoList } from '@/utils/types'
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 
 export const useTodoLists = (): UseQueryResult<TodoList[], ApiError> => {
-  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], API.todo.list.getAll)
+  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], API.todo.list.getAll, {
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: 'always',
+  })
 }
 
 export const useTodoList = (id: string): UseQueryResult<TodoList, ApiError> => {
-  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id], () => API.todo.list.getOne(id))
+  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id], () => API.todo.list.getOne(id), {
+    refetchOnMount: 'always',
+    refetchOnWindowFocus: 'always',
+  })
 }

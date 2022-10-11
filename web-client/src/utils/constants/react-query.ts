@@ -10,4 +10,6 @@ export const MUTATION_KEY = {
   LOGOUT: 'logout',
   REFRESH_TOKEN: 'refresh-token',
   REGISTER: 'register',
+  TODO_LIST_CREATE: 'todo-list-create',
+  TODO_LIST_UPDATE: 'todo-list-update',
 }
