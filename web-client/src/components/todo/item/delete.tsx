@@ -9,7 +9,7 @@ type Props = {
 }
 
 export const DeleteTodoItem: React.FC<Props> = ({ todo }) => {
-  const { mutate } = useDeleteItemMutation(todo.id)
+  const { mutate, isLoading } = useDeleteItemMutation(todo.id)
 
   return (
     <HoverVisibleBox>
@@ -19,6 +19,7 @@ export const DeleteTodoItem: React.FC<Props> = ({ todo }) => {
         size="sm"
         rounded="md"
         aria-label="Delete Todo"
+        isLoading={isLoading}
         onClick={() => mutate(null)}
         icon={<Icon as={FiTrash} />}
       />
