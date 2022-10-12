@@ -4,13 +4,13 @@ import { bool, InferType, object, string } from 'yup'
 import { ApiClient, ApiClientConfig } from '../client'
 
 export const CreateTodoItemSchema = object({
-  title: string().trim().required('Title cannot be empty'),
+  title: string().trim().required('Title cannot be empty').max(190, 'Title is too long'),
   listId: string().required(),
 })
 export type CreateTodoItemPayload = InferType<typeof CreateTodoItemSchema>
 
 export const UpdateTodoItemSchema = object({
-  title: string().trim().min(1, 'Title cannot be empty'),
+  title: string().trim().min(1, 'Title cannot be empty').max(190, 'Title is too long'),
   completed: bool(),
 })
 export type UpdateTodoItemPayload = InferType<typeof UpdateTodoItemSchema>

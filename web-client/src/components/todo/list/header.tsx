@@ -92,7 +92,7 @@ export const TodoListHeader: React.FC<Props> = ({ list }) => {
   }
 
   return (
-    <HStack spacing="2" mb="6" justifyContent="stretch">
+    <HStack spacing="2" justifyContent="stretch">
       <Editable
         value={formik.values.title}
         display="flex"

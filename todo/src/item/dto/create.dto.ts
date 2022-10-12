@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer'
-import { IsDefined, IsNotEmpty } from 'class-validator'
+import { Transform, Type } from 'class-transformer'
+import { IsDefined, IsNotEmpty, MaxLength } from 'class-validator'
 
 export abstract class CreateDto {
   @IsDefined({
@@ -9,6 +9,8 @@ export abstract class CreateDto {
     message: 'Title cannot be empty',
   })
   @Type(() => String)
+  @Transform(({ value }) => (value as string).trim())
+  @MaxLength(190, { message: 'Title is too long' })
   title: string
 
   @IsDefined({

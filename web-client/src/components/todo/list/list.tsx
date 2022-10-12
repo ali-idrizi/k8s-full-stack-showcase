@@ -1,8 +1,8 @@
 import { ApiErrorAlert } from '@/components/common'
 import { useTodoList } from '@/hooks/queries/todo-list'
-import { Alert, AlertIcon, Center, Divider, Fade, List, Spinner } from '@chakra-ui/react'
+import { Alert, AlertIcon, Center, Divider, Fade, List, Spinner, VStack } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { TodoListItem } from '../item'
+import { CreateTodoItem, TodoListItem } from '../item'
 import { TodoListHeader } from './header'
 
 type Props = {
@@ -27,8 +27,9 @@ export const TodoList: React.FC<Props> = ({ listId }) => {
   const todoItems = list.items ?? []
 
   return (
-    <>
+    <VStack spacing="10" alignItems="stretch">
       <TodoListHeader list={list} />
+      <CreateTodoItem list={list} />
 
       {todoItems.length === 0 ? (
         <Fade in>
@@ -55,6 +56,6 @@ export const TodoList: React.FC<Props> = ({ listId }) => {
           </AnimatePresence>
         </List>
       )}
-    </>
+    </VStack>
   )
 }
