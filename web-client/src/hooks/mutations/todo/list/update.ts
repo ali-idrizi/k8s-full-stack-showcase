@@ -10,7 +10,7 @@ export const useUpdateListMutation = (
   const queryClient = useQueryClient()
 
   return useMutation(
-    [MUTATION_KEY.TODO_LIST_UPDATE],
+    [MUTATION_KEY.TODO_LIST.UPDATE],
     (payload) => API.todo.list.update(id, payload),
     {
       onSuccess: async (data) => {

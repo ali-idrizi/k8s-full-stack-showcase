@@ -16,7 +16,7 @@ const deleteListItem = (list: TodoList | undefined, deleteId: string) => {
 export const useDeleteItemMutation = (id: string): UseMutationResult<TodoItem, ApiError> => {
   const queryClient = useQueryClient()
 
-  return useMutation([MUTATION_KEY.TODO_ITEM_DELETE], () => API.todo.item.delete(id), {
+  return useMutation([MUTATION_KEY.TODO_ITEM.DELETE], () => API.todo.item.delete(id), {
     onSuccess: async (data) => {
       queryClient.setQueryData<TodoList>(
         [QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, data.listId],

@@ -20,7 +20,7 @@ export const useUpdateItemMutation = (
   const queryClient = useQueryClient()
 
   return useMutation(
-    [MUTATION_KEY.TODO_ITEM_UPDATE],
+    [MUTATION_KEY.TODO_ITEM.UPDATE],
     (payload) => API.todo.item.update(id, payload),
     {
       onSuccess: async (data) => {

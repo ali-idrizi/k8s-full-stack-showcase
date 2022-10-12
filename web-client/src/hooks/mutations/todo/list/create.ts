@@ -11,7 +11,7 @@ export const useCreateListMutation = (): UseMutationResult<
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation([MUTATION_KEY.TODO_LIST_CREATE], API.todo.list.create, {
+  return useMutation([MUTATION_KEY.TODO_LIST.CREATE], API.todo.list.create, {
     onSuccess: async (data) => {
       queryClient.setQueryData<TodoList[]>(
         [QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS],

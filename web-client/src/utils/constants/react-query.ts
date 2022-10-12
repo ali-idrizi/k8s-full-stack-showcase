@@ -10,10 +10,14 @@ export const MUTATION_KEY = {
   LOGOUT: 'logout',
   REFRESH_TOKEN: 'refresh-token',
   REGISTER: 'register',
-  TODO_LIST_CREATE: 'todo-list-create',
-  TODO_LIST_UPDATE: 'todo-list-update',
-  TODO_LIST_DELETE: 'todo-list-delete',
-  TODO_ITEM_CREATE: 'todo-item-create',
-  TODO_ITEM_UPDATE: 'todo-item-update',
-  TODO_ITEM_DELETE: 'todo-item-delete',
+  TODO_LIST: {
+    CREATE: 'todo-list-create',
+    UPDATE: 'todo-list-update',
+    DELETE: 'todo-list-delete',
+  },
+  TODO_ITEM: {
+    CREATE: 'todo-item-create',
+    UPDATE: 'todo-item-update',
+    DELETE: 'todo-item-delete',
+  },
 }
