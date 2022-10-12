@@ -57,7 +57,17 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
       >
         {todoLists.map((list) => (
           <Link key={list.id} href={`/dashboard/${list.id}`} shallow passHref>
-            <Tab as="a">{list.title}</Tab>
+            <Tab
+              as="a"
+              display="block"
+              maxW="32"
+              textOverflow="ellipsis"
+              overflow="hidden"
+              whiteSpace="nowrap"
+              title={list.title}
+            >
+              {list.title}
+            </Tab>
           </Link>
         ))}
 
