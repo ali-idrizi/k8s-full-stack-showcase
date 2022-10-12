@@ -15,6 +15,7 @@ export const DeleteTodoItem: React.FC<Props> = ({ todo }) => {
     <HoverVisibleBox>
       <IconButton
         variant="ghost"
+        colorScheme="red"
         size="sm"
         rounded="md"
         aria-label="Delete Todo"
