@@ -27,7 +27,11 @@ export class ListService {
           },
         },
         include: {
-          items: true,
+          items: {
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
         },
       })
 
