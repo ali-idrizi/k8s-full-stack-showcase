@@ -14,7 +14,10 @@ export const useUpdateListMutation = (
     (payload) => API.todo.list.update(id, payload),
     {
       onSuccess: async (data) => {
-        queryClient.setQueryData<TodoList>([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id], data)
+        queryClient.setQueryData<TodoList>(
+          [QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id],
+          (previousList) => ({ ...previousList, ...data }),
+        )
 
         queryClient.setQueryData<TodoList[]>([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], (lists) => {
           return lists?.map((list) => {

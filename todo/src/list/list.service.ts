@@ -80,9 +80,6 @@ export class ListService {
             id,
           },
         },
-        include: {
-          items: true,
-        },
         data: updateDto,
       })
 
