@@ -1,4 +1,3 @@
-import { UserClient } from '@/api'
 import { InferType, object, string } from 'yup'
 
 export const LoginSchema = object({
@@ -12,10 +11,4 @@ export type LoginResponse = {
   id: string
   name: string
   email: string
-}
-
-export const login = async (payload: LoginPayload): Promise<LoginResponse> => {
-  const res = await UserClient.post<LoginResponse>('/login', payload)
-
-  return res.data
 }

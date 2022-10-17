@@ -17,7 +17,7 @@ import { useFormik } from 'formik'
 import { useRouter } from 'next/router'
 import { FiAtSign, FiKey, FiUser } from 'react-icons/fi'
 
-export const getServerSideProps = withHocs(withReactQuery, withAuth, withUnauthenticatedRoute)()
+export const getServerSideProps = withHocs(withReactQuery, withAuth, withUnauthenticatedRoute())()
 
 const Register: PageWithLayout = () => {
   const router = useRouter()

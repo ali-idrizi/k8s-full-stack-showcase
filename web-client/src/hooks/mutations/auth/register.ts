@@ -1,4 +1,4 @@
-import { ApiError, UserApi } from '@/api'
+import { API, ApiError } from '@/api'
 import { RegisterPayload, RegisterResponse } from '@/api/user/register'
 import { WithAuth } from '@/hocs'
 import { MUTATION_KEY, QUERY_KEY } from '@/utils/constants'
@@ -11,7 +11,7 @@ export const useRegisterMutation = (): UseMutationResult<
 > => {
   const queryClient = useQueryClient()
 
-  return useMutation([MUTATION_KEY.REGISTER], UserApi.register, {
+  return useMutation([MUTATION_KEY.REGISTER], API.user.register, {
     onSuccess: (data) => {
       queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
         userId: data.id,

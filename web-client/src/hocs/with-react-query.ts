@@ -16,8 +16,10 @@ export const withReactQuery: GsspHoc<WithReactQueryData, WithReactQueryProps> = 
     data: {
       queryClient,
     },
-    props: () => ({
-      dehydratedState: dehydrate(queryClient),
-    }),
+    props: () => {
+      const dehydratedState = dehydrate(queryClient)
+      queryClient.clear()
+      return { dehydratedState }
+    },
   }
 }

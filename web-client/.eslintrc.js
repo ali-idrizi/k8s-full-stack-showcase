@@ -22,6 +22,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-explicit-any': 2,
     '@typescript-eslint/explicit-module-boundary-types': ['error'],
+    'react/no-unescaped-entities': 0,
   },
   overrides: [
     {

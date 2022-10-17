@@ -22,4 +22,8 @@ export class ApiError extends Error {
 
     return message ?? 'An unknown error occured! Please try again later.'
   }
+
+  get firstError(): string | undefined {
+    return typeof this.data === 'string' ? this.data : this.data[0]
+  }
 }

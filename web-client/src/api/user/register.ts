@@ -1,4 +1,3 @@
-import { UserClient } from '@/api'
 import { InferType, object, ref, string } from 'yup'
 
 export const RegisterSchema = object({
@@ -18,10 +17,4 @@ export type RegisterResponse = {
   id: string
   name: string
   email: string
-}
-
-export const register = async (payload: RegisterPayload): Promise<RegisterResponse> => {
-  const res = await UserClient.post<RegisterResponse>('/register', payload)
-
-  return res.data
 }

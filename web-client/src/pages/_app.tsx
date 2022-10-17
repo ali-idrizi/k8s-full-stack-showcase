@@ -22,7 +22,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps: { dehydratedState, ...p
         <Footer />
       </Chakra>
 
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ReactQueryDevtools />
     </ReactQuery>
   )
 }
