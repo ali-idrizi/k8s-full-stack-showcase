@@ -1,5 +1,4 @@
-import { useBrandColors } from '@/hooks'
-import { FilterItemsBy } from '@/hooks/queries/todo-list'
+import { FilterItemsBy, useBrandColors } from '@/hooks'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import React from 'react'
 
