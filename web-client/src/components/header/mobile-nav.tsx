@@ -1,6 +1,5 @@
 import { Button, Stack } from '@chakra-ui/react'
 import Link from 'next/link'
-import React from 'react'
 
 type NavItemProps = React.PropsWithChildren<{
   href: string

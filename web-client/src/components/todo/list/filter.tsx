@@ -1,6 +1,5 @@
 import { FilterItemsBy, useBrandColors } from '@/hooks'
 import { Button, ButtonGroup } from '@chakra-ui/react'
-import React from 'react'
 
 type FilterByButtonProps = {
   isActive: boolean
