@@ -10,9 +10,34 @@ export const useTodoLists = (): UseQueryResult<TodoList[], ApiError> => {
   })
 }
 
-export const useTodoList = (id: string): UseQueryResult<TodoList, ApiError> => {
+export enum FilterItemsBy {
+  ALL = 'all',
+  ACTIVE = 'active',
+  COMPLETED = 'completed',
+}
+export const useTodoList = (
+  id: string,
+  filter: FilterItemsBy,
+): UseQueryResult<TodoList, ApiError> => {
   return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id], () => API.todo.list.getOne(id), {
     refetchOnMount: 'always',
     refetchOnWindowFocus: 'always',
+    select: (list) => ({
+      ...list,
+      items: list.items?.filter((item) => {
+        switch (filter) {
+          case FilterItemsBy.COMPLETED:
+            return item.completed
+          case FilterItemsBy.ACTIVE:
+            return !item.completed
+          default:
+            return true
+        }
+      }),
+    }),
   })
+}
+
+export const useTodoListItemCount = (id: string): number => {
+  return useTodoList(id, FilterItemsBy.ALL).data?.items?.length ?? 0
 }
