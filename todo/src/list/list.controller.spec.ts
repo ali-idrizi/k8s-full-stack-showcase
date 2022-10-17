@@ -51,7 +51,13 @@ describe('ListController', () => {
         where: {
           userIndex: { userId: 'test-user-id', id: 'id' },
         },
-        include: { items: true },
+        include: {
+          items: {
+            orderBy: {
+              createdAt: 'desc',
+            },
+          },
+        },
       })
     })
 

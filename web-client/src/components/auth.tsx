@@ -1,37 +1,31 @@
-import { useAuth } from '@/hooks'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useAuthQuery, useRefreshTokenMutation, useRouterRef } from '@/hooks'
+import { useEffect, useState } from 'react'
 
 export const Auth: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const router = useRouter()
-  const { needsRefresh } = useAuth()
+  const { mutate } = useRefreshTokenMutation()
+  const { needsRefresh } = useAuthQuery()
+  const routerRef = useRouterRef()
+  const [isRefreshing, setIsRefreshing] = useState(needsRefresh)
 
   useEffect(() => {
-    const refreshToken = async (): Promise<void> => {
-      const res = await fetch('/api/user/auth/refresh-token', {
-        method: 'post',
-      })
-
-      if (!res.ok) {
-        throw new Error('Failed to refresh the access token')
-      }
-    }
-
     // Refresh the access token if a GSSP call requested it
     if (needsRefresh) {
-      refreshToken()
-        .then(() => {
+      setIsRefreshing(true)
+      mutate(null, {
+        onSuccess: async () => {
           // Replace the route with the current path, this will make another call to GSSP
-          router.replace(router.asPath)
-        })
-        .catch(() => {
+          await routerRef.current.replace(routerRef.current.asPath)
+          setIsRefreshing(false)
+        },
+        onError: () => {
+          console.error('refresh token failed')
           // TODO: refresh token failed, logout and redirect to /login
-          router.push('/404')
-        })
+        },
+      })
     }
-  }, [router, needsRefresh])
+  }, [needsRefresh, mutate, routerRef])
 
-  if (needsRefresh) {
+  if (isRefreshing) {
     return <noscript>Authentication failed</noscript>
   }
 

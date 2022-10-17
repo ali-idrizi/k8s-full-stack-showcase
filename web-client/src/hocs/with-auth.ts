@@ -6,13 +6,30 @@ export type WithAuth = {
   needsRefresh: boolean
 }
 
-export const withAuth: GsspHoc<unknown, unknown, WithReactQueryData> = ({ queryClient }, ctx) => {
+export type WithAuthData = {
+  auth: WithAuth & {
+    isLoggedIn: boolean
+  }
+}
+
+export const withAuth: GsspHoc<WithAuthData, unknown, WithReactQueryData> = (
+  { queryClient },
+  ctx,
+) => {
   const userId = (ctx.req?.headers['x-user-id'] as string | undefined) ?? null
   const needsRefresh = !userId && ctx.req?.headers['x-authenticated'] === 'true'
 
-  queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], { userId, needsRefresh })
+  const auth = { userId, needsRefresh }
+
+  queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], auth)
 
   return {
     props: {},
+    data: {
+      auth: {
+        ...auth,
+        isLoggedIn: userId !== null || needsRefresh,
+      },
+    },
   }
 }

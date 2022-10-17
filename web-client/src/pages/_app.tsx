@@ -2,6 +2,7 @@ import { Auth, Chakra, Footer, Header, ReactQuery } from '@/components'
 import { AppProps, PageWithLayout } from '@/utils/types'
 import { Box, Flex } from '@chakra-ui/react'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const App: React.FC<AppProps> = ({ Component, pageProps: { dehydratedState, ...pageProps } }) => {
   const getLayout: PageWithLayout['getLayout'] = Component.getLayout ?? ((page) => page)
@@ -20,6 +21,8 @@ const App: React.FC<AppProps> = ({ Component, pageProps: { dehydratedState, ...p
         </Flex>
         <Footer />
       </Chakra>
+
+      <ReactQueryDevtools />
     </ReactQuery>
   )
 }

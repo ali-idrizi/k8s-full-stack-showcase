@@ -28,6 +28,7 @@ todo:
   ingress:
     <<: *ingress
     path: /api/todo(/|$)(.*)
+  service: {}
 
 user:
   <<: *default

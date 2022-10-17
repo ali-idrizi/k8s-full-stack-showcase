@@ -111,27 +111,28 @@ describe('ItemController', () => {
     const updateData = { title: 'New Title' }
 
     it('should update the item', async () => {
-      prismaMockContext.prisma.item.update.mockResolvedValue({
+      prismaMockContext.prisma.item.findUniqueOrThrow.mockResolvedValue({
         list: {
           userId: 'test-user-id',
         },
-      } as Item & { list: List })
+      } as unknown as Item)
+      prismaMockContext.prisma.item.update.mockResolvedValue({} as Item)
 
       await itemController.update('test-user-id', 'id', updateData)
 
       expect(prismaService.item.update).toHaveBeenCalledWith({
         where: { id: 'id' },
-        include: { list: true },
         data: updateData,
       })
     })
 
     it('should throw BadRequest if item does not belong to user', async () => {
-      prismaMockContext.prisma.item.update.mockResolvedValue({
+      prismaMockContext.prisma.item.findUniqueOrThrow.mockResolvedValue({
         list: {
           userId: 'another-user-id',
         },
-      } as Item & { list: List })
+      } as unknown as Item)
+      prismaMockContext.prisma.item.update.mockResolvedValue({} as Item)
 
       expect(async () => {
         await itemController.update('test-user-id', 'id', updateData)
@@ -139,7 +140,7 @@ describe('ItemController', () => {
     })
 
     it('should throw BadRequest if item is not found', async () => {
-      prismaMockContext.prisma.item.update.mockRejectedValue(
+      prismaMockContext.prisma.item.findUniqueOrThrow.mockRejectedValue(
         new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
       )
 

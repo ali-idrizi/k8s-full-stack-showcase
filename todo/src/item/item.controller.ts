@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Patch,
-  Post,
-  UseGuards,
-} from '@nestjs/common'
+import { Body, Controller, Delete, Param, Patch, Post, UseGuards } from '@nestjs/common'
 import { Item } from '@prisma/client'
 import { UserId } from 'src/common/decorators/user-id.decorator'
 import { AuthGuard } from 'src/common/guards/auth.guard'
@@ -27,8 +17,7 @@ export class ItemController {
   }
 
   @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@UserId() userId: string, @Param('id') id: string): Promise<void> {
+  delete(@UserId() userId: string, @Param('id') id: string): Promise<Item> {
     return this.itemService.delete(userId, id)
   }
 
