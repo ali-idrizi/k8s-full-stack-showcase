@@ -13,3 +13,4 @@ export class API {
 }
 
 export { ApiError } from './error'
+export { UserApi } from './user'

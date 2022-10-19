@@ -1,4 +1,4 @@
-import { UserApi } from '@/api/user'
+import { UserApi } from '@/api'
 import { RefreshTokenResponse } from '@/api/user/refresh-token'
 import { WithAuth } from '@/hocs'
 import { MUTATION_KEY, QUERY_KEY } from '@/utils/constants'

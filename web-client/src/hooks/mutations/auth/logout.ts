@@ -1,5 +1,4 @@
-import { ApiError } from '@/api'
-import { UserApi } from '@/api/user'
+import { ApiError, UserApi } from '@/api'
 import { WithAuth } from '@/hocs'
 import { MUTATION_KEY, QUERY_KEY } from '@/utils/constants'
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'

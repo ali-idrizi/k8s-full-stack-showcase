@@ -1,4 +1,4 @@
-import { UserApi } from '@/api/user'
+import { UserApi } from '@/api'
 import { ApiProvider } from '@/components'
 import { WithAuth } from '@/hocs'
 import { QUERY_KEY } from '@/utils/constants'
