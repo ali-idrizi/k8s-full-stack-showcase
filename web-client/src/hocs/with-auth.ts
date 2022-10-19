@@ -3,7 +3,7 @@ import { GsspHoc, WithReactQueryData } from '.'
 
 export type WithAuth = {
   userId: string | null
-  needsRefresh: boolean
+  shouldRefreshToken: boolean
 }
 
 export type WithAuthData = {
@@ -17,9 +17,9 @@ export const withAuth: GsspHoc<WithAuthData, unknown, WithReactQueryData> = (
   ctx,
 ) => {
   const userId = (ctx.req?.headers['x-user-id'] as string | undefined) ?? null
-  const needsRefresh = !userId && ctx.req?.headers['x-authenticated'] === 'true'
+  const shouldRefreshToken = !userId && ctx.req?.headers['x-authenticated'] === 'true'
 
-  const auth = { userId, needsRefresh }
+  const auth = { userId, shouldRefreshToken }
 
   queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], auth)
 
@@ -28,7 +28,7 @@ export const withAuth: GsspHoc<WithAuthData, unknown, WithReactQueryData> = (
     data: {
       auth: {
         ...auth,
-        isLoggedIn: userId !== null || needsRefresh,
+        isLoggedIn: userId !== null || shouldRefreshToken,
       },
     },
   }

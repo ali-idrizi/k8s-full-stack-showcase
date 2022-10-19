@@ -13,7 +13,7 @@ export const useLoginMutation = (): UseMutationResult<LoginResponse, ApiError, L
     onSuccess: (data) => {
       queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
         userId: data.id,
-        needsRefresh: false,
+        shouldRefreshToken: false,
       })
     },
   })

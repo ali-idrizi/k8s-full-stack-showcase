@@ -15,7 +15,7 @@ export const useRefreshTokenMutation = (): UseMutationResult<RefreshTokenRespons
     onSuccess: (data) => {
       queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
         userId: data.userId,
-        needsRefresh: false,
+        shouldRefreshToken: false,
       })
     },
     onError: () => {

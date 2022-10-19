@@ -20,7 +20,7 @@ describe('Header', () => {
 
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: 'test-user-id',
-      needsRefresh: false,
+      shouldRefreshToken: false,
     })
 
     render(

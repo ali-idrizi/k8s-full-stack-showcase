@@ -12,7 +12,7 @@ export const useLogoutMutation = (): UseMutationResult<unknown, ApiError, unknow
     onSuccess: () => {
       queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
         userId: null,
-        needsRefresh: false,
+        shouldRefreshToken: false,
       })
 
       router.push('/login')

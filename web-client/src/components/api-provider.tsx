@@ -14,7 +14,7 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
   const refreshTokenPromiseRef = useRef<Promise<unknown> | null>(null)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { mutateAsync: mutateRefreshToken } = useRefreshTokenMutation()
-  const { isLoggedIn, needsRefresh } = useAuthQuery()
+  const { isLoggedIn, shouldRefreshToken } = useAuthQuery()
 
   const handleRefreshToken = useCallback(async () => {
     try {
@@ -45,7 +45,7 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
 
   useEffect(() => {
     const refreshTokenAndReplaceRoute = async () => {
-      if (needsRefresh) {
+      if (shouldRefreshToken) {
         setIsRefreshing(true)
         if (await handleRefreshToken()) {
           await routerRef.current.replace(routerRef.current.asPath)
@@ -55,11 +55,11 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     }
 
     refreshTokenAndReplaceRoute()
-  }, [needsRefresh, handleRefreshToken, routerRef])
+  }, [shouldRefreshToken, handleRefreshToken, routerRef])
 
   return (
     <ApiContext.Provider value={api}>
-      {needsRefresh || isRefreshing ? (
+      {shouldRefreshToken || isRefreshing ? (
         <HStack justifyContent="center" spacing="4" pt="16">
           <Spinner size="sm" />
           <Text fontSize="sm">Authenticating! Please wait...</Text>

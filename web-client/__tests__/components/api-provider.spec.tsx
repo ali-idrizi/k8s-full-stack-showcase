@@ -35,7 +35,7 @@ describe('Auth', () => {
 
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
-      needsRefresh: false,
+      shouldRefreshToken: false,
     })
 
     render(
@@ -69,7 +69,7 @@ describe('Auth', () => {
     const queryClient = new QueryClient()
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
-      needsRefresh: true,
+      shouldRefreshToken: true,
     })
 
     render(
@@ -92,7 +92,7 @@ describe('Auth', () => {
     expect(getHeading()).toBeInTheDocument()
     expect(queryClient.getQueryData<WithAuth>([QUERY_KEY.AUTH])).toEqual({
       userId: 'test-user-id',
-      needsRefresh: false,
+      shouldRefreshToken: false,
     })
   })
 
@@ -103,7 +103,7 @@ describe('Auth', () => {
     const queryClient = new QueryClient()
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
-      needsRefresh: true,
+      shouldRefreshToken: true,
     })
 
     render(
