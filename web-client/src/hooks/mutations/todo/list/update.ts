@@ -1,5 +1,6 @@
-import { API, ApiError } from '@/api'
+import { ApiError } from '@/api'
 import { UpdateTodoListPayload } from '@/api/todo/list'
+import { useApi } from '@/hooks'
 import { MUTATION_KEY, QUERY_KEY } from '@/utils/constants'
 import { TodoList } from '@/utils/types'
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'
@@ -7,11 +8,12 @@ import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-
 export const useUpdateListMutation = (
   id: string,
 ): UseMutationResult<TodoList, ApiError, UpdateTodoListPayload> => {
+  const api = useApi()
   const queryClient = useQueryClient()
 
   return useMutation(
     [MUTATION_KEY.TODO_LIST.UPDATE],
-    (payload) => API.todo.list.update(id, payload),
+    (payload) => api.todo.list.update(id, payload),
     {
       onSuccess: async (data) => {
         queryClient.setQueryData<TodoList>(

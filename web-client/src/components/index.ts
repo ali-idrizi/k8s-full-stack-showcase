@@ -2,7 +2,7 @@ export * from './common'
 export * from './home'
 export * from './todo'
 
-export * from './auth'
+export * from './api-provider'
 export * from './chakra'
 export * from './react-query'
 
