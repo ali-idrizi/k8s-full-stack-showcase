@@ -23,7 +23,6 @@ describe('Auth', () => {
 
     jest.spyOn(hooks, 'useAuthQuery')
     jest.spyOn(hooks, 'useRefreshTokenMutation')
-    jest.spyOn(hooks, 'useLogoutMutation')
   })
 
   afterEach(() => {
