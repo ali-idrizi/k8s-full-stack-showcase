@@ -5,7 +5,7 @@ import { ApiError } from './error'
 
 export type ApiClientConfig = AxiosRequestConfig & {
   onRefreshToken?: () => Promise<boolean>
-  onPreRequest?: () => Promise<void>
+  onPreRequest?: () => Promise<boolean>
 }
 
 export class ApiClient {
@@ -19,7 +19,12 @@ export class ApiClient {
 
     this.axios.interceptors.request.use(
       async (reqConfig) => {
-        await (reqConfig as ApiClientConfig).onPreRequest?.()
+        const shouldProceed = await (reqConfig as ApiClientConfig).onPreRequest?.()
+
+        if (shouldProceed === false) {
+          return Promise.reject(new AxiosError('Request Calcelled', '', reqConfig))
+        }
+
         return reqConfig
       },
       (error) => Promise.reject(error),

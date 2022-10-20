@@ -34,11 +34,16 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     return new API({
       onRefreshToken: handleRefreshToken,
       onPreRequest: async () => {
-        // Delay requests if we are in process of refreshing the token
+        // Delay requests if we are in process of refreshing the token.
+        // Cancel requests if refresh token fails.
         if (refreshTokenPromiseRef.current !== null) {
-          // TODO: Handle rejecting promise
-          await refreshTokenPromiseRef.current
+          try {
+            await refreshTokenPromiseRef.current
+          } catch {
+            return false
+          }
         }
+        return true
       },
     })
   }, [handleRefreshToken])
