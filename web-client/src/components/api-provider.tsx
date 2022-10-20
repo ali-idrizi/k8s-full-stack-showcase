@@ -1,7 +1,7 @@
 import { API } from '@/api'
 import { useAuthQuery, useRefreshTokenMutation, useRouterRef } from '@/hooks'
 import { HStack, Spinner, Text } from '@chakra-ui/react'
-import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export const ApiContext = createContext<API | null>(null)
 
