@@ -2,20 +2,15 @@ import { ApiClientConfig } from './client'
 import { TodoApi } from './todo'
 import { UserApi } from './user'
 
-export type Api = {
+export class API {
   user: UserApi
   todo: TodoApi
-}
 
-export const createApi = (config?: ApiClientConfig): Api => {
-  return {
-    user: new UserApi(config),
-    todo: new TodoApi(config),
+  constructor(config?: ApiClientConfig) {
+    this.user = new UserApi(config)
+    this.todo = new TodoApi(config)
   }
 }
 
-export const API = createApi({
-  withRefreshTokenInterceptor: true,
-})
-
 export { ApiError } from './error'
+export { UserApi } from './user'

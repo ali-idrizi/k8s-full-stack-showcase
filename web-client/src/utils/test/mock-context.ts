@@ -1,11 +1,11 @@
-import { Api } from '@/api'
+import { API } from '@/api'
 import { AxiosInstance } from 'axios'
 import { DeepMockProxy, mockDeep } from 'jest-mock-extended'
 import { GetServerSidePropsContext } from 'next'
 import { NextRouter } from 'next/router'
 
 export type MockContext = {
-  api: DeepMockProxy<Api>
+  api: DeepMockProxy<API>
   context: DeepMockProxy<GetServerSidePropsContext>
   router: DeepMockProxy<NextRouter>
   axios: DeepMockProxy<AxiosInstance>

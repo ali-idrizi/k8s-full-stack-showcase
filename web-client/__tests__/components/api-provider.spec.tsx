@@ -1,21 +1,12 @@
-import { Auth } from '@/components'
+import { UserApi } from '@/api'
+import { ApiProvider } from '@/components'
 import { WithAuth } from '@/hocs'
 import { QUERY_KEY } from '@/utils/constants'
 import { createMockContext, MockContext } from '@/utils/test'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 
-import * as api from '@/api'
 import * as hooks from '@/hooks'
-import * as router from 'next/router'
-
-jest.mock('@/api', () => ({
-  __esModule: true,
-  get API() {
-    return null
-  },
-}))
-
 jest.mock('@/hooks', () => ({
   __esModule: true,
   ...jest.requireActual('@/hooks'),
@@ -27,8 +18,9 @@ describe('Auth', () => {
   beforeEach(() => {
     ctx = createMockContext()
 
-    jest.spyOn(api, 'API', 'get').mockReturnValue(ctx.api)
-    jest.spyOn(router, 'useRouter').mockReturnValue(ctx.router)
+    jest.spyOn(hooks, 'useRouterRef').mockReturnValue({ current: ctx.router })
+    jest.spyOn(hooks, 'useApi').mockReturnValue(ctx.api)
+
     jest.spyOn(hooks, 'useAuthQuery')
     jest.spyOn(hooks, 'useRefreshTokenMutation')
   })
@@ -42,14 +34,14 @@ describe('Auth', () => {
 
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
-      needsRefresh: false,
+      shouldRefreshToken: false,
     })
 
     render(
       <QueryClientProvider client={queryClient}>
-        <Auth>
+        <ApiProvider>
           <h1>heading</h1>
-        </Auth>
+        </ApiProvider>
       </QueryClientProvider>,
     )
 
@@ -68,21 +60,22 @@ describe('Auth', () => {
   })
 
   it('should refresh the token and replace the route', async () => {
+    UserApi.refreshToken = jest.fn().mockResolvedValue({ userId: 'test-user-id' })
+
     ctx.router.asPath = '/test-route'
     ctx.router.replace.mockResolvedValue(true)
-    ctx.api.user.refreshToken.mockResolvedValue({ userId: 'test-user-id' })
 
     const queryClient = new QueryClient()
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
-      needsRefresh: true,
+      shouldRefreshToken: true,
     })
 
     render(
       <QueryClientProvider client={queryClient}>
-        <Auth>
+        <ApiProvider>
           <h1>heading</h1>
-        </Auth>
+        </ApiProvider>
       </QueryClientProvider>,
     )
 
@@ -91,14 +84,39 @@ describe('Auth', () => {
     expect(getHeading()).not.toBeInTheDocument()
 
     await waitFor(() => {
-      expect(ctx.api.user.refreshToken).toHaveBeenCalled()
+      expect(UserApi.refreshToken).toHaveBeenCalled()
     })
 
     expect(ctx.router.replace).toHaveBeenCalledWith('/test-route')
     expect(getHeading()).toBeInTheDocument()
     expect(queryClient.getQueryData<WithAuth>([QUERY_KEY.AUTH])).toEqual({
       userId: 'test-user-id',
-      needsRefresh: false,
+      shouldRefreshToken: false,
     })
+  })
+
+  it('should logout if refresh token fails', async () => {
+    UserApi.refreshToken = jest.fn().mockRejectedValue(new Error('refresh token failed'))
+    UserApi.logout = jest.fn().mockImplementation(Promise.resolve)
+
+    const queryClient = new QueryClient()
+    queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
+      userId: null,
+      shouldRefreshToken: true,
+    })
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <ApiProvider>
+          <h1>heading</h1>
+        </ApiProvider>
+      </QueryClientProvider>,
+    )
+
+    await waitFor(() => {
+      expect(UserApi.refreshToken).toHaveBeenCalled()
+    })
+
+    expect(UserApi.logout).toHaveBeenCalled()
   })
 })

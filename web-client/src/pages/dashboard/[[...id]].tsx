@@ -50,7 +50,7 @@ export const getServerSideProps = withHocs(
 
   return {
     props: {
-      initialListId: listId,
+      initialListId: listId ?? paramListId,
     },
   }
 })

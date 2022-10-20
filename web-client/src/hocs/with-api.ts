@@ -1,8 +1,8 @@
-import { Api, createApi } from '@/api'
+import { API } from '@/api'
 import { GsspHoc } from '.'
 
 export type WithApiData = {
-  api: Api
+  api: API
 }
 
 export const withApi: GsspHoc<WithApiData, unknown, unknown> = (_, ctx) => {
@@ -17,9 +17,8 @@ export const withApi: GsspHoc<WithApiData, unknown, unknown> = (_, ctx) => {
   return {
     props: {},
     data: {
-      api: createApi({
+      api: new API({
         headers: authHeaders,
-        withRefreshTokenInterceptor: false,
       }),
     },
   }

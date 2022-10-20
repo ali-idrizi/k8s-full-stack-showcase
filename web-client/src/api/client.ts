@@ -1,13 +1,11 @@
 import { axiosConfig } from '@/configs'
 import { isDev } from '@/utils/env'
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { API } from '.'
 import { ApiError } from './error'
 
 export type ApiClientConfig = AxiosRequestConfig & {
-  withRefreshTokenInterceptor?: boolean
-
-  _isRetry?: boolean
+  onRefreshToken?: () => Promise<boolean>
+  onPreRequest?: () => Promise<boolean>
 }
 
 export class ApiClient {
@@ -19,22 +17,34 @@ export class ApiClient {
       ...config,
     })
 
-    if (config?.withRefreshTokenInterceptor) {
-      this.axios.interceptors.response.use(
-        (res) => res,
-        async (error: AxiosError) => {
-          const req = error.config as ApiClientConfig
+    this.axios.interceptors.request.use(
+      async (reqConfig) => {
+        const shouldProceed = await (reqConfig as ApiClientConfig).onPreRequest?.()
 
-          if (error?.response?.status === 401 && !req._isRetry) {
-            req._isRetry = true
-            await API.user.refreshToken()
-            return this.axios(req)
+        if (shouldProceed === false) {
+          return Promise.reject(new AxiosError('Request Cancelled', '', reqConfig))
+        }
+
+        return reqConfig
+      },
+      (error) => Promise.reject(error),
+    )
+
+    this.axios.interceptors.response.use(
+      (res) => res,
+      async (error: AxiosError) => {
+        const reqConfig = error.config as ApiClientConfig
+
+        if (reqConfig.onRefreshToken !== undefined && error?.response?.status === 401) {
+          const shouldRetry = await reqConfig.onRefreshToken()
+          if (shouldRetry) {
+            return this.axios(reqConfig)
           }
+        }
 
-          return Promise.reject(error)
-        },
-      )
-    }
+        return Promise.reject(error)
+      },
+    )
   }
 
   get axios(): AxiosInstance {

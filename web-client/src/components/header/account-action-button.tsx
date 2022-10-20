@@ -1,12 +1,10 @@
 import { useLogoutMutation } from '@/hooks'
 import { IconButton, Menu, MenuButton, MenuItem, MenuList, useToast } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { FiUser } from 'react-icons/fi'
 
 export const AccountActionButton: React.FC = () => {
   const { mutate } = useLogoutMutation()
   const toast = useToast()
-  const router = useRouter()
 
   const onLogout = () => {
     mutate(null, {
@@ -19,9 +17,6 @@ export const AccountActionButton: React.FC = () => {
           duration: 5000,
           variant: 'subtle',
         })
-        if (!error) {
-          router.push('/')
-        }
       },
     })
   }

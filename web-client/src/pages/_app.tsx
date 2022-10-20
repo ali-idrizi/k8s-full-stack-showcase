@@ -1,4 +1,4 @@
-import { Auth, Chakra, Footer, Header, ReactQuery } from '@/components'
+import { ApiProvider, Chakra, Footer, Header, ReactQuery } from '@/components'
 import { AppProps, PageWithLayout } from '@/utils/types'
 import { Box, Flex } from '@chakra-ui/react'
 import { SkipNavContent, SkipNavLink } from '@chakra-ui/skip-nav'
@@ -15,7 +15,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps: { dehydratedState, ...p
           <Header />
           <SkipNavContent as="main" id="main" display="flex" flexDir="row" flexGrow="1">
             <Box w="full" minH="full">
-              <Auth>{getLayout(<Component {...pageProps} />)}</Auth>
+              <ApiProvider>{getLayout(<Component {...pageProps} />)}</ApiProvider>
             </Box>
           </SkipNavContent>
         </Flex>
