@@ -22,7 +22,7 @@ export class ApiClient {
         const shouldProceed = await (reqConfig as ApiClientConfig).onPreRequest?.()
 
         if (shouldProceed === false) {
-          return Promise.reject(new AxiosError('Request Calcelled', '', reqConfig))
+          return Promise.reject(new AxiosError('Request Cancelled', '', reqConfig))
         }
 
         return reqConfig
