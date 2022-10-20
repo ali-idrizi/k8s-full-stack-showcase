@@ -48,6 +48,8 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     })
   }, [handleRefreshToken])
 
+  // Only a call to `getServerSideProps` will set `shouldRefreshToken` to `true`.
+  // Refresh the token in that case and replace the route to make another call to it.
   useEffect(() => {
     const refreshTokenAndReplaceRoute = async () => {
       if (shouldRefreshToken) {
