@@ -14,6 +14,9 @@ export class ListService {
       where: {
         userId,
       },
+      orderBy: {
+        createdAt: 'asc',
+      },
     })
   }
 
