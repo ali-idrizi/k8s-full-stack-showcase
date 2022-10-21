@@ -15,6 +15,10 @@ export class ApiClient {
     this.axiosClient = axios.create({
       ...axiosConfig,
       ...config,
+      headers: {
+        ...config?.headers,
+        ...axiosConfig.headers,
+      },
     })
 
     this.axios.interceptors.request.use(
