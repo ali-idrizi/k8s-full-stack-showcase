@@ -21,11 +21,12 @@ model Item {
 }
 
 model List {
-  id      String  @id @default(uuid())
-  userId  String
-  title   String
-  default Boolean @default(false)
-  items   Item[]
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  createdAt DateTime @default(now())
+  default   Boolean  @default(false)
+  items     Item[]
 
   @@unique([userId, id], name: "userIndex")
   @@map("lists")
