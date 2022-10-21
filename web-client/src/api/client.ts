@@ -9,15 +9,19 @@ export type ApiClientConfig = AxiosRequestConfig & {
 }
 
 export class ApiClient {
-  private axiosClient: AxiosInstance
+  private http: AxiosInstance
 
   constructor(config?: ApiClientConfig) {
-    this.axiosClient = axios.create({
+    this.http = axios.create({
       ...axiosConfig,
       ...config,
+      headers: {
+        ...axiosConfig.headers,
+        ...config?.headers,
+      },
     })
 
-    this.axios.interceptors.request.use(
+    this.http.interceptors.request.use(
       async (reqConfig) => {
         const shouldProceed = await (reqConfig as ApiClientConfig).onPreRequest?.()
 
@@ -30,7 +34,7 @@ export class ApiClient {
       (error) => Promise.reject(error),
     )
 
-    this.axios.interceptors.response.use(
+    this.http.interceptors.response.use(
       (res) => res,
       async (error: AxiosError) => {
         const reqConfig = error.config as ApiClientConfig
@@ -38,7 +42,7 @@ export class ApiClient {
         if (reqConfig.onRefreshToken !== undefined && error?.response?.status === 401) {
           const shouldRetry = await reqConfig.onRefreshToken()
           if (shouldRetry) {
-            return this.axios(reqConfig)
+            return this.http(reqConfig)
           }
         }
 
@@ -47,31 +51,27 @@ export class ApiClient {
     )
   }
 
-  get axios(): AxiosInstance {
-    return this.axiosClient
-  }
-
   get<T = unknown, R = AxiosResponse<T, unknown>>(url: string): Promise<R> {
-    return this.handleRequest(() => this.axios.get(url))
+    return this.handleRequest(() => this.http.get(url))
   }
 
   post<T = unknown, R = AxiosResponse<T, unknown>, D = unknown>(url: string, data?: D): Promise<R> {
-    return this.handleRequest(() => this.axios.post(url, data))
+    return this.handleRequest(() => this.http.post(url, data))
   }
 
   put<T = unknown, R = AxiosResponse<T, unknown>, D = unknown>(url: string, data?: D): Promise<R> {
-    return this.handleRequest(() => this.axios.put(url, data))
+    return this.handleRequest(() => this.http.put(url, data))
   }
 
   patch<T = unknown, R = AxiosResponse<T, unknown>, D = unknown>(
     url: string,
     data?: D,
   ): Promise<R> {
-    return this.handleRequest(() => this.axios.patch(url, data))
+    return this.handleRequest(() => this.http.patch(url, data))
   }
 
   delete<T = unknown, R = AxiosResponse<T, unknown>>(url: string): Promise<R> {
-    return this.handleRequest(() => this.axios.delete(url))
+    return this.handleRequest(() => this.http.delete(url))
   }
 
   private async handleRequest<T>(fn: () => Promise<T>): Promise<T> {
