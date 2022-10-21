@@ -36,13 +36,15 @@ export class ApiClient {
 
     this.http.interceptors.response.use(
       (res) => res,
-      async (error: AxiosError) => {
-        const reqConfig = error.config as ApiClientConfig
+      async (error) => {
+        if (error instanceof AxiosError) {
+          const reqConfig = error.config as ApiClientConfig
 
-        if (reqConfig.onRefreshToken !== undefined && error?.response?.status === 401) {
-          const shouldRetry = await reqConfig.onRefreshToken()
-          if (shouldRetry) {
-            return this.http(reqConfig)
+          if (reqConfig.onRefreshToken !== undefined && error?.response?.status === 401) {
+            const shouldRetry = await reqConfig.onRefreshToken()
+            if (shouldRetry) {
+              return this.http(reqConfig)
+            }
           }
         }
 
