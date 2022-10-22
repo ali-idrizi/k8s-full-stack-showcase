@@ -84,9 +84,10 @@ export const TodoListHeader: React.FC<Props> = ({ list }) => {
     },
   })
 
+  const resetTitle = () => formik.setFieldValue('title', list.title, true)
   const handleSubmit = async () => {
     if (!!formik.errors.title) {
-      await formik.setFieldValue('title', list.title, true)
+      await resetTitle()
     }
     formik.handleSubmit()
   }
@@ -103,6 +104,7 @@ export const TodoListHeader: React.FC<Props> = ({ list }) => {
         minH="12"
         flexGrow="1"
         onSubmit={handleSubmit}
+        onCancel={resetTitle}
         isPreviewFocusable={false}
       >
         <EditablePreview as="h1" textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" />
