@@ -12,6 +12,8 @@ export const useAuthQuery = (): UseAuthQuery => {
       userId: null,
       shouldRefreshToken: false,
     },
+    staleTime: Infinity,
+    cacheTime: Infinity,
   })
 
   const isLoggedIn = data.userId !== null || data.shouldRefreshToken
