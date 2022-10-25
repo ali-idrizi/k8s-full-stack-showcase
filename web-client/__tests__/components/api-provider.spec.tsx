@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen, waitFor } from '@testing-library/react'
 
 import * as hooks from '@/hooks'
+import { mockDeep } from 'jest-mock-extended'
 jest.mock('@/hooks', () => ({
   __esModule: true,
   ...jest.requireActual('@/hooks'),
@@ -111,7 +112,7 @@ describe('Auth', () => {
     UserApi.refreshToken = jest.fn().mockRejectedValue(new Error('refresh token failed'))
     UserApi.logout = jest.fn().mockImplementation(Promise.resolve)
 
-    const queryClient = new QueryClient()
+    const queryClient = new QueryClient({ logger: mockDeep() })
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
       shouldRefreshToken: true,
