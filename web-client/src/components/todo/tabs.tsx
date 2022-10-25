@@ -2,24 +2,28 @@ import { ApiErrorAlert } from '@/components'
 import { useBrandColors } from '@/hooks'
 import { useTodoLists } from '@/hooks/queries/todo-list'
 import {
+  Icon,
   Spinner,
   Tab,
   TabList,
   TabPanel,
   TabPanels,
   Tabs,
+  Text,
   useColorModeValue,
 } from '@chakra-ui/react'
 import { AnimatePresence, motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useMemo } from 'react'
+import { FiPlus } from 'react-icons/fi'
 import { TodoList } from './list'
+import { EmptyTodoListAlert } from './list/empty-alert'
 
 const CreateTodoList = dynamic(import('./list').then((mod) => mod.CreateTodoList))
 
 type Props = {
-  listId: string
+  listId: string | null
 }
 
 export const TodoTabs: React.FC<Props> = ({ listId }) => {
@@ -28,7 +32,7 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
   const tabListBorderColor = useColorModeValue('gray.100', 'gray.700')
 
   const index = useMemo(() => {
-    return todoLists?.findIndex((list) => list.id === listId) ?? 0
+    return todoLists?.findIndex((list) => list.id === listId) ?? -1
   }, [todoLists, listId])
 
   if (isLoading) {
@@ -52,6 +56,7 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
         gap="2"
         flexWrap="wrap"
         pb="4"
+        mb="6"
         borderBottom="2px solid"
         borderColor={tabListBorderColor}
       >
@@ -76,7 +81,7 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
 
       <TabPanels>
         {todoLists.map((list) => (
-          <TabPanel key={list.id} mt="6">
+          <TabPanel key={list.id}>
             <AnimatePresence initial={false}>
               {list.id === listId && (
                 <motion.div
@@ -91,6 +96,15 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
           </TabPanel>
         ))}
       </TabPanels>
+
+      {todoLists.length === 0 && (
+        <EmptyTodoListAlert>
+          <Text>
+            You don't have any lists! Use the <Icon w="5" verticalAlign="middle" as={FiPlus} />{' '}
+            button above to add one.
+          </Text>
+        </EmptyTodoListAlert>
+      )}
     </Tabs>
   )
 }
