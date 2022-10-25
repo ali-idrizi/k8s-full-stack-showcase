@@ -1,6 +1,6 @@
 import { API } from '@/api'
 import { useAuthQuery, useRefreshTokenMutation, useRouterRef } from '@/hooks'
-import { HStack, Spinner, Text } from '@chakra-ui/react'
+import { Center, Spinner } from '@chakra-ui/react'
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 export const ApiContext = createContext<API | null>(null)
@@ -12,7 +12,7 @@ export const ApiContext = createContext<API | null>(null)
 export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const routerRef = useRouterRef()
   const refreshTokenPromiseRef = useRef<Promise<unknown> | null>(null)
-  const [isTokenRefreshing, setInTokenRefreshing] = useState(false)
+  const [isTokenRefreshing, setIsTokenRefreshing] = useState(false)
   const { mutateAsync: mutateRefreshToken } = useRefreshTokenMutation()
   const { isLoggedIn, shouldRefreshToken } = useAuthQuery()
 
@@ -48,16 +48,24 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
     })
   }, [handleRefreshToken])
 
+  useEffect(() => {
+    const router = routerRef.current
+    const onRouteChangeComplete = () => setIsTokenRefreshing(false)
+
+    router.events.on('routeChangeComplete', onRouteChangeComplete)
+
+    return () => router.events.off('routeChangeComplete', onRouteChangeComplete)
+  }, [routerRef])
+
   // Only a call to `getServerSideProps` will set `shouldRefreshToken` to `true`.
   // Refresh the token in that case and replace the route to make another call to it.
   useEffect(() => {
     const refreshTokenAndReplaceRoute = async () => {
       if (shouldRefreshToken) {
-        setInTokenRefreshing(true)
+        setIsTokenRefreshing(true)
         if (await handleRefreshToken()) {
-          await routerRef.current.replace(routerRef.current.asPath)
+          routerRef.current.replace(routerRef.current.asPath)
         }
-        setInTokenRefreshing(false)
       }
     }
 
@@ -67,10 +75,9 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
   return (
     <ApiContext.Provider value={api}>
       {shouldRefreshToken || isTokenRefreshing ? (
-        <HStack justifyContent="center" spacing="4" pt="16">
-          <Spinner size="sm" />
-          <Text fontSize="sm">Authenticating! Please wait...</Text>
-        </HStack>
+        <Center>
+          <Spinner mt="16" />
+        </Center>
       ) : (
         children
       )}

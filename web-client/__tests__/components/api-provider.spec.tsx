@@ -65,6 +65,13 @@ describe('Auth', () => {
     ctx.router.asPath = '/test-route'
     ctx.router.replace.mockResolvedValue(true)
 
+    let onRouteChangeComplete: () => void
+    ctx.router.events.on.mockImplementation((type, handler) => {
+      if (type === 'routeChangeComplete') {
+        onRouteChangeComplete = handler
+      }
+    })
+
     const queryClient = new QueryClient()
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: null,
@@ -88,7 +95,12 @@ describe('Auth', () => {
     })
 
     expect(ctx.router.replace).toHaveBeenCalledWith('/test-route')
-    expect(getHeading()).toBeInTheDocument()
+
+    await waitFor(() => {
+      onRouteChangeComplete?.()
+      expect(getHeading()).toBeInTheDocument()
+    })
+
     expect(queryClient.getQueryData<WithAuth>([QUERY_KEY.AUTH])).toEqual({
       userId: 'test-user-id',
       shouldRefreshToken: false,
