@@ -52,7 +52,14 @@ export const Header: React.FC = () => {
         <Logo />
 
         <HStack spacing={[4, null, 6]}>
-          <TooltipIconButton icon={<Icon as={FiGithub} />} aria-label="View GitHub Repo" />
+          <TooltipIconButton
+            as="a"
+            href={process.env.NEXT_PUBLIC_GITHUB_REPO}
+            target="_blank"
+            rel="noreferrer noopener"
+            icon={<Icon as={FiGithub} />}
+            aria-label="View GitHub Repo"
+          />
           <TooltipIconButton
             onClick={toggleColorMode}
             icon={<Icon as={useColorModeValue(FiMoon, FiSun)} />}
