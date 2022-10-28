@@ -10,11 +10,13 @@ export const useAuthQuery = (): UseAuthQuery => {
   const { data } = useQuery<WithAuth>([QUERY_KEY.AUTH], {
     initialData: {
       userId: null,
-      needsRefresh: false,
+      shouldRefreshToken: false,
     },
+    staleTime: Infinity,
+    cacheTime: Infinity,
   })
 
-  const isLoggedIn = data.userId !== null || data.needsRefresh
+  const isLoggedIn = data.userId !== null || data.shouldRefreshToken
 
   return {
     isLoggedIn,

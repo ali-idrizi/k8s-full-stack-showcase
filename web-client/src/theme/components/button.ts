@@ -1,9 +1,7 @@
 import { ComponentStyleConfig } from '@chakra-ui/react'
 
-const buttonTheme: ComponentStyleConfig = {
+export const buttonTheme: ComponentStyleConfig = {
   baseStyle: {
     fontWeight: 'normal',
   },
 }
-
-export default buttonTheme

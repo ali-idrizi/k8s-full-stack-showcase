@@ -40,6 +40,9 @@ describe('ListController', () => {
         where: {
           userId: 'test-user-id',
         },
+        orderBy: {
+          createdAt: 'asc',
+        },
       })
     })
   })

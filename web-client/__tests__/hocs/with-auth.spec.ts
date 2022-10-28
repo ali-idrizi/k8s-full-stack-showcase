@@ -31,7 +31,7 @@ describe('With Authentication GSSP HOC', () => {
 
     expect(props.dehydratedState?.queries.at(0)?.state.data).toEqual({
       userId: null,
-      needsRefresh: true,
+      shouldRefreshToken: true,
     })
   })
 

@@ -1,10 +1,13 @@
-import { API, ApiError } from '@/api'
+import { ApiError } from '@/api'
+import { useApi } from '@/hooks'
 import { QUERY_KEY } from '@/utils/constants'
 import { TodoList } from '@/utils/types'
 import { useQuery, UseQueryResult } from '@tanstack/react-query'
 
 export const useTodoLists = (): UseQueryResult<TodoList[], ApiError> => {
-  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], API.todo.list.getAll, {
+  const api = useApi()
+
+  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], api.todo.list.getAll, {
     refetchOnMount: 'always',
     refetchOnWindowFocus: 'always',
   })
@@ -19,7 +22,9 @@ export const useTodoList = (
   id: string,
   filter: FilterItemsBy,
 ): UseQueryResult<TodoList, ApiError> => {
-  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id], () => API.todo.list.getOne(id), {
+  const api = useApi()
+
+  return useQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, id], () => api.todo.list.getOne(id), {
     refetchOnMount: 'always',
     refetchOnWindowFocus: 'always',
     select: (list) => ({

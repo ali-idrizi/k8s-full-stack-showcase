@@ -88,9 +88,10 @@ export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
     },
   })
 
+  const resetTitle = () => formik.setFieldValue('title', todo.title, true)
   const handleSubmit = async () => {
     if (!!formik.errors.title) {
-      await formik.setFieldValue('title', todo.title, true)
+      await resetTitle()
     }
     formik.handleSubmit()
   }
@@ -107,6 +108,7 @@ export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
       flexGrow="1"
       pl="1"
       onSubmit={handleSubmit}
+      onCancel={resetTitle}
       isPreviewFocusable={false}
     >
       <EditablePreview

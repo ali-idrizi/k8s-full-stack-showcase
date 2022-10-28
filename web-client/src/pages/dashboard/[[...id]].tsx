@@ -4,20 +4,16 @@ import { withApi } from '@/hocs/with-api'
 import { EmptyLayout } from '@/layouts'
 import { QUERY_KEY } from '@/utils/constants'
 import { PageWithLayout, TodoList } from '@/utils/types'
-import { Alert, AlertIcon, Flex } from '@chakra-ui/react'
+import { Flex } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-
-type Props = {
-  initialListId: string | null
-}
+import { useCallback, useEffect, useState } from 'react'
 
 export const getServerSideProps = withHocs(
   withReactQuery,
   withAuth,
   withAuthenticatedRoute(),
   withApi,
-)<Props>(async ({ queryClient, api }, ctx) => {
+)(async ({ queryClient, api }, ctx) => {
   let lists: TodoList[] = []
   try {
     lists = await queryClient.fetchQuery(
@@ -49,29 +45,22 @@ export const getServerSideProps = withHocs(
   }
 
   return {
-    props: {
-      initialListId: listId,
-    },
+    props: {},
   }
 })
 
-const Dashboard: PageWithLayout<Props> = ({ initialListId }) => {
+const Dashboard: PageWithLayout = () => {
   const router = useRouter()
-  const [listId, setListId] = useState(initialListId)
+  const getListId = useCallback(() => router.query.id?.[0] ?? null, [router])
+  const [listId, setListId] = useState(() => getListId())
 
   useEffect(() => {
-    setListId(router.query.id?.[0] ?? null)
-  }, [router])
+    setListId(getListId())
+  }, [getListId])
 
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
-      {listId ? (
-        <TodoTabs listId={listId} />
-      ) : (
-        <Alert status="error" rounded="md">
-          <AlertIcon />A server error occurred! Please contact us for assistance.
-        </Alert>
-      )}
+      <TodoTabs listId={listId} />
     </Flex>
   )
 }

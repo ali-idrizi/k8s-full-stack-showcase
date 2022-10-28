@@ -1,6 +1,5 @@
 import { ApiClient, ApiClientConfig } from '@/api/client'
 import { isServer } from '@/utils/env'
-import { AxiosResponse } from 'axios'
 import { LoginPayload, LoginResponse } from './login'
 import { RefreshTokenResponse } from './refresh-token'
 import { RegisterPayload, RegisterResponse } from './register'
@@ -8,14 +7,14 @@ import { RegisterPayload, RegisterResponse } from './register'
 export class UserApi {
   private client: ApiClient
 
-  private refreshTokenPromise: Promise<AxiosResponse<RefreshTokenResponse>> | null = null
-
   constructor(config?: ApiClientConfig) {
-    this.client = new ApiClient({
+    this.client = UserApi.createClient(config)
+  }
+
+  private static createClient(config?: ApiClientConfig): ApiClient {
+    return new ApiClient({
       baseURL: isServer() ? 'http://app-user' : '/api/user',
       ...config,
-      // Always disable refreshing the token for UserApi calls
-      withRefreshTokenInterceptor: false,
     })
   }
 
@@ -25,20 +24,20 @@ export class UserApi {
     return res.data
   }
 
-  logout = async (): Promise<void> => {
-    await this.client.post('/logout')
-  }
+  register = async (payload: RegisterPayload): Promise<RegisterResponse> => {
+    const res = await this.client.post<RegisterResponse>('/register', payload)
 
-  refreshToken = async (): Promise<RefreshTokenResponse> => {
-    this.refreshTokenPromise =
-      this.refreshTokenPromise ?? this.client.post<RefreshTokenResponse>('/auth/refresh-token')
-    const res = await this.refreshTokenPromise
-    this.refreshTokenPromise = null
     return res.data
   }
 
-  register = async (payload: RegisterPayload): Promise<RegisterResponse> => {
-    const res = await this.client.post<RegisterResponse>('/register', payload)
+  static logout = async (): Promise<void> => {
+    const client = UserApi.createClient()
+    await client.post('/logout')
+  }
+
+  static refreshToken = async (): Promise<RefreshTokenResponse> => {
+    const client = UserApi.createClient()
+    const res = await client.post<RefreshTokenResponse>('/auth/refresh-token')
 
     return res.data
   }
