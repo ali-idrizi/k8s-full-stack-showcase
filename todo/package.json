@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@jest-mock/express": "^2.0.1",
-    "@nestjs/cli": "^9.1.4",
+    "@nestjs/cli": "^9.1.5",
     "@nestjs/schematics": "^9.0.3",
     "@nestjs/testing": "^8.4.7",
     "@types/cookie-parser": "^1.4.3",
