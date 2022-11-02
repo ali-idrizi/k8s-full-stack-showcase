@@ -14,7 +14,7 @@ export const AuthLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
         <Box
           data-testid="auth-layout-content"
           flexGrow={{ lg: 1 }}
-          bgColor={useColorModeValue('white', 'gray.800')}
+          bgColor="chakra-body-bg"
           pt={{ base: 10, lg: 16 }}
         >
           <GradientHeading

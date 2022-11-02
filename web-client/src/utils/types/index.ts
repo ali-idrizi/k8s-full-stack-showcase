@@ -1,4 +1,5 @@
 export * from './app-props'
 export * from './page-with-layout'
+export * from './tech-details'
 export * from './todo-item'
 export * from './todo-list'
