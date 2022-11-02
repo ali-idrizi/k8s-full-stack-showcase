@@ -3,8 +3,15 @@ import { Heading, Text } from '@chakra-ui/react'
 import { motion, useAnimationControls } from 'framer-motion'
 import { useEffect, useState } from 'react'
 
-const HIGHLIGHT_TEXT = ['Accessible', 'Scalable', 'Responsive', 'Maintainable', 'Testable'] as const
-const HIGHLIGHT_WIDTH = Math.max(...HIGHLIGHT_TEXT.map((text) => text.length))
+const HIGHLIGHT_TEXT: readonly string[] = [
+  'Accessible',
+  'Scalable',
+  'Responsive',
+  'Maintainable',
+  'Testable',
+  'Modern',
+]
+const HIGHLIGHT_WIDTH = Math.max(...HIGHLIGHT_TEXT.map((text) => text.length)) + 1
 
 export const FooterHeading: React.FC = () => {
   const controls = useAnimationControls()
@@ -24,23 +31,27 @@ export const FooterHeading: React.FC = () => {
         transition: { delay: 2 },
       }))
 
-      setHighlightIndex(highlightIndex === HIGHLIGHT_TEXT.length - 1 ? 0 : highlightIndex + 1)
+      setHighlightIndex((highlightIndex + 1) % HIGHLIGHT_TEXT.length)
     }
 
     animate()
   }, [controls, highlightIndex])
 
   return (
-    <Heading as="h4" fontSize="xl" py="8">
+    <Heading as="h4" fontSize="lg">
       <Text
         color={highlightIndex % 2 === 0 ? primary : secondary}
         as="span"
         display="inline-flex"
         minW={`${HIGHLIGHT_WIDTH}ch`}
         justifyContent="center"
-        borderBottom="2px solid"
+        border="2px solid"
         borderColor="currentcolor"
         transition="color .5s"
+        rounded="full"
+        lineHeight="1"
+        mr="2"
+        py="2"
       >
         {HIGHLIGHT_TEXT[highlightIndex]?.split('').map((char, index) => {
           return (
@@ -55,7 +66,7 @@ export const FooterHeading: React.FC = () => {
           )
         })}
       </Text>{' '}
-      full-stack monorepo showcase app running on Kubernetes written in TypeScript
+      full&#8209;stack monorepo showcase todo app built with&hellip;
     </Heading>
   )
 }

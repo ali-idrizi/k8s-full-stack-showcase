@@ -29,7 +29,7 @@ exports[`renders homepage unchanged 1`] = `
     <h2
       class="chakra-heading css-19wzjxi"
     >
-      Create different lists and organize your day better!
+      Create lists with your tasks and organize your day better!
     </h2>
     <div
       class="chakra-stack css-1jin9mk"

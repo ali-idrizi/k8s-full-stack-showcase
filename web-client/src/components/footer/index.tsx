@@ -1,17 +1,22 @@
+import { Container } from '@/components'
 import { DarkMode, Flex, useColorModeValue } from '@chakra-ui/react'
 import { FooterHeading } from './heading'
+import { FooterTechStack } from './tech-stack'
 
 const Content = () => {
   return (
     <Flex
       as="footer"
       justifyContent="center"
-      textAlign="center"
+      flexDir="column"
       bg={useColorModeValue('gray.100', 'gray.900')}
       color="chakra-body-text"
-      py="5"
+      py="12"
     >
-      <FooterHeading />
+      <Container as="div">
+        <FooterHeading />
+        <FooterTechStack />
+      </Container>
     </Flex>
   )
 }
