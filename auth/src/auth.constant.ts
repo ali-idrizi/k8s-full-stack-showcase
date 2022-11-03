@@ -6,9 +6,9 @@ export const Environment = {
   NATS_PORT: 'NATS_PORT',
 } as const
 
-export const Command = {
-  GEN_TOKENS: 'genTokens',
-  VALIDATE_JWT: 'validateJwt',
-  REFRESH_JWT: 'refreshJwt',
-  REMOVE_REFRESH_TOKEN: 'removeRefreshToken',
+export const COMMAND = {
+  genTokens: 'auth:genTokens',
+  validateJwt: 'auth:validateJwt',
+  refreshJwt: 'auth:refreshJwt',
+  removeRefreshToken: 'auth:removeRefreshToken',
 } as const

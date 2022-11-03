@@ -4,11 +4,11 @@ import { ClientProxy } from '@nestjs/microservices'
 import { firstValueFrom, timeout } from 'rxjs'
 import { Cookie } from 'src/common/interfaces/cookie.interface'
 import { ConfigUtil } from 'src/common/utils/config.util'
+import { COMMAND, NATS_CLIENT } from 'src/nats/nats.constants'
 import { ENV } from 'src/user.constants'
 import { Environment, Tokens } from 'src/user.interface'
-import { AUTH_CLIENT, Command } from './auth.constant'
 import { JwtStatus } from './auth.interface'
-import { InvalidRefreshTokenException, InvalidJwtException } from './exceptions'
+import { InvalidJwtException, InvalidRefreshTokenException } from './exceptions'
 
 @Injectable()
 export class AuthService {
@@ -16,7 +16,7 @@ export class AuthService {
   private readonly refreshTokenCookieName: string
 
   constructor(
-    @Inject(AUTH_CLIENT) private authClient: ClientProxy,
+    @Inject(NATS_CLIENT) private natsClient: ClientProxy,
     configService: ConfigService<Environment>,
   ) {
     const [jwtCookieName, refreshTokenCookieName] = ConfigUtil.getMultiple(configService, [
@@ -29,16 +29,16 @@ export class AuthService {
   }
 
   genTokens(userId: string): Promise<Tokens> {
-    const tokens = this.authClient
-      .send<Tokens>({ cmd: Command.GEN_TOKENS }, { userId })
+    const tokens = this.natsClient
+      .send<Tokens>({ cmd: COMMAND.auth.genTokens }, { userId })
       .pipe(timeout(10000))
 
     return firstValueFrom(tokens)
   }
 
   async validateJwt(jwt: string): Promise<JwtStatus> {
-    const res = this.authClient
-      .send<JwtStatus>({ cmd: Command.VALIDATE_JWT }, { jwt })
+    const res = this.natsClient
+      .send<JwtStatus>({ cmd: COMMAND.auth.validateJwt }, { jwt })
       .pipe(timeout(10000))
 
     let data
@@ -52,8 +52,8 @@ export class AuthService {
   }
 
   async refreshJwt(refreshToken: string, userId: string): Promise<Tokens> {
-    const res = this.authClient
-      .send<Tokens>({ cmd: Command.REFRESH_JWT }, { refreshToken, userId })
+    const res = this.natsClient
+      .send<Tokens>({ cmd: COMMAND.auth.refreshJwt }, { refreshToken, userId })
       .pipe(timeout(10000))
 
     let data
@@ -67,7 +67,7 @@ export class AuthService {
   }
 
   removeRefreshToken(refreshToken: string): void {
-    this.authClient.emit({ cmd: Command.REMOVE_REFRESH_TOKEN }, { refreshToken })
+    this.natsClient.emit({ cmd: COMMAND.auth.removeRefreshToken }, { refreshToken })
   }
 
   getCookies(tokens: Tokens): Cookie[] {
