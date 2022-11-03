@@ -23,6 +23,9 @@ auth:
 todo:
   <<: *default
   nameOverride: todo
+  extraEnvFrom:
+    - configMapRef:
+        name: nats
   containerPorts:
     http: 3002
   ingress:

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { AuthService } from 'src/auth/auth.service'
-import { AuthModuleMock } from 'src/common/test/auth-module.mock'
 import { TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
+import { NatsModuleMock } from 'src/common/test/nats-module.mock'
 import { LogoutController } from './logout.controller'
 
 describe('LogoutController', () => {
@@ -15,7 +15,8 @@ describe('LogoutController', () => {
 
     const app: TestingModule = await Test.createTestingModule({
       controllers: [LogoutController],
-      imports: [AuthModuleMock.register(ctx.clientProxy)],
+      providers: [AuthService],
+      imports: [NatsModuleMock.register(ctx.clientProxy)],
     }).compile()
 
     logoutController = app.get<LogoutController>(LogoutController)
