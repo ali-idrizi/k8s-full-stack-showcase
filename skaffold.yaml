@@ -1,137 +1,97 @@
-apiVersion: skaffold/v2beta29
+apiVersion: skaffold/v3
 kind: Config
 metadata:
   name: todo-app
 build:
-  local:
-    concurrency: 1
-    useBuildkit: true
   artifacts:
-    - image: gcr.io/k8s-full-stack-starter/auth
+    - image: auth
       context: auth
-      custom: &nestjsCustomBuild
-        dependencies:
-          paths:
-            - ../.k8s/docker/nestjs/*
-            - ./**/*
-          ignore:
-            - dist/**/*
-            - node_modules/**/*
-        buildCommand: |
-          docker build . --tag=$IMAGE --file=../.k8s/docker/nestjs/Dockerfile.$ENV
-      sync: &nestjsSync
-        manual:
-          - src: "src/**/*.ts"
-            dest: .
-    - image: gcr.io/k8s-full-stack-starter/todo
-      context: todo
-      custom: *nestjsCustomBuild
-      sync: *nestjsSync
-    - image: gcr.io/k8s-full-stack-starter/user
-      context: user
-      custom: *nestjsCustomBuild
-      sync: *nestjsSync
-    - image: gcr.io/k8s-full-stack-starter/web-client
-      context: web-client
-      custom:
-        dependencies:
-          paths:
-            - ../.k8s/docker/nextjs/*
-            - ./**/*
-          ignore:
-            - __tests__/**/*
-            - .next/**/*
-            - node_modules/**/*
-            - coverage/**/*
-        buildCommand: |
-          docker build . --tag=$IMAGE --file=../.k8s/docker/nextjs/Dockerfile.$ENV
       sync:
-        manual:
-          - src: "src/**/*.{ts,tsx}"
-            dest: .
-    - image: gcr.io/k8s-full-stack-starter/auth-prisma
-      context: auth
-      docker: &prismaDocker
-        dockerfile: .k8s/docker/Dockerfile.prisma
-    - image: gcr.io/k8s-full-stack-starter/todo-prisma
+        infer:
+          - src/**/*.ts
+      docker:
+        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
+    - image: todo
       context: todo
-      docker: *prismaDocker
-    - image: gcr.io/k8s-full-stack-starter/user-prisma
+      sync:
+        infer:
+          - src/**/*.ts
+      docker:
+        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
+    - image: user
       context: user
-      docker: *prismaDocker
-
-deploy:
-  logs:
-    prefix: auto
+      sync:
+        infer:
+          - src/**/*.ts
+      docker:
+        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
+    - image: web-client
+      context: web-client
+      sync:
+        infer:
+          - src/**/*.{ts,tsx}
+      docker:
+        dockerfile: ../.k8s/docker/nextjs/Dockerfile.dev
+  local:
+    useBuildkit: true
+    concurrency: 1
+manifests:
   helm:
     releases:
       - name: ingress-nginx
         remoteChart: ingress-nginx
-        repo: https://kubernetes.github.io/ingress-nginx
-        version: 4.2.5
-        namespace: ingress-nginx
-        createNamespace: true
-        upgradeOnChange: true
         valuesFiles:
           - .k8s/values/dev/ingress-nginx-values.yaml
+        namespace: ingress-nginx
+        version: 4.2.5
+        createNamespace: true
         wait: true
-
+        repo: https://kubernetes.github.io/ingress-nginx
+        upgradeOnChange: true
       - name: nats
         remoteChart: nats
-        repo: https://nats-io.github.io/k8s/helm/charts/
-        version: 0.18.0
-        namespace: dev
-        createNamespace: true
-        upgradeOnChange: true
         valuesFiles:
           - .k8s/values/dev/nats-values.yaml
-        wait: true
-
-      - name: db
-        useHelmSecrets: true
-        chartPath: .k8s/helm-charts/db
         namespace: dev
+        version: 0.18.0
         createNamespace: true
+        wait: true
+        repo: https://nats-io.github.io/k8s/helm/charts/
+        upgradeOnChange: true
+      - name: db
+        chartPath: .k8s/helm-charts/db
         valuesFiles:
           - .k8s/values/dev/db-values.yaml
           - .k8s/values/dev/db-secrets.yaml
-        wait: true
-
-      - name: app
-        useHelmSecrets: true
-        chartPath: .k8s/helm-charts/app
         namespace: dev
         createNamespace: true
-        artifactOverrides:
-          auth:
-            image: gcr.io/k8s-full-stack-starter/auth
-            db.prisma.image: gcr.io/k8s-full-stack-starter/auth-prisma
-          todo:
-            image: gcr.io/k8s-full-stack-starter/todo
-            db.prisma.image: gcr.io/k8s-full-stack-starter/todo-prisma
-          user:
-            image: gcr.io/k8s-full-stack-starter/user
-            db.prisma.image: gcr.io/k8s-full-stack-starter/user-prisma
-          webClient:
-            image: gcr.io/k8s-full-stack-starter/web-client
-        imageStrategy:
-          helm:
-            explicitRegistry: true
+        wait: true
+        useHelmSecrets: true
+      - name: app
+        chartPath: .k8s/helm-charts/app
         valuesFiles:
           - .k8s/values/dev/app-values.yaml
           - .k8s/values/dev/app-secrets.yaml
-
+        namespace: dev
+        createNamespace: true
+        useHelmSecrets: true
+deploy:
+  helm: {}
+  logs:
+    prefix: auto
 test:
-  - image: gcr.io/k8s-full-stack-starter/auth
-    custom: &npmTestCommand
+  - image: auth
+    custom:
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-  - image: gcr.io/k8s-full-stack-starter/todo
-    custom: *npmTestCommand
-  - image: gcr.io/k8s-full-stack-starter/user
-    custom: *npmTestCommand
-  - image: gcr.io/k8s-full-stack-starter/web-client
-    custom: *npmTestCommand
-
+  - image: todo
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+  - image: user
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+  - image: web-client
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 portForward:
   - resourceType: service
     resourceName: ingress-nginx-controller
@@ -139,7 +99,6 @@ portForward:
     port: 80
     address: 0.0.0.0
     localPort: 3000
-
 profiles:
   - name: dev
     activation:

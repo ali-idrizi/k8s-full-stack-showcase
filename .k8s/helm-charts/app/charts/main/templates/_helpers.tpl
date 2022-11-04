@@ -6,13 +6,6 @@ Return the proper image name
 {{- end -}}
 
 {{/*
-Return the proper image name
-*/}}
-{{- define "main.db.prisma.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.db.prisma.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "main.imagePullSecrets" -}}

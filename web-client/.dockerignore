@@ -1,0 +1,11 @@
+# compiled output
+/.git
+/.next
+/node_modules
+
+# tests
+/coverage
+
+# other
+Dockerfile
+.dockerignore

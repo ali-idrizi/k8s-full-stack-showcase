@@ -16,7 +16,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: db-migrate
-          image: {{ include "main.db.prisma.image" . }}
+          image: {{ include "main.image" . }}
           envFrom:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-preinst
@@ -43,7 +43,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: db-seed
-          image: {{ include "main.db.prisma.image" . }}
+          image: {{ include "main.image" . }}
           envFrom:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-preinst

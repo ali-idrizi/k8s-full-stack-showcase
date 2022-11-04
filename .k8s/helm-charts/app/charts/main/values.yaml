@@ -64,10 +64,6 @@ db:
     seed:
       enabled: false
       fileName: seed.ts
-    image:
-      registry: ""
-      repository: node
-      tag: latest
   host: ""
   port: 3306
   username: ""

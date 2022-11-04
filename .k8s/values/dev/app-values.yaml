@@ -3,30 +3,38 @@ ingress: &ingress
     url: http://app-user.dev.svc.cluster.local/auth
 
 auth:
+  image:
+    repository: auth
   db:
     prisma:
       migrate:
-        enabled: true
+        enabled: false
 
 todo:
+  image:
+    repository: todo
   ingress:
     <<: *ingress
   db:
     prisma:
       migrate:
-        enabled: true
+        enabled: false
 
 user:
+  image:
+    repository: user
   ingress:
     <<: *ingress
   db:
     prisma:
       migrate:
-        enabled: true
+        enabled: false
       seed:
-        enabled: true
+        enabled: false
 
 webClient:
+  image:
+    repository: web-client
   ingress:
     <<: *ingress
 
