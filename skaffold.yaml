@@ -40,33 +40,47 @@ manifests:
     releases:
       - name: ingress-nginx
         remoteChart: ingress-nginx
-        valuesFiles:
-          - .k8s/values/dev/ingress-nginx-values.yaml
         namespace: ingress-nginx
         version: 4.2.5
         createNamespace: true
         wait: true
         repo: https://kubernetes.github.io/ingress-nginx
-        upgradeOnChange: true
       - name: nats
         remoteChart: nats
         valuesFiles:
-          - .k8s/values/dev/nats-values.yaml
+          - .k8s/values/main/nats.yaml
         namespace: dev
         version: 0.18.0
         createNamespace: true
         wait: true
         repo: https://nats-io.github.io/k8s/helm/charts/
-        upgradeOnChange: true
-      - name: db
-        chartPath: .k8s/helm-charts/db
+      - name: db-auth
+        remoteChart: mysql
         valuesFiles:
-          - .k8s/values/dev/db-values.yaml
-          - .k8s/values/dev/db-secrets.yaml
+          - .k8s/values/main/db-base.yaml
         namespace: dev
+        version: 9.2.1
         createNamespace: true
         wait: true
-        useHelmSecrets: true
+        repo: https://charts.bitnami.com/bitnami
+      - name: db-todo
+        remoteChart: mysql
+        valuesFiles:
+          - .k8s/values/main/db-base.yaml
+        namespace: dev
+        version: 9.2.1
+        createNamespace: true
+        wait: true
+        repo: https://charts.bitnami.com/bitnami
+      - name: db-user
+        remoteChart: mysql
+        valuesFiles:
+          - .k8s/values/main/db-base.yaml
+        namespace: dev
+        version: 9.2.1
+        createNamespace: true
+        wait: true
+        repo: https://charts.bitnami.com/bitnami
       - name: app
         chartPath: .k8s/helm-charts/app
         valuesFiles:
@@ -103,3 +117,30 @@ profiles:
   - name: dev
     activation:
       - kubeContext: minikube
+    patches:
+      # Helm Releases
+      # ingress-nginx
+      - op: add
+        path: /manifests/helm/releases/0/valuesFiles
+        value: [.k8s/values/dev/ingress-nginx.yaml]
+      # db-auth
+      - op: add
+        path: /manifests/helm/releases/2/valuesFiles/-
+        value: .k8s/values/dev/db-base.yaml
+      - op: add
+        path: /manifests/helm/releases/2/valuesFiles/-
+        value: .k8s/values/dev/db-auth.yaml
+      # db-todo
+      - op: add
+        path: /manifests/helm/releases/3/valuesFiles/-
+        value: .k8s/values/dev/db-base.yaml
+      - op: add
+        path: /manifests/helm/releases/3/valuesFiles/-
+        value: .k8s/values/dev/db-todo.yaml
+      # db-user
+      - op: add
+        path: /manifests/helm/releases/4/valuesFiles/-
+        value: .k8s/values/dev/db-user.yaml
+      - op: add
+        path: /manifests/helm/releases/4/valuesFiles/-
+        value: .k8s/values/dev/db-auth.yaml

@@ -1,0 +1,3 @@
+fullnameOverride: nats
+natsbox:
+  enabled: false
