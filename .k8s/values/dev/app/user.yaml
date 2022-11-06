@@ -1,0 +1,6 @@
+db:
+  enabled: true
+  host: db-user-mysql.dev.svc.cluster.local
+  username: user
+  password: password
+  database: user

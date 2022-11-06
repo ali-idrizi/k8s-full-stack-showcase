@@ -1,0 +1,6 @@
+db:
+  enabled: true
+  host: db-todo-mysql.dev.svc.cluster.local
+  username: todo
+  password: password
+  database: todo

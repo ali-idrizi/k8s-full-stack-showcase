@@ -1,0 +1,9 @@
+containerPorts:
+  http: 3002
+extraEnvFrom:
+  - configMapRef:
+      name: nats
+image:
+  repository: todo
+ingress:
+  path: /api/todo(/|$)(.*)

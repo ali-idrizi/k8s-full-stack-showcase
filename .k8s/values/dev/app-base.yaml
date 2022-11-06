@@ -1,3 +1,0 @@
-ingress:
-  auth:
-    url: http://app-user.dev.svc.cluster.local/auth

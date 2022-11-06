@@ -10,28 +10,28 @@ build:
         infer:
           - src/**/*.ts
       docker:
-        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
+        dockerfile: .k8s/docker/nestjs/Dockerfile.dev
     - image: todo
       context: todo
       sync:
         infer:
           - src/**/*.ts
       docker:
-        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
+        dockerfile: .k8s/docker/nestjs/Dockerfile.dev
     - image: user
       context: user
       sync:
         infer:
           - src/**/*.ts
       docker:
-        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
+        dockerfile: .k8s/docker/nestjs/Dockerfile.dev
     - image: web-client
       context: web-client
       sync:
         infer:
           - src/**/*.{ts,tsx}
       docker:
-        dockerfile: ../.k8s/docker/nextjs/Dockerfile.dev
+        dockerfile: .k8s/docker/nextjs/Dockerfile.dev
   local:
     useBuildkit: true
     concurrency: 1
@@ -40,6 +40,8 @@ manifests:
     releases:
       - name: ingress-nginx
         remoteChart: ingress-nginx
+        valuesFiles:
+          - .k8s/values/main/ingress-nginx.yaml
         namespace: ingress-nginx
         version: 4.2.5
         createNamespace: true
@@ -54,6 +56,14 @@ manifests:
         createNamespace: true
         wait: true
         repo: https://nats-io.github.io/k8s/helm/charts/
+      - name: config
+        chartPath: .k8s/helm-charts/config
+        valuesFiles:
+          - .k8s/values/main/config.yaml
+        namespace: dev
+        createNamespace: true
+        useHelmSecrets: true
+        wait: true
       - name: db-auth
         remoteChart: mysql
         valuesFiles:
@@ -84,11 +94,35 @@ manifests:
         createNamespace: true
         wait: true
         repo: https://charts.bitnami.com/bitnami
-      - name: app
+      - name: app-auth
         chartPath: .k8s/helm-charts/app
         valuesFiles:
-          - .k8s/values/dev/app-values.yaml
-          - .k8s/values/dev/app-secrets.yaml
+          - .k8s/values/main/app/base.yaml
+          - .k8s/values/main/app/auth.yaml
+        namespace: dev
+        createNamespace: true
+        useHelmSecrets: true
+      - name: app-todo
+        chartPath: .k8s/helm-charts/app
+        valuesFiles:
+          - .k8s/values/main/app/base.yaml
+          - .k8s/values/main/app/todo.yaml
+        namespace: dev
+        createNamespace: true
+        useHelmSecrets: true
+      - name: app-user
+        chartPath: .k8s/helm-charts/app
+        valuesFiles:
+          - .k8s/values/main/app/base.yaml
+          - .k8s/values/main/app/user.yaml
+        namespace: dev
+        createNamespace: true
+        useHelmSecrets: true
+      - name: app-web-client
+        chartPath: .k8s/helm-charts/app
+        valuesFiles:
+          - .k8s/values/main/app/base.yaml
+          - .k8s/values/main/app/web-client.yaml
         namespace: dev
         createNamespace: true
         useHelmSecrets: true
@@ -121,29 +155,65 @@ profiles:
     activation:
       - kubeContext: minikube
     patches:
-      # Helm Releases
+      # Helm Releases (adding .k8s/values/dev files)
       # ingress-nginx
       - op: add
-        path: /manifests/helm/releases/0/valuesFiles
-        value: [.k8s/values/dev/ingress-nginx.yaml]
+        path: /manifests/helm/releases/0/valuesFiles/-
+        value: .k8s/values/dev/ingress-nginx.yaml
+      # nats
+      - op: add
+        path: /manifests/helm/releases/1/valuesFiles/-
+        value: .k8s/values/dev/nats.yaml
+      # config
+      - op: add
+        path: /manifests/helm/releases/2/valuesFiles/-
+        value: .k8s/values/dev/config.yaml
       # db-auth
       - op: add
-        path: /manifests/helm/releases/2/valuesFiles/-
+        path: /manifests/helm/releases/3/valuesFiles/-
         value: .k8s/values/dev/db/base.yaml
       - op: add
-        path: /manifests/helm/releases/2/valuesFiles/-
+        path: /manifests/helm/releases/3/valuesFiles/-
         value: .k8s/values/dev/db/auth.yaml
       # db-todo
       - op: add
-        path: /manifests/helm/releases/3/valuesFiles/-
+        path: /manifests/helm/releases/4/valuesFiles/-
         value: .k8s/values/dev/db/base.yaml
       - op: add
-        path: /manifests/helm/releases/3/valuesFiles/-
+        path: /manifests/helm/releases/4/valuesFiles/-
         value: .k8s/values/dev/db/todo.yaml
       # db-user
       - op: add
-        path: /manifests/helm/releases/4/valuesFiles/-
+        path: /manifests/helm/releases/5/valuesFiles/-
         value: .k8s/values/dev/db/base.yaml
       - op: add
-        path: /manifests/helm/releases/4/valuesFiles/-
+        path: /manifests/helm/releases/5/valuesFiles/-
         value: .k8s/values/dev/db/user.yaml
+      # app-auth
+      - op: add
+        path: /manifests/helm/releases/6/valuesFiles/-
+        value: .k8s/values/dev/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/6/valuesFiles/-
+        value: .k8s/values/dev/app/auth.yaml
+      # app-todo
+      - op: add
+        path: /manifests/helm/releases/7/valuesFiles/-
+        value: .k8s/values/dev/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/7/valuesFiles/-
+        value: .k8s/values/dev/app/todo.yaml
+      # app-user
+      - op: add
+        path: /manifests/helm/releases/8/valuesFiles/-
+        value: .k8s/values/dev/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/8/valuesFiles/-
+        value: .k8s/values/dev/app/user.yaml
+      # app-web-client
+      - op: add
+        path: /manifests/helm/releases/9/valuesFiles/-
+        value: .k8s/values/dev/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/9/valuesFiles/-
+        value: .k8s/values/dev/app/user.yaml

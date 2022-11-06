@@ -2,8 +2,6 @@ livenessProbe:
   enabled: false
 readinessProbe:
   enabled: false
-service:
-  clusterIP: None
 ingress:
   rewriteTarget: /$2
   auth:

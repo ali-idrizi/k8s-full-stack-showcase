@@ -1,0 +1,9 @@
+extraEnvFrom:
+  - configMapRef:
+      name: nats
+image:
+  repository: auth
+ingress:
+  enabled: false
+service:
+  clusterIP: None
