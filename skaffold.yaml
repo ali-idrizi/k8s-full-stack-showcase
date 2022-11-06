@@ -57,7 +57,8 @@ manifests:
       - name: db-auth
         remoteChart: mysql
         valuesFiles:
-          - .k8s/values/main/db-base.yaml
+          - .k8s/values/main/db/base.yaml
+          - .k8s/values/main/db/auth.yaml
         namespace: dev
         version: 9.2.1
         createNamespace: true
@@ -66,7 +67,8 @@ manifests:
       - name: db-todo
         remoteChart: mysql
         valuesFiles:
-          - .k8s/values/main/db-base.yaml
+          - .k8s/values/main/db/base.yaml
+          - .k8s/values/main/db/todo.yaml
         namespace: dev
         version: 9.2.1
         createNamespace: true
@@ -75,7 +77,8 @@ manifests:
       - name: db-user
         remoteChart: mysql
         valuesFiles:
-          - .k8s/values/main/db-base.yaml
+          - .k8s/values/main/db/base.yaml
+          - .k8s/values/main/db/user.yaml
         namespace: dev
         version: 9.2.1
         createNamespace: true
@@ -126,21 +129,21 @@ profiles:
       # db-auth
       - op: add
         path: /manifests/helm/releases/2/valuesFiles/-
-        value: .k8s/values/dev/db-base.yaml
+        value: .k8s/values/dev/db/base.yaml
       - op: add
         path: /manifests/helm/releases/2/valuesFiles/-
-        value: .k8s/values/dev/db-auth.yaml
+        value: .k8s/values/dev/db/auth.yaml
       # db-todo
       - op: add
         path: /manifests/helm/releases/3/valuesFiles/-
-        value: .k8s/values/dev/db-base.yaml
+        value: .k8s/values/dev/db/base.yaml
       - op: add
         path: /manifests/helm/releases/3/valuesFiles/-
-        value: .k8s/values/dev/db-todo.yaml
+        value: .k8s/values/dev/db/todo.yaml
       # db-user
       - op: add
         path: /manifests/helm/releases/4/valuesFiles/-
-        value: .k8s/values/dev/db-user.yaml
+        value: .k8s/values/dev/db/base.yaml
       - op: add
         path: /manifests/helm/releases/4/valuesFiles/-
-        value: .k8s/values/dev/db-auth.yaml
+        value: .k8s/values/dev/db/user.yaml
