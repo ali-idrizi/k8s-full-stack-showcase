@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",
-    "dev": "ENV=dev skaffold dev --skip-tests --profile dev",
-    "run:dev": "ENV=dev skaffold run --tail --skip-tests --profile dev",
-    "build:ci": "ENV=ci skaffold build --skip-tests --profile dev --file-output tags.json",
-    "test:ci": "skaffold test --build-artifacts tags.json",
-    "deploy:ci": "skaffold deploy --build-artifacts tags.json"
+    "dev": "skaffold dev -p dev --skip-tests",
+    "run:dev": "skaffold run -p dev --skip-tests --tail",
+    "build:ci": "skaffold build -p dev -p ci --skip-tests --file-output tags.json",
+    "test:ci": "skaffold test -p dev -p ci -a tags.json",
+    "deploy:ci": "skaffold deploy -p dev -p ci -a tags.json"
   },
   "repository": {
     "type": "git",

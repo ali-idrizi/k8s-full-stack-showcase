@@ -152,8 +152,6 @@ portForward:
     localPort: 3000
 profiles:
   - name: dev
-    activation:
-      - kubeContext: minikube
     patches:
       # Helm Releases (adding .k8s/values/dev files)
       # ingress-nginx
@@ -217,3 +215,22 @@ profiles:
       - op: add
         path: /manifests/helm/releases/9/valuesFiles/-
         value: .k8s/values/dev/app/user.yaml
+  - name: ci
+    patches:
+      # Build Artifacts (replacing dockerfiles)
+      # auth
+      - op: replace
+        path: /build/artifacts/0/docker/dockerfile
+        value: .k8s/docker/nestjs/Dockerfile.ci
+      # todo
+      - op: replace
+        path: /build/artifacts/1/docker/dockerfile
+        value: .k8s/docker/nestjs/Dockerfile.ci
+      # user
+      - op: replace
+        path: /build/artifacts/2/docker/dockerfile
+        value: .k8s/docker/nestjs/Dockerfile.ci
+      # web-client
+      - op: replace
+        path: /build/artifacts/3/docker/dockerfile
+        value: .k8s/docker/nextjs/Dockerfile.ci
