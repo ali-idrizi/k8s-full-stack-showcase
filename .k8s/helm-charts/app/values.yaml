@@ -59,11 +59,8 @@ extraEnvFrom: []
 db:
   enabled: false
   prisma:
-    migrate:
-      enabled: false
-    seed:
-      enabled: false
-      fileName: seed.ts
+    migrate: false
+    seed: false
   host: ""
   port: 3306
   username: ""

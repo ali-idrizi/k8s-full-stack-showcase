@@ -12,3 +12,7 @@ ingress:
       location ~ ^/api/user/auth/?$ {
         internal;
       }
+db:
+  prisma:
+    migrate: true
+    seed: true
