@@ -42,7 +42,7 @@ manifests:
         remoteChart: ingress-nginx
         valuesFiles:
           - .k8s/values/main/ingress-nginx.yaml
-        namespace: ingress-nginx
+        namespace: dev
         version: 4.2.5
         createNamespace: true
         wait: true
@@ -143,13 +143,6 @@ test:
   - image: web-client
     custom:
       - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-portForward:
-  - resourceType: service
-    resourceName: ingress-nginx-controller
-    namespace: ingress-nginx
-    port: 80
-    address: 0.0.0.0
-    localPort: 3000
 profiles:
   - name: dev
     patches:
@@ -215,6 +208,13 @@ profiles:
       - op: add
         path: /manifests/helm/releases/9/valuesFiles/-
         value: .k8s/values/dev/app/user.yaml
+    portForward:
+      - resourceType: service
+        resourceName: ingress-nginx-controller
+        namespace: dev
+        port: 80
+        address: 0.0.0.0
+        localPort: 3000
   - name: ci
     patches:
       # Build Artifacts (replacing dockerfiles)
@@ -234,3 +234,115 @@ profiles:
       - op: replace
         path: /build/artifacts/3/docker/dockerfile
         value: .k8s/docker/nextjs/Dockerfile.ci
+  - name: prod
+    patches:
+      # Build Artifacts (replacing dockerfiles)
+      # auth
+      - op: replace
+        path: /build/artifacts/0/docker/dockerfile
+        value: .k8s/docker/nestjs/Dockerfile.prod
+      # todo
+      - op: replace
+        path: /build/artifacts/1/docker/dockerfile
+        value: .k8s/docker/nestjs/Dockerfile.prod
+      # user
+      - op: replace
+        path: /build/artifacts/2/docker/dockerfile
+        value: .k8s/docker/nestjs/Dockerfile.prod
+      # web-client
+      - op: replace
+        path: /build/artifacts/3/docker/dockerfile
+        value: .k8s/docker/nextjs/Dockerfile.prod
+      # Helm Releases (adding .k8s/values/prod files)
+      # ingress-nginx
+      - op: add
+        path: /manifests/helm/releases/0/valuesFiles/-
+        value: .k8s/values/prod/ingress-nginx.yaml
+      # nats
+      - op: add
+        path: /manifests/helm/releases/1/valuesFiles/-
+        value: .k8s/values/prod/nats.yaml
+      # config
+      - op: add
+        path: /manifests/helm/releases/2/valuesFiles/-
+        value: .k8s/values/prod/config.yaml
+      # db-auth
+      - op: add
+        path: /manifests/helm/releases/3/valuesFiles/-
+        value: .k8s/values/prod/db/base.yaml
+      - op: add
+        path: /manifests/helm/releases/3/valuesFiles/-
+        value: .k8s/values/prod/db/auth.yaml
+      # db-todo
+      - op: add
+        path: /manifests/helm/releases/4/valuesFiles/-
+        value: .k8s/values/prod/db/base.yaml
+      - op: add
+        path: /manifests/helm/releases/4/valuesFiles/-
+        value: .k8s/values/prod/db/todo.yaml
+      # db-user
+      - op: add
+        path: /manifests/helm/releases/5/valuesFiles/-
+        value: .k8s/values/prod/db/base.yaml
+      - op: add
+        path: /manifests/helm/releases/5/valuesFiles/-
+        value: .k8s/values/prod/db/user.yaml
+      # app-auth
+      - op: add
+        path: /manifests/helm/releases/6/valuesFiles/-
+        value: .k8s/values/prod/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/6/valuesFiles/-
+        value: .k8s/values/prod/app/auth.yaml
+      # app-todo
+      - op: add
+        path: /manifests/helm/releases/7/valuesFiles/-
+        value: .k8s/values/prod/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/7/valuesFiles/-
+        value: .k8s/values/prod/app/todo.yaml
+      # app-user
+      - op: add
+        path: /manifests/helm/releases/8/valuesFiles/-
+        value: .k8s/values/prod/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/8/valuesFiles/-
+        value: .k8s/values/prod/app/user.yaml
+      # app-web-client
+      - op: add
+        path: /manifests/helm/releases/9/valuesFiles/-
+        value: .k8s/values/prod/app/base.yaml
+      - op: add
+        path: /manifests/helm/releases/9/valuesFiles/-
+        value: .k8s/values/prod/app/web-client.yaml
+      # Helm Releases (changing namespace to prod)
+      - op: replace
+        path: /manifests/helm/releases/0/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/1/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/2/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/3/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/4/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/5/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/6/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/7/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/8/namespace
+        value: prod
+      - op: replace
+        path: /manifests/helm/releases/9/namespace
+        value: prod

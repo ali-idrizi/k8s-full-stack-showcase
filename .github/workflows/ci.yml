@@ -39,13 +39,13 @@ jobs:
           sudo install skaffold /usr/local/bin/
 
       - name: Build
-        run: npm run build:ci
+        run: npm run ci:build
 
       - name: Test
-        run: npm run test:ci
+        run: npm run ci:test
 
       - name: Deploy
-        run: npm run deploy:ci
+        run: npm run ci:deploy
 
   lint:
     name: Lint

@@ -1,5 +1,12 @@
+nameOverride: dev # until https://github.com/kubernetes/ingress-nginx/issues/8936 is fixed
 controller:
   service:
     type: NodePort
     nodePorts:
       http: 30000
+  scope:
+    enabled: true
+  ingressClass: nginx-dev
+  ingressClassResource:
+    name: nginx-dev
+    controllerValue: k8s.io/ingress-nginx-dev

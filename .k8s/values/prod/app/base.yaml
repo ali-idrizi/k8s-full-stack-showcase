@@ -1,0 +1,4 @@
+ingress:
+  ingressClassName: nginx-prod
+  auth:
+    url: http://app-user.prod.svc.cluster.local/auth

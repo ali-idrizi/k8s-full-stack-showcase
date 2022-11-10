@@ -1,3 +1,4 @@
 ingress:
+  ingressClassName: nginx-dev
   auth:
     url: http://app-user.dev.svc.cluster.local/auth

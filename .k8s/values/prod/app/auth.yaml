@@ -1,0 +1,10 @@
+extraEnvVars:
+  - name: JWT_SECRET
+    value: Nsg0ZhZjJVPvrYrYiJWmcIOn
+
+db:
+  enabled: true
+  host: db-auth-mysql.prod.svc.cluster.local
+  username: auth
+  password: password
+  database: auth
