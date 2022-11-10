@@ -207,7 +207,7 @@ profiles:
         value: .k8s/values/dev/app/base.yaml
       - op: add
         path: /manifests/helm/releases/9/valuesFiles/-
-        value: .k8s/values/dev/app/user.yaml
+        value: .k8s/values/dev/app/web-client.yaml
     portForward:
       - resourceType: service
         resourceName: ingress-nginx-dev-controller
