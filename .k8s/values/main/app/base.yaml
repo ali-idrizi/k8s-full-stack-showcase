@@ -10,5 +10,5 @@ ingress:
     responseHeaders: X-User-ID, X-Authenticated
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: "{{ .Values.ingress.rewriteTarget }}"
-    nginx.ingress.kubernetes.io/auth-url: "{{ ternary .Values.ingress.auth.url \"\" .Values.ingress.auth.enabled }}"
-    nginx.ingress.kubernetes.io/auth-response-headers: "{{ ternary .Values.ingress.auth.responseHeaders \"\" .Values.ingress.auth.enabled }}"
+    nginx.ingress.kubernetes.io/auth-url: '{{ ternary .Values.ingress.auth.url "" .Values.ingress.auth.enabled }}'
+    nginx.ingress.kubernetes.io/auth-response-headers: '{{ ternary .Values.ingress.auth.responseHeaders "" .Values.ingress.auth.enabled }}'
