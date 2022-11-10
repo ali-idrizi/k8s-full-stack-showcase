@@ -210,7 +210,7 @@ profiles:
         value: .k8s/values/dev/app/user.yaml
     portForward:
       - resourceType: service
-        resourceName: ingress-nginx-controller
+        resourceName: ingress-nginx-dev-controller
         namespace: dev
         port: 80
         address: 0.0.0.0
