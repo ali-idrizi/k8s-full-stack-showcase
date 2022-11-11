@@ -1,4 +1,4 @@
-apiVersion: skaffold/v3
+apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
   name: todo-app
@@ -35,6 +35,19 @@ build:
   local:
     useBuildkit: true
     concurrency: 1
+test:
+  - image: auth
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+  - image: todo
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+  - image: user
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
+  - image: web-client
+    custom:
+      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 manifests:
   helm:
     releases:
@@ -45,7 +58,6 @@ manifests:
         namespace: dev
         version: 4.2.5
         createNamespace: true
-        wait: true
         repo: https://kubernetes.github.io/ingress-nginx
       - name: nats
         remoteChart: nats
@@ -62,8 +74,8 @@ manifests:
           - .k8s/values/main/config.yaml
         namespace: dev
         createNamespace: true
-        useHelmSecrets: true
         wait: true
+        useHelmSecrets: true
       - name: db-auth
         remoteChart: mysql
         valuesFiles:
@@ -130,19 +142,6 @@ deploy:
   helm: {}
   logs:
     prefix: auto
-test:
-  - image: auth
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-  - image: todo
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-  - image: user
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
-  - image: web-client
-    custom:
-      - command: docker run --entrypoint '/bin/sh' $IMAGE -c 'npm run test'
 profiles:
   - name: dev
     patches:
@@ -346,3 +345,10 @@ profiles:
       - op: replace
         path: /manifests/helm/releases/9/namespace
         value: prod
+    portForward:
+      - resourceType: service
+        resourceName: ingress-nginx-prod-controller
+        namespace: prod
+        port: 80
+        address: 0.0.0.0
+        localPort: 3100
