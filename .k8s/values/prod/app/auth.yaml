@@ -1,7 +1,6 @@
 extraEnvVars:
   - name: JWT_SECRET
     value: Nsg0ZhZjJVPvrYrYiJWmcIOn
-
 db:
   enabled: true
   host: db-auth.prod.svc.cluster.local
