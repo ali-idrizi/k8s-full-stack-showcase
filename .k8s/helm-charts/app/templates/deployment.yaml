@@ -63,6 +63,7 @@ spec:
         {{- end }}
         # Use initContainers to migrate/seed the database.
         # TODO: Revert back to Job once https://github.com/GoogleContainerTools/skaffold/issues/7989 is fixed
+        {{- if .Values.db.enabled -}}
         {{- if .Values.db.prisma.migrate }}
         - name: db-migrate
           image: {{ include "main.image" . }}
@@ -84,6 +85,7 @@ spec:
             - /bin/sh
             - -c
             - npx prisma db seed
+        {{- end -}}
         {{- end }}
       containers:
         - name: main
