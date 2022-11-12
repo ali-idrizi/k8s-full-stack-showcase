@@ -8,14 +8,17 @@ import { ErrorInterceptor } from './common/interceptors/error.interceptor'
 const CONNECT_RETRIES = 10
 const CONNECT_DELAY = 5000
 
-const NATS_HOST = process.env[Environment.NATS_HOST]
-const NATS_PORT = process.env[Environment.NATS_PORT]
+const NATS_URL = process.env[Environment.NATS_URL]
 
 async function bootstrap(): Promise<void> {
+  if (!NATS_URL) {
+    throw new Error('Nats environment variable missing')
+  }
+
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(AuthModule, {
     transport: Transport.NATS,
     options: {
-      servers: [`nats://${NATS_HOST}:${NATS_PORT}`],
+      servers: [NATS_URL],
       reconnect: true,
       maxReconnectAttempts: CONNECT_RETRIES,
       reconnectTimeWait: CONNECT_DELAY,

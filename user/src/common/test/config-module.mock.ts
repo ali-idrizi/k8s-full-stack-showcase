@@ -3,8 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { Environment } from 'src/user.interface'
 
 export const TEST_ENV: Environment = {
-  NATS_HOST: '',
-  NATS_PORT: '',
+  NATS_URL: '',
   JWT_COOKIE_NAME: 'jwt',
   REFRESH_TOKEN_COOKIE_NAME: 'refresh-token',
 }

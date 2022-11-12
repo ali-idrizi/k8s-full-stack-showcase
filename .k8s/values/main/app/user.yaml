@@ -1,8 +1,5 @@
 containerPorts:
   http: 3001
-extraEnvFrom:
-  - configMapRef:
-      name: nats
 image:
   repository: user
 ingress:

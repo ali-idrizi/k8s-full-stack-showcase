@@ -1,6 +1,3 @@
-extraEnvFrom:
-  - configMapRef:
-      name: nats
 image:
   repository: auth
 ingress:

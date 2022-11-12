@@ -1,2 +1,0 @@
-nats:
-  host: nats.dev.svc.cluster.local
