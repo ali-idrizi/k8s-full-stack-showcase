@@ -4,7 +4,7 @@ extraEnvVars:
 
 db:
   enabled: true
-  host: db-auth-mysql.prod.svc.cluster.local
+  host: db-auth.prod.svc.cluster.local
   username: auth
   password: password
   database: auth

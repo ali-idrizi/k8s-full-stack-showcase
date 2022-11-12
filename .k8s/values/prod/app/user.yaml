@@ -1,6 +1,6 @@
 db:
   enabled: true
-  host: db-user-mysql.prod.svc.cluster.local
+  host: db-user.prod.svc.cluster.local
   username: user
   password: password
   database: user
