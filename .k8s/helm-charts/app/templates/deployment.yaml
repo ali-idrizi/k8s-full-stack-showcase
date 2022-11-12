@@ -92,6 +92,8 @@ spec:
           image: {{ include "main.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           env:
+            - name: POD_NAMESPACE
+              value: {{ include "common.names.namespace" . | quote }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -18,7 +18,7 @@ export class TodoListApi {
 
   constructor(config?: ApiClientConfig) {
     this.client = new ApiClient({
-      baseURL: isServer() ? 'http://app-todo/list' : '/api/todo/list',
+      baseURL: isServer() ? `${process.env.TODO_SERVICE_URL}/list` : '/api/todo/list',
       ...config,
     })
   }
