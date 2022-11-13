@@ -1,0 +1,5 @@
+nameOverride: dev # until https://github.com/kubernetes/ingress-nginx/issues/8936 is fixed
+controller:
+  ingressClassResource:
+    name: nginx-dev
+    controllerValue: k8s.io/ingress-nginx-dev

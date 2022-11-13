@@ -1,8 +1,0 @@
-auth:
-  createShadowDb: true
-
-todo:
-  createShadowDb: true
-
-user:
-  createShadowDb: true

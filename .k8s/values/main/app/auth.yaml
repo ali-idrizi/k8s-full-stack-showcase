@@ -1,0 +1,9 @@
+image:
+  repository: auth
+ingress:
+  enabled: false
+service:
+  clusterIP: None
+db:
+  prisma:
+    migrate: true

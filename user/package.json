@@ -24,7 +24,7 @@
     "src/**/*.ts": "jest --bail --findRelatedTests --passWithNoTests"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed.ts"
+    "seed": "ts-node -T prisma/seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^8.4.7",
@@ -39,9 +39,11 @@
     "cookie-parser": "^1.4.6",
     "nats": "^2.9.0",
     "nestjs-prisma": "^0.19.0",
+    "prisma": "^4.5.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.5.7"
+    "rxjs": "^7.5.7",
+    "ts-node": "^10.9.1"
   },
   "devDependencies": {
     "@jest-mock/express": "^2.0.1",
@@ -63,12 +65,10 @@
     "jest-mock-extended": "^3.0.1",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
-    "prisma": "^4.5.0",
     "source-map-support": "^0.5.20",
     "supertest": "^6.3.1",
     "ts-jest": "28.0.8",
     "ts-loader": "^9.4.1",
-    "ts-node": "^10.9.1",
     "tsconfig-paths": "4.1.0",
     "typescript": "^4.8.4"
   }
