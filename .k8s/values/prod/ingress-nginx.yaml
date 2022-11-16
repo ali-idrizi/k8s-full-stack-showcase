@@ -1,0 +1,5 @@
+nameOverride: prod # until https://github.com/kubernetes/ingress-nginx/issues/8936 is fixed
+controller:
+  ingressClassResource:
+    name: nginx-prod
+    controllerValue: k8s.io/ingress-nginx-prod

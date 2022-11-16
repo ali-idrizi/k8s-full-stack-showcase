@@ -3,7 +3,7 @@ import { any, objectContainsValue } from 'jest-mock-extended'
 import { of } from 'rxjs'
 import { ConfigModuleMock, TEST_ENV } from 'src/common/test/config-module.mock'
 import { createMockContext, MockContext } from 'src/common/test/mock-context'
-import { AUTH_CLIENT, Command } from './auth.constant'
+import { COMMAND, NATS_CLIENT } from 'src/nats/nats.constants'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 
@@ -19,7 +19,7 @@ describe('AuthController', () => {
       providers: [
         AuthService,
         {
-          provide: AUTH_CLIENT,
+          provide: NATS_CLIENT,
           useValue: ctx.clientProxy,
         },
       ],
@@ -40,17 +40,17 @@ describe('AuthController', () => {
       }
 
       ctx.clientProxy.send
-        .calledWith(objectContainsValue(Command.VALIDATE_JWT), any())
+        .calledWith(objectContainsValue(COMMAND.auth.validateJwt), any())
         .mockReturnValue(of({ userId: 'test-user-id' }))
 
       ctx.clientProxy.send
-        .calledWith(objectContainsValue(Command.REFRESH_JWT), any())
+        .calledWith(objectContainsValue(COMMAND.auth.refreshJwt), any())
         .mockReturnValue(of({ jwt: 'new-test-jwt', refreshToken: 'new-test-refresh-token' }))
 
       const res = await authController.refreshToken(ctx.req)
 
       expect(ctx.clientProxy.send).toHaveBeenCalledWith(
-        { cmd: Command.REFRESH_JWT },
+        { cmd: COMMAND.auth.refreshJwt },
         {
           refreshToken: 'test-refresh-token',
           userId: 'test-user-id',

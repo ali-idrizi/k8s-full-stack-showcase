@@ -20,7 +20,7 @@ export class TodoItemApi {
 
   constructor(config?: ApiClientConfig) {
     this.client = new ApiClient({
-      baseURL: isServer() ? 'http://app-todo/item' : '/api/todo/item',
+      baseURL: isServer() ? `${process.env.TODO_SERVICE_URL}/item` : '/api/todo/item',
       ...config,
     })
   }

@@ -1,0 +1,9 @@
+containerPorts:
+  http: 3002
+image:
+  repository: todo
+ingress:
+  path: /api/todo(/|$)(.*)
+db:
+  prisma:
+    migrate: true

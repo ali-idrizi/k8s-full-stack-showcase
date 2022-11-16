@@ -1,22 +1,12 @@
 apiVersion: v2
-
 name: app
-description: Helm chart for releasing all the necessary microservices
+description: Helm chart for releasing any image (modified bitnami/node)
 type: application
-
 version: 0.1.0
 appVersion: "0.1.0"
-
 dependencies:
-  - name: main
-    version: 0.1.0
-    alias: auth
-  - name: main
-    version: 0.1.0
-    alias: todo
-  - name: main
-    version: 0.1.0
-    alias: user
-  - name: main
-    version: 0.1.0
-    alias: webClient
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 1.x.x

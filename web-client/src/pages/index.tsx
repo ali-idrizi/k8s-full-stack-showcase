@@ -41,7 +41,7 @@ const Home: PageWithLayout<Props> = () => {
       </GradientHeading>
 
       <Heading as="h2" textAlign="center" fontSize={['2xl', '3xl']}>
-        Create different lists and organize your day better!
+        Create lists with your tasks and organize your day better!
       </Heading>
 
       <Stack

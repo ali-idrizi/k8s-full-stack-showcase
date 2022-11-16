@@ -1,0 +1,15 @@
+containerPorts:
+  http: 3001
+image:
+  repository: user
+ingress:
+  path: /api/user(/|$)(.*)
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ~ ^/api/user/auth/?$ {
+        internal;
+      }
+db:
+  prisma:
+    migrate: true
+    seed: true

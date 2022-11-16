@@ -1,0 +1,5 @@
+auth:
+  username: auth
+  password: password
+  rootPassword: root
+  database: auth

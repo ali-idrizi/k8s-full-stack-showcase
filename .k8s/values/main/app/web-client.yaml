@@ -1,0 +1,9 @@
+containerPorts:
+  http: 3003
+image:
+  repository: web-client
+ingress:
+  rewriteTarget: /$1
+  path: /(.*)
+service:
+  clusterIP: None
