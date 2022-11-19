@@ -3,3 +3,7 @@ controller:
   ingressClassResource:
     name: nginx-prod
     controllerValue: k8s.io/ingress-nginx-prod
+  service:
+    annotations:
+      external-dns.alpha.kubernetes.io/hostname: todo.alidrizi.com
+      external-dns.alpha.kubernetes.io/ttl: 5m
