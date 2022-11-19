@@ -264,7 +264,7 @@ profiles:
       - op: replace
         path: /build/artifacts/3/docker/dockerfile
         value: .k8s/docker/nextjs/Dockerfile.prod
-      # Helm Releases (adding .k8s/values/prod files)
+      # Helm Releases (adding prod values/secrets files)
       # external-dns
       - op: add
         path: /manifests/helm/releases/0/valuesFiles
