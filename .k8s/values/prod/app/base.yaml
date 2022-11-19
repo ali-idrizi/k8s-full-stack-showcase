@@ -1,4 +1,5 @@
 ingress:
+  hostname: todo.alidrizi.com
   ingressClassName: nginx-prod
   auth:
     url: http://app-user.prod.svc.cluster.local/auth
