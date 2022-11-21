@@ -3,6 +3,8 @@ apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ .Values.tls.issuer.name }}
+  labels: {{- include "config.labels.standard" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
 spec:
   {{- if .Values.tls.issuer.selfSigned }}
   selfSigned: {}
