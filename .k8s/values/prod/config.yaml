@@ -4,3 +4,5 @@ tls:
     acme:
       email: todo@alidrizi.com
       privateKeySecretName: letsencrypt-prod-private-key
+dockerCredentials:
+  enabled: true

@@ -304,6 +304,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/4/valuesFiles/-
         value: .k8s/values/prod/config.yaml
+      - op: add
+        path: /manifests/helm/releases/4/valuesFiles/-
+        value: .k8s/secrets/prod/config.yaml
       # db-auth
       - op: add
         path: /manifests/helm/releases/5/valuesFiles/-

@@ -7,3 +7,9 @@ tls:
       server: https://acme-v02.api.letsencrypt.org/directory
       email: ""
       privateKeySecretName: letsencrypt-private-key
+dockerCredentials:
+  enabled: false
+  secretName: reg-credentials
+  server: https://index.docker.io/v1
+  username: ""
+  password: ""
