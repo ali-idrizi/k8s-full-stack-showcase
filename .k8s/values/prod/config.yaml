@@ -1,0 +1,6 @@
+tls:
+  issuer:
+    name: letsencrypt-prod
+    acme:
+      email: todo@alidrizi.com
+      privateKeySecretName: letsencrypt-prod-private-key

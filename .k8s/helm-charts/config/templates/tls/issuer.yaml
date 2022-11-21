@@ -1,0 +1,19 @@
+{{- if .Values.tls.issuer.enabled }}
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: {{ .Values.tls.issuer.name }}
+spec:
+  {{- if .Values.tls.issuer.selfSigned }}
+  selfSigned: {}
+  {{- else }}
+  acme:
+    server: {{ .Values.tls.issuer.acme.server }}
+    email: {{ .Values.tls.issuer.acme.email }}
+    privateKeySecretRef:
+      name: {{ .Values.tls.issuer.acme.privateKeySecretName }}
+    solvers:
+      - http01:
+          ingress: {}
+  {{- end }}
+{{- end }}

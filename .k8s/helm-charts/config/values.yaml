@@ -1,0 +1,9 @@
+tls:
+  issuer:
+    enabled: true
+    name: letsencrypt
+    selfSigned: false
+    acme:
+      server: https://acme-v02.api.letsencrypt.org/directory
+      email: ""
+      privateKeySecretName: letsencrypt-private-key
