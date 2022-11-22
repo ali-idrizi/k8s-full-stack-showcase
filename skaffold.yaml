@@ -219,6 +219,7 @@ profiles:
     build:
       local:
         useBuildkit: true
+        tryImportMissing: true
         push: true
     manifests:
       helm:
