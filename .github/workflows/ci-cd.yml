@@ -72,7 +72,7 @@ jobs:
       DOCKER_REGISTRY: docker.io/aliidrizi
     steps:
       - name: Set Kubernetes context
-        uses: azure/k8s-set-context@v2
+        uses: azure/k8s-set-context@v3
         with:
           method: service-account
           k8s-url: ${{ secrets.KUBERNETES_SERVER_URL }}
