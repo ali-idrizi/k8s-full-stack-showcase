@@ -42,10 +42,6 @@ jobs:
       - name: Set Docker Environment
         run: eval $(minikube -p minikube docker-env)
 
-      - name: Load Docker Layer Caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
-
       - name: Build
         run: npm run ci:build
 
@@ -114,10 +110,6 @@ jobs:
         uses: crazy-max/ghaction-import-gpg@v5
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-
-      - name: Load Docker Layer Caching
-        uses: satackey/action-docker-layer-caching@v0.0.11
-        continue-on-error: true
 
       - name: Build
         run: npm run prod:build
