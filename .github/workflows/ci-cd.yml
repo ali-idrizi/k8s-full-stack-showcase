@@ -42,6 +42,10 @@ jobs:
       - name: Build
         run: npm run ci:build
 
+      - name: Cache Docker Layers
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
       - name: Test
         run: npm run ci:test
 
@@ -110,6 +114,10 @@ jobs:
 
       - name: Build
         run: npm run prod:build
+
+      - name: Cache Docker Layers
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
 
       - name: Deploy
         run: npm run prod:deploy
