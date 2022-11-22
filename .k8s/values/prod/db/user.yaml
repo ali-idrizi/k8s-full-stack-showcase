@@ -1,5 +1,2 @@
 auth:
-  username: user
-  password: password
-  rootPassword: root
   database: user
