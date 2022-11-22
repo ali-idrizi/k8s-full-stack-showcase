@@ -39,12 +39,12 @@ jobs:
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v2.0.2/skaffold-linux-amd64
           sudo install skaffold /usr/local/bin/
 
-      - name: Build
-        run: npm run ci:build
-
-      - name: Cache Docker Layers
+      - name: Load Docker Layer Caching
         uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
+
+      - name: Build
+        run: npm run ci:build
 
       - name: Test
         run: npm run ci:test
@@ -112,12 +112,12 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
 
-      - name: Build
-        run: npm run prod:build
-
-      - name: Cache Docker Layers
+      - name: Load Docker Layer Caching
         uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
+
+      - name: Build
+        run: npm run prod:build
 
       - name: Deploy
         run: npm run prod:deploy
