@@ -58,6 +58,7 @@ manifests:
         namespace: dev
         version: 4.2.5
         createNamespace: true
+        useHelmSecrets: true
         repo: https://kubernetes.github.io/ingress-nginx
       - name: cert-manager
         remoteChart: cert-manager
@@ -66,6 +67,7 @@ manifests:
         namespace: cert-manager
         version: 1.10.0
         createNamespace: true
+        useHelmSecrets: true
         repo: https://charts.jetstack.io
       - name: external-dns
         remoteChart: external-dns
@@ -82,6 +84,7 @@ manifests:
         version: 0.18.0
         createNamespace: true
         wait: true
+        useHelmSecrets: true
         repo: https://nats-io.github.io/k8s/helm/charts/
       - name: config
         chartPath: .k8s/helm-charts/config
@@ -100,6 +103,7 @@ manifests:
         version: 9.2.1
         createNamespace: true
         wait: true
+        useHelmSecrets: true
         repo: https://charts.bitnami.com/bitnami
       - name: db-todo
         remoteChart: mysql
@@ -110,6 +114,7 @@ manifests:
         version: 9.2.1
         createNamespace: true
         wait: true
+        useHelmSecrets: true
         repo: https://charts.bitnami.com/bitnami
       - name: db-user
         remoteChart: mysql
@@ -120,6 +125,7 @@ manifests:
         version: 9.2.1
         createNamespace: true
         wait: true
+        useHelmSecrets: true
         repo: https://charts.bitnami.com/bitnami
       - name: app-auth
         chartPath: .k8s/helm-charts/app
@@ -314,6 +320,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/5/valuesFiles/-
         value: .k8s/values/prod/db/auth.yaml
+      - op: add
+        path: /manifests/helm/releases/5/valuesFiles/-
+        value: .k8s/secrets/prod/db/auth.yaml
       # db-todo
       - op: add
         path: /manifests/helm/releases/6/valuesFiles/-
@@ -321,6 +330,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/6/valuesFiles/-
         value: .k8s/values/prod/db/todo.yaml
+      - op: add
+        path: /manifests/helm/releases/6/valuesFiles/-
+        value: .k8s/secrets/prod/db/todo.yaml
       # db-user
       - op: add
         path: /manifests/helm/releases/7/valuesFiles/-
@@ -328,6 +340,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/7/valuesFiles/-
         value: .k8s/values/prod/db/user.yaml
+      - op: add
+        path: /manifests/helm/releases/7/valuesFiles/-
+        value: .k8s/secrets/prod/db/user.yaml
       # app-auth
       - op: add
         path: /manifests/helm/releases/8/valuesFiles/-
@@ -335,6 +350,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/8/valuesFiles/-
         value: .k8s/values/prod/app/auth.yaml
+      - op: add
+        path: /manifests/helm/releases/8/valuesFiles/-
+        value: .k8s/secrets/prod/app/auth.yaml
       # app-todo
       - op: add
         path: /manifests/helm/releases/9/valuesFiles/-
@@ -342,6 +360,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/9/valuesFiles/-
         value: .k8s/values/prod/app/todo.yaml
+      - op: add
+        path: /manifests/helm/releases/9/valuesFiles/-
+        value: .k8s/secrets/prod/app/todo.yaml
       # app-user
       - op: add
         path: /manifests/helm/releases/10/valuesFiles/-
@@ -349,6 +370,9 @@ profiles:
       - op: add
         path: /manifests/helm/releases/10/valuesFiles/-
         value: .k8s/values/prod/app/user.yaml
+      - op: add
+        path: /manifests/helm/releases/10/valuesFiles/-
+        value: .k8s/secrets/prod/app/user.yaml
       # app-web-client
       - op: add
         path: /manifests/helm/releases/11/valuesFiles/-

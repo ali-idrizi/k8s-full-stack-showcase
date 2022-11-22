@@ -1,5 +1,2 @@
 auth:
-  username: todo
-  password: password
-  rootPassword: root
   database: todo
