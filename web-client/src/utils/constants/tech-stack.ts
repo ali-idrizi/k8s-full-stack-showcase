@@ -78,7 +78,7 @@ export const TECH_STACK: readonly TechDetails[] = [
     type: TechType.UTILITY,
   },
   {
-    title: 'DigitalOcean',
+    title: 'Linode',
     type: TechType.PLATFORM,
   },
 ]
