@@ -1,4 +1,13 @@
 ingress:
+  hostname: todo.alidrizi.com
   ingressClassName: nginx-prod
+  tls:
+    enabled: true
+    secretName: letsencrypt-prod-tls
   auth:
     url: http://app-user.prod.svc.cluster.local/auth
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+global:
+  imagePullSecrets:
+    - reg-credentials

@@ -8,6 +8,8 @@
     "dev:start": "skaffold dev -p dev --skip-tests",
     "dev:run": "skaffold run -p dev --skip-tests --tail",
     "prod:run": "skaffold run -p prod --skip-tests --tail",
+    "prod:build": "skaffold build -p prod --default-repo=$DOCKER_REGISTRY --file-output tags.json",
+    "prod:deploy": "skaffold deploy -p prod -a tags.json",
     "ci:build": "skaffold build -p dev -p ci --skip-tests --file-output tags.json",
     "ci:test": "skaffold test -p dev -p ci -a tags.json",
     "ci:deploy": "skaffold deploy -p dev -p ci -a tags.json"
