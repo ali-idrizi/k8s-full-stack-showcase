@@ -11,6 +11,7 @@ build:
           - src/**/*.ts
       docker:
         dockerfile: .k8s/docker/nestjs/Dockerfile.dev
+        cacheFrom: [auth]
     - image: todo
       context: todo
       sync:
@@ -18,6 +19,7 @@ build:
           - src/**/*.ts
       docker:
         dockerfile: .k8s/docker/nestjs/Dockerfile.dev
+        cacheFrom: [todo]
     - image: user
       context: user
       sync:
@@ -25,6 +27,7 @@ build:
           - src/**/*.ts
       docker:
         dockerfile: .k8s/docker/nestjs/Dockerfile.dev
+        cacheFrom: [user]
     - image: web-client
       context: web-client
       sync:
@@ -32,9 +35,12 @@ build:
           - src/**/*.{ts,tsx}
       docker:
         dockerfile: .k8s/docker/nextjs/Dockerfile.dev
+        cacheFrom: [web-client]
   local:
     useBuildkit: true
     push: false
+  tagPolicy:
+    inputDigest: {}
 test:
   - image: auth
     custom:

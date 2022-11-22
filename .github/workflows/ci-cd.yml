@@ -39,6 +39,9 @@ jobs:
           curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v2.0.2/skaffold-linux-amd64
           sudo install skaffold /usr/local/bin/
 
+      - name: Set Docker Environment
+        run: eval $(minikube -p minikube docker-env)
+
       - name: Build
         run: npm run ci:build
 
