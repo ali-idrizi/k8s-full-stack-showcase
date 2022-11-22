@@ -1,4 +1,4 @@
-apiVersion: skaffold/v3
+apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
   name: todo-app
@@ -34,7 +34,7 @@ build:
         dockerfile: .k8s/docker/nextjs/Dockerfile.dev
   local:
     useBuildkit: true
-    concurrency: 1
+    push: false
 test:
   - image: auth
     custom:
@@ -51,366 +51,264 @@ test:
 manifests:
   helm:
     releases:
-      - name: ingress-nginx
-        remoteChart: ingress-nginx
-        valuesFiles:
-          - .k8s/values/main/ingress-nginx.yaml
-        namespace: dev
-        version: 4.2.5
-        createNamespace: true
-        useHelmSecrets: true
-        repo: https://kubernetes.github.io/ingress-nginx
-      - name: cert-manager
+      - &certManagerRelease
+        name: cert-manager
         remoteChart: cert-manager
         valuesFiles:
           - .k8s/values/main/cert-manager.yaml
+          - .k8s/values/dev/cert-manager.yaml
         namespace: cert-manager
         version: 1.10.0
         createNamespace: true
-        useHelmSecrets: true
         repo: https://charts.jetstack.io
-      - name: external-dns
-        remoteChart: external-dns
-        namespace: dev
-        version: 6.12.0
-        createNamespace: true
-        useHelmSecrets: true
-        repo: https://charts.bitnami.com/bitnami
-      - name: nats
-        remoteChart: nats
-        valuesFiles:
-          - .k8s/values/main/nats.yaml
-        namespace: dev
-        version: 0.18.0
-        createNamespace: true
-        wait: true
-        useHelmSecrets: true
-        repo: https://nats-io.github.io/k8s/helm/charts/
-      - name: config
+      - &configRelease
+        name: config
         chartPath: .k8s/helm-charts/config
         valuesFiles:
           - .k8s/values/main/config.yaml
+          - .k8s/values/dev/config.yaml
         namespace: dev
         createNamespace: true
         wait: true
-        useHelmSecrets: true
-      - name: db-auth
+      - &ingressNginxRelease
+        name: ingress-nginx
+        remoteChart: ingress-nginx
+        valuesFiles:
+          - .k8s/values/main/ingress-nginx.yaml
+          - .k8s/values/dev/ingress-nginx.yaml
+        namespace: dev
+        version: 4.2.5
+        repo: https://kubernetes.github.io/ingress-nginx
+      - &natsRelease
+        name: nats
+        remoteChart: nats
+        valuesFiles:
+          - .k8s/values/main/nats.yaml
+          - .k8s/values/dev/nats.yaml
+        namespace: dev
+        version: 0.18.0
+        wait: true
+        repo: https://nats-io.github.io/k8s/helm/charts/
+      - &dbAuthRelease
+        name: db-auth
         remoteChart: mysql
         valuesFiles:
           - .k8s/values/main/db/base.yaml
           - .k8s/values/main/db/auth.yaml
+          - .k8s/values/dev/db/base.yaml
+          - .k8s/values/dev/db/auth.yaml
         namespace: dev
         version: 9.2.1
-        createNamespace: true
         wait: true
-        useHelmSecrets: true
         repo: https://charts.bitnami.com/bitnami
-      - name: db-todo
+      - &dbTodoRelease
+        name: db-todo
         remoteChart: mysql
         valuesFiles:
           - .k8s/values/main/db/base.yaml
           - .k8s/values/main/db/todo.yaml
+          - .k8s/values/dev/db/base.yaml
+          - .k8s/values/dev/db/todo.yaml
         namespace: dev
         version: 9.2.1
-        createNamespace: true
         wait: true
-        useHelmSecrets: true
         repo: https://charts.bitnami.com/bitnami
-      - name: db-user
+      - &dbUserRelease
+        name: db-user
         remoteChart: mysql
         valuesFiles:
           - .k8s/values/main/db/base.yaml
           - .k8s/values/main/db/user.yaml
+          - .k8s/values/dev/db/base.yaml
+          - .k8s/values/dev/db/user.yaml
         namespace: dev
         version: 9.2.1
-        createNamespace: true
         wait: true
-        useHelmSecrets: true
         repo: https://charts.bitnami.com/bitnami
-      - name: app-auth
+      - &appAuthRelease
+        name: app-auth
         chartPath: .k8s/helm-charts/app
         valuesFiles:
           - .k8s/values/main/app/base.yaml
           - .k8s/values/main/app/auth.yaml
+          - .k8s/values/dev/app/base.yaml
+          - .k8s/values/dev/app/auth.yaml
         namespace: dev
-        createNamespace: true
-        useHelmSecrets: true
-      - name: app-todo
+      - &appTodoRelease
+        name: app-todo
         chartPath: .k8s/helm-charts/app
         valuesFiles:
           - .k8s/values/main/app/base.yaml
           - .k8s/values/main/app/todo.yaml
+          - .k8s/values/dev/app/base.yaml
+          - .k8s/values/dev/app/todo.yaml
         namespace: dev
-        createNamespace: true
-        useHelmSecrets: true
-      - name: app-user
+      - &appUserRelease
+        name: app-user
         chartPath: .k8s/helm-charts/app
         valuesFiles:
           - .k8s/values/main/app/base.yaml
           - .k8s/values/main/app/user.yaml
+          - .k8s/values/dev/app/base.yaml
+          - .k8s/values/dev/app/user.yaml
         namespace: dev
-        createNamespace: true
-        useHelmSecrets: true
-      - name: app-web-client
+      - &appWebClientRelease
+        name: app-web-client
         chartPath: .k8s/helm-charts/app
         valuesFiles:
           - .k8s/values/main/app/base.yaml
           - .k8s/values/main/app/web-client.yaml
+          - .k8s/values/dev/app/base.yaml
+          - .k8s/values/dev/app/web-client.yaml
         namespace: dev
-        createNamespace: true
-        useHelmSecrets: true
 deploy:
   helm: {}
   logs:
     prefix: auto
+portForward:
+  - resourceType: service
+    resourceName: ingress-nginx-dev-controller
+    namespace: dev
+    port: 443
+    address: 0.0.0.0
+    localPort: 3443
+  - resourceType: service
+    resourceName: ingress-nginx-dev-controller
+    namespace: dev
+    port: 80
+    address: 0.0.0.0
+    localPort: 3000
 profiles:
   - name: dev
-    patches:
-      # Helm Releases
-      # Add .k8s/values/dev files
-      # ingress-nginx
-      - op: add
-        path: /manifests/helm/releases/0/valuesFiles/-
-        value: .k8s/values/dev/ingress-nginx.yaml
-      # cert-manager
-      - op: add
-        path: /manifests/helm/releases/1/valuesFiles/-
-        value: .k8s/values/dev/cert-manager.yaml
-      # nats
-      - op: add
-        path: /manifests/helm/releases/3/valuesFiles/-
-        value: .k8s/values/dev/nats.yaml
-      # config
-      - op: add
-        path: /manifests/helm/releases/4/valuesFiles/-
-        value: .k8s/values/dev/config.yaml
-      # db-auth
-      - op: add
-        path: /manifests/helm/releases/5/valuesFiles/-
-        value: .k8s/values/dev/db/base.yaml
-      - op: add
-        path: /manifests/helm/releases/5/valuesFiles/-
-        value: .k8s/values/dev/db/auth.yaml
-      # db-todo
-      - op: add
-        path: /manifests/helm/releases/6/valuesFiles/-
-        value: .k8s/values/dev/db/base.yaml
-      - op: add
-        path: /manifests/helm/releases/6/valuesFiles/-
-        value: .k8s/values/dev/db/todo.yaml
-      # db-user
-      - op: add
-        path: /manifests/helm/releases/7/valuesFiles/-
-        value: .k8s/values/dev/db/base.yaml
-      - op: add
-        path: /manifests/helm/releases/7/valuesFiles/-
-        value: .k8s/values/dev/db/user.yaml
-      # app-auth
-      - op: add
-        path: /manifests/helm/releases/8/valuesFiles/-
-        value: .k8s/values/dev/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/8/valuesFiles/-
-        value: .k8s/values/dev/app/auth.yaml
-      # app-todo
-      - op: add
-        path: /manifests/helm/releases/9/valuesFiles/-
-        value: .k8s/values/dev/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/9/valuesFiles/-
-        value: .k8s/values/dev/app/todo.yaml
-      # app-user
-      - op: add
-        path: /manifests/helm/releases/10/valuesFiles/-
-        value: .k8s/values/dev/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/10/valuesFiles/-
-        value: .k8s/values/dev/app/user.yaml
-      # app-web-client
-      - op: add
-        path: /manifests/helm/releases/11/valuesFiles/-
-        value: .k8s/values/dev/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/11/valuesFiles/-
-        value: .k8s/values/dev/app/web-client.yaml
-      # Remove external-dns
-      - op: remove
-        path: /manifests/helm/releases/2
-    portForward:
-      - resourceType: service
-        resourceName: ingress-nginx-dev-controller
-        namespace: dev
-        port: 443
-        address: 0.0.0.0
-        localPort: 3443
-      - resourceType: service
-        resourceName: ingress-nginx-dev-controller
-        namespace: dev
-        port: 80
-        address: 0.0.0.0
-        localPort: 3000
   - name: ci
     patches:
       # Build Artifacts (replacing dockerfiles)
-      # auth
       - op: replace
         path: /build/artifacts/0/docker/dockerfile
         value: .k8s/docker/nestjs/Dockerfile.ci
-      # todo
       - op: replace
         path: /build/artifacts/1/docker/dockerfile
         value: .k8s/docker/nestjs/Dockerfile.ci
-      # user
       - op: replace
         path: /build/artifacts/2/docker/dockerfile
         value: .k8s/docker/nestjs/Dockerfile.ci
-      # web-client
       - op: replace
         path: /build/artifacts/3/docker/dockerfile
         value: .k8s/docker/nextjs/Dockerfile.ci
   - name: prod
     patches:
       # Build Artifacts (replacing dockerfiles)
-      # auth
       - op: replace
         path: /build/artifacts/0/docker/dockerfile
         value: .k8s/docker/nestjs/Dockerfile.prod
-      # todo
       - op: replace
         path: /build/artifacts/1/docker/dockerfile
         value: .k8s/docker/nestjs/Dockerfile.prod
-      # user
       - op: replace
         path: /build/artifacts/2/docker/dockerfile
         value: .k8s/docker/nestjs/Dockerfile.prod
-      # web-client
       - op: replace
         path: /build/artifacts/3/docker/dockerfile
         value: .k8s/docker/nextjs/Dockerfile.prod
-      # Helm Releases (adding prod values/secrets files)
-      # ingress-nginx
-      - op: add
-        path: /manifests/helm/releases/0/valuesFiles/-
-        value: .k8s/values/prod/ingress-nginx.yaml
-      # cert-manager
-      - op: add
-        path: /manifests/helm/releases/1/valuesFiles/-
-        value: .k8s/values/prod/cert-manager.yaml
-      # external-dns
-      - op: add
-        path: /manifests/helm/releases/2/valuesFiles
-        value:
-          - .k8s/values/prod/external-dns.yaml
-          - .k8s/secrets/prod/external-dns.yaml
-      # nats
-      - op: add
-        path: /manifests/helm/releases/3/valuesFiles/-
-        value: .k8s/values/prod/nats.yaml
-      # config
-      - op: add
-        path: /manifests/helm/releases/4/valuesFiles/-
-        value: .k8s/values/prod/config.yaml
-      - op: add
-        path: /manifests/helm/releases/4/valuesFiles/-
-        value: .k8s/secrets/prod/config.yaml
-      # db-auth
-      - op: add
-        path: /manifests/helm/releases/5/valuesFiles/-
-        value: .k8s/values/prod/db/base.yaml
-      - op: add
-        path: /manifests/helm/releases/5/valuesFiles/-
-        value: .k8s/values/prod/db/auth.yaml
-      - op: add
-        path: /manifests/helm/releases/5/valuesFiles/-
-        value: .k8s/secrets/prod/db/auth.yaml
-      # db-todo
-      - op: add
-        path: /manifests/helm/releases/6/valuesFiles/-
-        value: .k8s/values/prod/db/base.yaml
-      - op: add
-        path: /manifests/helm/releases/6/valuesFiles/-
-        value: .k8s/values/prod/db/todo.yaml
-      - op: add
-        path: /manifests/helm/releases/6/valuesFiles/-
-        value: .k8s/secrets/prod/db/todo.yaml
-      # db-user
-      - op: add
-        path: /manifests/helm/releases/7/valuesFiles/-
-        value: .k8s/values/prod/db/base.yaml
-      - op: add
-        path: /manifests/helm/releases/7/valuesFiles/-
-        value: .k8s/values/prod/db/user.yaml
-      - op: add
-        path: /manifests/helm/releases/7/valuesFiles/-
-        value: .k8s/secrets/prod/db/user.yaml
-      # app-auth
-      - op: add
-        path: /manifests/helm/releases/8/valuesFiles/-
-        value: .k8s/values/prod/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/8/valuesFiles/-
-        value: .k8s/values/prod/app/auth.yaml
-      - op: add
-        path: /manifests/helm/releases/8/valuesFiles/-
-        value: .k8s/secrets/prod/app/auth.yaml
-      # app-todo
-      - op: add
-        path: /manifests/helm/releases/9/valuesFiles/-
-        value: .k8s/values/prod/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/9/valuesFiles/-
-        value: .k8s/values/prod/app/todo.yaml
-      - op: add
-        path: /manifests/helm/releases/9/valuesFiles/-
-        value: .k8s/secrets/prod/app/todo.yaml
-      # app-user
-      - op: add
-        path: /manifests/helm/releases/10/valuesFiles/-
-        value: .k8s/values/prod/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/10/valuesFiles/-
-        value: .k8s/values/prod/app/user.yaml
-      - op: add
-        path: /manifests/helm/releases/10/valuesFiles/-
-        value: .k8s/secrets/prod/app/user.yaml
-      # app-web-client
-      - op: add
-        path: /manifests/helm/releases/11/valuesFiles/-
-        value: .k8s/values/prod/app/base.yaml
-      - op: add
-        path: /manifests/helm/releases/11/valuesFiles/-
-        value: .k8s/values/prod/app/web-client.yaml
-      # Helm Releases (changing namespace to prod)
-      - op: replace
-        path: /manifests/helm/releases/0/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/2/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/3/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/4/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/5/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/6/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/7/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/8/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/9/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/10/namespace
-        value: prod
-      - op: replace
-        path: /manifests/helm/releases/11/namespace
-        value: prod
+    build:
+      local:
+        useBuildkit: true
+        push: true
+    manifests:
+      helm:
+        releases:
+          - <<: *certManagerRelease
+            valuesFiles:
+              - .k8s/values/main/cert-manager.yaml
+              - .k8s/values/prod/cert-manager.yaml
+            useHelmSecrets: true
+          - <<: *configRelease
+            valuesFiles:
+              - .k8s/values/main/config.yaml
+              - .k8s/values/prod/config.yaml
+              - .k8s/secrets/prod/config.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *ingressNginxRelease
+            valuesFiles:
+              - .k8s/values/main/ingress-nginx.yaml
+              - .k8s/values/prod/ingress-nginx.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - name: external-dns
+            remoteChart: external-dns
+            valuesFiles:
+              - .k8s/values/prod/external-dns.yaml
+              - .k8s/secrets/prod/external-dns.yaml
+            namespace: prod
+            version: 6.12.0
+            useHelmSecrets: true
+            repo: https://charts.bitnami.com/bitnami
+          - <<: *natsRelease
+            valuesFiles:
+              - .k8s/values/main/nats.yaml
+              - .k8s/values/prod/nats.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *dbAuthRelease
+            valuesFiles:
+              - .k8s/values/main/db/base.yaml
+              - .k8s/values/main/db/auth.yaml
+              - .k8s/values/prod/db/base.yaml
+              - .k8s/values/prod/db/auth.yaml
+              - .k8s/secrets/prod/db/auth.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *dbTodoRelease
+            valuesFiles:
+              - .k8s/values/main/db/base.yaml
+              - .k8s/values/main/db/todo.yaml
+              - .k8s/values/prod/db/base.yaml
+              - .k8s/values/prod/db/todo.yaml
+              - .k8s/secrets/prod/db/todo.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *dbUserRelease
+            valuesFiles:
+              - .k8s/values/main/db/base.yaml
+              - .k8s/values/main/db/user.yaml
+              - .k8s/values/prod/db/base.yaml
+              - .k8s/values/prod/db/user.yaml
+              - .k8s/secrets/prod/db/user.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *appAuthRelease
+            valuesFiles:
+              - .k8s/values/main/app/base.yaml
+              - .k8s/values/main/app/auth.yaml
+              - .k8s/values/prod/app/base.yaml
+              - .k8s/values/prod/app/auth.yaml
+              - .k8s/secrets/prod/app/auth.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *appTodoRelease
+            valuesFiles:
+              - .k8s/values/main/app/base.yaml
+              - .k8s/values/main/app/todo.yaml
+              - .k8s/values/prod/app/base.yaml
+              - .k8s/values/prod/app/todo.yaml
+              - .k8s/secrets/prod/app/todo.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *appUserRelease
+            valuesFiles:
+              - .k8s/values/main/app/base.yaml
+              - .k8s/values/main/app/user.yaml
+              - .k8s/values/prod/app/base.yaml
+              - .k8s/values/prod/app/user.yaml
+              - .k8s/secrets/prod/app/user.yaml
+            namespace: prod
+            useHelmSecrets: true
+          - <<: *appWebClientRelease
+            valuesFiles:
+              - .k8s/values/main/app/base.yaml
+              - .k8s/values/main/app/web-client.yaml
+              - .k8s/values/prod/app/base.yaml
+              - .k8s/values/prod/app/web-client.yaml
+            namespace: prod
+            useHelmSecrets: true
