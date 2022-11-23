@@ -21,6 +21,8 @@ jobs:
     name: Test
     runs-on: ubuntu-20.04
     timeout-minutes: 15
+    env:
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
@@ -72,7 +74,7 @@ jobs:
       - test
       - lint
     env:
-      DOCKER_REGISTRY: docker.io/aliidrizi
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
     steps:
       - name: Set Kubernetes context
         uses: azure/k8s-set-context@v3

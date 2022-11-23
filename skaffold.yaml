@@ -38,6 +38,7 @@ build:
         cacheFrom: [web-client]
   local:
     useBuildkit: true
+    tryImportMissing: true
     push: false
   tagPolicy:
     inputDigest: {}
