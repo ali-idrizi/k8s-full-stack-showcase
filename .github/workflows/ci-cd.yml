@@ -72,7 +72,7 @@ jobs:
       - test
       - lint
     env:
-      DOCKER_REGISTRY: docker.io/aliidrizi
+      DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
     steps:
       - name: Set Kubernetes context
         uses: azure/k8s-set-context@v3
