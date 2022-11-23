@@ -10,7 +10,7 @@ build:
         infer:
           - src/**/*.ts
       docker:
-        dockerfile: .k8s/docker/nestjs/Dockerfile.dev
+        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
         cacheFrom: [auth]
     - image: todo
       context: todo
@@ -18,7 +18,7 @@ build:
         infer:
           - src/**/*.ts
       docker:
-        dockerfile: .k8s/docker/nestjs/Dockerfile.dev
+        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
         cacheFrom: [todo]
     - image: user
       context: user
@@ -26,7 +26,7 @@ build:
         infer:
           - src/**/*.ts
       docker:
-        dockerfile: .k8s/docker/nestjs/Dockerfile.dev
+        dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
         cacheFrom: [user]
     - image: web-client
       context: web-client
@@ -34,7 +34,7 @@ build:
         infer:
           - src/**/*.{ts,tsx}
       docker:
-        dockerfile: .k8s/docker/nextjs/Dockerfile.dev
+        dockerfile: ../.k8s/docker/nextjs/Dockerfile.dev
         cacheFrom: [web-client]
   local:
     useBuildkit: true
@@ -191,31 +191,31 @@ profiles:
       # Build Artifacts (replacing dockerfiles)
       - op: replace
         path: /build/artifacts/0/docker/dockerfile
-        value: .k8s/docker/nestjs/Dockerfile.ci
+        value: ../.k8s/docker/nestjs/Dockerfile.ci
       - op: replace
         path: /build/artifacts/1/docker/dockerfile
-        value: .k8s/docker/nestjs/Dockerfile.ci
+        value: ../.k8s/docker/nestjs/Dockerfile.ci
       - op: replace
         path: /build/artifacts/2/docker/dockerfile
-        value: .k8s/docker/nestjs/Dockerfile.ci
+        value: ../.k8s/docker/nestjs/Dockerfile.ci
       - op: replace
         path: /build/artifacts/3/docker/dockerfile
-        value: .k8s/docker/nextjs/Dockerfile.ci
+        value: ../.k8s/docker/nextjs/Dockerfile.ci
   - name: prod
     patches:
       # Build Artifacts (replacing dockerfiles)
       - op: replace
         path: /build/artifacts/0/docker/dockerfile
-        value: .k8s/docker/nestjs/Dockerfile.prod
+        value: ../.k8s/docker/nestjs/Dockerfile.prod
       - op: replace
         path: /build/artifacts/1/docker/dockerfile
-        value: .k8s/docker/nestjs/Dockerfile.prod
+        value: ../.k8s/docker/nestjs/Dockerfile.prod
       - op: replace
         path: /build/artifacts/2/docker/dockerfile
-        value: .k8s/docker/nestjs/Dockerfile.prod
+        value: ../.k8s/docker/nestjs/Dockerfile.prod
       - op: replace
         path: /build/artifacts/3/docker/dockerfile
-        value: .k8s/docker/nextjs/Dockerfile.prod
+        value: ../.k8s/docker/nextjs/Dockerfile.prod
     build:
       local:
         useBuildkit: true
