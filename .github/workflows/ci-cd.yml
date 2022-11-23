@@ -25,9 +25,6 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Setup Minikube
-        uses: hiberbee/github-action-minikube@1.7.0
-
       - name: Setup Helm
         uses: hiberbee/github-action-helm@1.13.0
 
