@@ -1,3 +1,4 @@
+replicaCount: 2
 ingress:
   hostname: todo.alidrizi.com
   ingressClassName: nginx-prod
