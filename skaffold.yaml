@@ -182,21 +182,35 @@ portForward:
     localPort: 3000
 profiles:
   - name: dev
+    patches:
+      # Build Artifacts (add docker target)
+      - op: add
+        path: /build/artifacts/0/docker/target
+        value: dev
+      - op: add
+        path: /build/artifacts/1/docker/target
+        value: dev
+      - op: add
+        path: /build/artifacts/2/docker/target
+        value: dev
+      - op: add
+        path: /build/artifacts/3/docker/target
+        value: dev
   - name: ci
     patches:
-      # Build Artifacts (replacing dockerfiles)
-      - op: replace
-        path: /build/artifacts/0/docker/dockerfile
-        value: ../.k8s/docker/nestjs/Dockerfile.ci
-      - op: replace
-        path: /build/artifacts/1/docker/dockerfile
-        value: ../.k8s/docker/nestjs/Dockerfile.ci
-      - op: replace
-        path: /build/artifacts/2/docker/dockerfile
-        value: ../.k8s/docker/nestjs/Dockerfile.ci
-      - op: replace
-        path: /build/artifacts/3/docker/dockerfile
-        value: ../.k8s/docker/nextjs/Dockerfile.ci
+      # Build Artifacts (add docker target)
+      - op: add
+        path: /build/artifacts/0/docker/target
+        value: ci
+      - op: add
+        path: /build/artifacts/1/docker/target
+        value: ci
+      - op: add
+        path: /build/artifacts/2/docker/target
+        value: ci
+      - op: add
+        path: /build/artifacts/3/docker/target
+        value: ci
   - name: prod
     patches:
       # Build Artifacts (replacing dockerfiles)
