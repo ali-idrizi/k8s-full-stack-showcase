@@ -7,4 +7,11 @@ FROM node:18.12.1 AS runner
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+FROM runner as dev
 CMD [ "npm", "run", "dev" ]
+
+# Build on CI to catch potentials errors ignored by `dev`
+FROM runner as ci
+RUN npm run build
+CMD [ "npm", "run", "start" ]

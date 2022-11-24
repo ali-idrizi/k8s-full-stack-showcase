@@ -8,4 +8,11 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npx prisma generate
+
+FROM runner as dev
 CMD [ "npm", "run", "start:dev" ]
+
+# Build on CI to catch potentials errors ignored by `start:dev`
+FROM runner as ci
+RUN npm run build
+CMD [ "npm", "run", "start:prod" ]
