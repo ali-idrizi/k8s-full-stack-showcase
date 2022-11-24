@@ -198,7 +198,7 @@ profiles:
         value: dev
   - name: ci
     patches:
-      # Build Artifacts (replacing dockerfiles)
+      # Build Artifacts (add docker target)
       - op: add
         path: /build/artifacts/0/docker/target
         value: ci
@@ -213,7 +213,7 @@ profiles:
         value: ci
   - name: prod
     patches:
-      # Build Artifacts (replacing dockerfiles)
+      # Build Artifacts (add docker target)
       - op: replace
         path: /build/artifacts/0/docker/dockerfile
         value: ../.k8s/docker/nestjs/Dockerfile.prod
