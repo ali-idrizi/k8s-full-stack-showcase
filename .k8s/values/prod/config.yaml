@@ -6,3 +6,4 @@ tls:
       privateKeySecretName: letsencrypt-prod-private-key
 dockerCredentials:
   enabled: true
+githubActionsCD: true
