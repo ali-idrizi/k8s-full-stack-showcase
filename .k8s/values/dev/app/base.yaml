@@ -1,5 +1,11 @@
 ingress:
   hostname: todo.dev.local
   ingressClassName: nginx-dev
+  tls:
+    enabled: true
+    secretName: letsencrypt-dev-tls
   auth:
     url: http://app-user.dev.svc.cluster.local/auth
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    cert-manager.io/issuer: letsencrypt-dev

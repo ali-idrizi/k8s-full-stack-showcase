@@ -6,11 +6,13 @@
   "scripts": {
     "prepare": "husky install",
     "dev:start": "skaffold dev -p dev --skip-tests",
-    "dev:run": "skaffold run -p dev --skip-tests --tail",
+    "dev:run": "skaffold run -p dev --skip-tests --tail --port-forward=user",
     "prod:run": "skaffold run -p prod --skip-tests --tail",
-    "ci:build": "skaffold build -p dev -p ci --skip-tests --file-output tags.json",
-    "ci:test": "skaffold test -p dev -p ci -a tags.json",
-    "ci:deploy": "skaffold deploy -p dev -p ci -a tags.json"
+    "prod:build": "skaffold build -p prod --default-repo=$DOCKER_REGISTRY --file-output tags.json",
+    "prod:deploy": "skaffold deploy -p prod -a tags.json",
+    "ci:build": "skaffold build -p ci --skip-tests --file-output tags.json",
+    "ci:test": "skaffold test -p ci -a tags.json",
+    "ci:deploy": "skaffold deploy -p ci -a tags.json"
   },
   "repository": {
     "type": "git",
