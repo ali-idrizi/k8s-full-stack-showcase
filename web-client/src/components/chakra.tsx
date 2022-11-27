@@ -1,6 +1,14 @@
 import theme from '@/theme'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, cookieStorageManagerSSR } from '@chakra-ui/react'
 
-export const Chakra: React.FC<React.PropsWithChildren> = ({ children }) => {
-  return <ChakraProvider theme={theme}>{children}</ChakraProvider>
+type Props = {
+  cookies: string
+}
+
+export const Chakra: React.FC<React.PropsWithChildren<Props>> = ({ cookies, children }) => {
+  return (
+    <ChakraProvider theme={theme} colorModeManager={cookieStorageManagerSSR(cookies)}>
+      {children}
+    </ChakraProvider>
+  )
 }

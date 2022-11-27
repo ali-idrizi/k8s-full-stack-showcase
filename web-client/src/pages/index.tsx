@@ -1,12 +1,23 @@
 import { CTAButton, GradientHeading } from '@/components'
-import { withAuth, withHocs, withReactQuery, withUnauthenticatedRoute } from '@/hocs'
+import {
+  withAuth,
+  withCookiesProp,
+  withHocs,
+  withReactQuery,
+  withUnauthenticatedRoute,
+} from '@/hocs'
 import { useBrandColors } from '@/hooks'
 import { EmptyLayout } from '@/layouts'
 import { PageWithLayout } from '@/utils/types'
 import { Heading, Highlight, Stack, Text, VStack } from '@chakra-ui/react'
 import { InferGetServerSidePropsType } from 'next'
 
-export const getServerSideProps = withHocs(withReactQuery, withAuth, withUnauthenticatedRoute())()
+export const getServerSideProps = withHocs(
+  withCookiesProp,
+  withReactQuery,
+  withAuth,
+  withUnauthenticatedRoute(),
+)()
 
 type Props = InferGetServerSidePropsType<typeof getServerSideProps>
 

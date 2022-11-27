@@ -1,5 +1,5 @@
 import { TodoTabs } from '@/components'
-import { withAuth, withAuthenticatedRoute, withHocs, withReactQuery } from '@/hocs'
+import { withAuth, withAuthenticatedRoute, withCookiesProp, withHocs, withReactQuery } from '@/hocs'
 import { withApi } from '@/hocs/with-api'
 import { EmptyLayout } from '@/layouts'
 import { QUERY_KEY } from '@/utils/constants'
@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { useCallback, useEffect, useState } from 'react'
 
 export const getServerSideProps = withHocs(
+  withCookiesProp,
   withReactQuery,
   withAuth,
   withAuthenticatedRoute(),
