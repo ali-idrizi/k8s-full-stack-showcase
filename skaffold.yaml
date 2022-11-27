@@ -7,29 +7,33 @@ build:
     - image: auth
       context: auth
       sync:
-        infer:
-          - src/**/*.ts
+        manual:
+          - src: src/**/*.ts
+            dest: .
       docker:
         dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
     - image: todo
       context: todo
       sync:
-        infer:
-          - src/**/*.ts
+        manual:
+          - src: src/**/*.ts
+            dest: .
       docker:
         dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
     - image: user
       context: user
       sync:
-        infer:
-          - src/**/*.ts
+        manual:
+          - src: src/**/*.ts
+            dest: .
       docker:
         dockerfile: ../.k8s/docker/nestjs/Dockerfile.dev
     - image: web-client
       context: web-client
       sync:
-        infer:
-          - src/**/*.{ts,tsx}
+        manual:
+          - src: src/**/*.{ts,tsx}
+            dest: .
       docker:
         dockerfile: ../.k8s/docker/nextjs/Dockerfile.dev
   local:
