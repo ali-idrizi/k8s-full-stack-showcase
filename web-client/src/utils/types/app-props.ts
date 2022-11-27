@@ -1,4 +1,4 @@
-import { WithReactQueryProps } from '@/hocs'
+import { WithCookiesProp, WithReactQueryProps } from '@/hocs'
 import { PageWithLayout } from './page-with-layout'
 
 type Props<P = unknown> = {
@@ -6,4 +6,4 @@ type Props<P = unknown> = {
   Component: PageWithLayout
 }
 
-export type AppProps = Props<WithReactQueryProps>
+export type AppProps = Props<WithReactQueryProps & WithCookiesProp>

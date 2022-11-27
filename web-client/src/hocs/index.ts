@@ -19,6 +19,7 @@ export type GsspHoc<
 
 export * from './with-auth'
 export * from './with-authenticated-route'
+export * from './with-cookies-prop'
 export * from './with-hocs'
 export * from './with-react-query'
 export * from './with-unauthenticated-route'

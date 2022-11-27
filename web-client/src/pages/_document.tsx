@@ -1,25 +1,41 @@
-import theme from '@/theme'
-import { ColorModeScript } from '@chakra-ui/react'
-import { Head, Html, Main, NextScript } from 'next/document'
+import { getColorModeFromCookies } from '@/utils/color-mode'
+import { ColorMode } from '@chakra-ui/react'
+import NextDocument, {
+  DocumentContext,
+  DocumentInitialProps,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from 'next/document'
 
-const Document: React.FC = () => {
-  return (
-    <Html lang="en">
-      <Head>
-        {/* eslint-disable-next-line */}
-        <title>Todo App</title>
-        <meta
-          name="description"
-          content="A full-stack monorepo showcase todo app running on Kubernetes"
-        />
-      </Head>
-      <body>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
-        <Main />
-        <NextScript />
-      </body>
-    </Html>
-  )
+type InitialProps = {
+  colorMode: ColorMode
+}
+
+class Document extends NextDocument<InitialProps> {
+  static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps & InitialProps> {
+    const colorMode = getColorModeFromCookies(ctx.req?.headers.cookie)
+
+    return {
+      ...(await NextDocument.getInitialProps(ctx)),
+      colorMode,
+    }
+  }
+
+  render(): JSX.Element {
+    const { colorMode } = this.props
+
+    return (
+      <Html data-theme={colorMode} lang="en" style={{ colorScheme: colorMode }}>
+        <Head />
+        <body className={`chakra-ui-${colorMode}`}>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
+  }
 }
 
 export default Document
