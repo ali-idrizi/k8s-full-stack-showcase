@@ -5,7 +5,7 @@ const COLOR_MODE_COOKIE = 'chakra-ui-color-mode'
 
 type MaybeColorMode = ColorMode | undefined
 
-export function getColorModeFromCookies(cookies: string | undefined): ColorMode {
+export function getColorModeFromCookies(cookies?: string): ColorMode {
   const defaultColorMode = theme.config.initialColorMode as ColorMode
 
   if (!cookies) {
@@ -22,7 +22,6 @@ export function getColorModeFromCookies(cookies: string | undefined): ColorMode 
   return defaultColorMode
 }
 
-export function getColorModeCookie(cookies: string | undefined): string {
-  const colorMode = getColorModeFromCookies(cookies)
-  return colorMode ? `${COLOR_MODE_COOKIE}=${colorMode}` : ''
+export function getColorModeCookie(cookies?: string): string {
+  return `${COLOR_MODE_COOKIE}=${getColorModeFromCookies(cookies)}`
 }
