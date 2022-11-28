@@ -10,7 +10,7 @@ import {
   useEditableControls,
 } from '@chakra-ui/react'
 import { useFormik } from 'formik'
-import { MutableRefObject } from 'react'
+import { MutableRefObject, useEffect } from 'react'
 import { FiCheck, FiEdit } from 'react-icons/fi'
 import { ValidationError } from 'yup'
 import { HoverVisibleBox } from './hover-visible-box'
@@ -54,7 +54,7 @@ type TodoTitleProps = {
   todo: TodoItem
 }
 export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
-  const { mutate, isLoading } = useUpdateItemMutation(todo.id)
+  const { mutate, isLoading } = useUpdateItemMutation(todo)
 
   const formik = useFormik({
     initialValues: {
@@ -89,12 +89,17 @@ export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
   })
 
   const resetTitle = () => formik.setFieldValue('title', todo.title, true)
+
   const handleSubmit = async () => {
     if (!!formik.errors.title) {
       await resetTitle()
     }
     formik.handleSubmit()
   }
+
+  useEffect(() => {
+    resetTitle()
+  }, [todo]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Editable
