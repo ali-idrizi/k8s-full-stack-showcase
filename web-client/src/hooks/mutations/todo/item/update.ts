@@ -29,7 +29,7 @@ export const useUpdateItemMutation = (
 
   return useMutation(
     [MUTATION_KEY.TODO_ITEM.UPDATE],
-    (payload) => api.todo.item.update(todo.id + 'x', payload),
+    (payload) => api.todo.item.update(todo.id, payload),
     {
       onMutate: (variables) => {
         replaceTodo({ ...todo, ...variables })
