@@ -178,7 +178,7 @@ extraDeploy: []
 livenessProbe:
   enabled: true
   path: '/'
-  initialDelaySeconds: 5
+  initialDelaySeconds: 0
   periodSeconds: 5
   timeoutSeconds: 1
   failureThreshold: 3
@@ -196,7 +196,7 @@ livenessProbe:
 readinessProbe:
   enabled: true
   path: '/'
-  initialDelaySeconds: 5
+  initialDelaySeconds: 0
   periodSeconds: 5
   timeoutSeconds: 1
   failureThreshold: 3
@@ -217,7 +217,7 @@ startupProbe:
   initialDelaySeconds: 5
   periodSeconds: 3
   timeoutSeconds: 1
-  failureThreshold: 15
+  failureThreshold: 20
   successThreshold: 1
 ## @param customLivenessProbe Override default liveness probe
 ##
