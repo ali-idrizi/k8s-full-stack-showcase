@@ -5,7 +5,6 @@ import { MUTATION_KEY, QUERY_KEY } from '@/utils/constants'
 import { updateListItems } from '@/utils/list'
 import { TodoItem, TodoList } from '@/utils/types'
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'
-import { useCallback } from 'react'
 
 export const useUpdateItemMutation = (
   todo: TodoItem,
@@ -13,19 +12,16 @@ export const useUpdateItemMutation = (
   const api = useApi()
   const queryClient = useQueryClient()
 
-  const replaceTodo = useCallback(
-    (newItem: TodoItem) => {
-      queryClient.setQueryData<TodoList>(
-        [QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, todo.listId],
-        (list) => {
-          return updateListItems(list, (items) =>
-            items.map((item) => (item.id === todo.id ? newItem : item)),
-          )
-        },
-      )
-    },
-    [queryClient, todo],
-  )
+  const replaceTodo = (newItem: TodoItem) => {
+    queryClient.setQueryData<TodoList>(
+      [QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, todo.listId],
+      (list) => {
+        return updateListItems(list, (items) =>
+          items.map((item) => (item.id === todo.id ? newItem : item)),
+        )
+      },
+    )
+  }
 
   return useMutation(
     [MUTATION_KEY.TODO_ITEM.UPDATE],
