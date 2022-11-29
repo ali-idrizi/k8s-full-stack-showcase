@@ -113,7 +113,7 @@ export const TodoListHeader: React.FC<Props> = ({ list }) => {
           name="title"
           as={EditableInput}
           onChange={formik.handleChange}
-          focusBorderColor="none"
+          focusBorderColor="blue.700"
         />
         <EditTitleControls isLoading={isLoading} isInvalid={!!formik.errors.title} />
       </Editable>
