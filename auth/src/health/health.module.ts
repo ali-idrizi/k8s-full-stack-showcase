@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices'
 import { TerminusModule } from '@nestjs/terminus'
-import { AuthHealthIndicator } from './auth.health'
+import { NatsHealthIndicator } from './nats.health'
 import { HEALTH_NATS_CLIENT } from './health.constants'
 import { HealthController } from './health.controller'
 import { HealthService } from './health.service'
@@ -28,7 +28,7 @@ import { PrismaHealthIndicator } from './prisma.health'
       },
     },
     PrismaHealthIndicator,
-    AuthHealthIndicator,
+    NatsHealthIndicator,
     HealthService,
   ],
   controllers: [HealthController],

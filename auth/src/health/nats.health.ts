@@ -5,7 +5,7 @@ import { firstValueFrom, timeout } from 'rxjs'
 import { COMMAND, HEALTH_NATS_CLIENT } from './health.constants'
 
 @Injectable()
-export class AuthHealthIndicator extends HealthIndicator {
+export class NatsHealthIndicator extends HealthIndicator {
   constructor(@Inject(HEALTH_NATS_CLIENT) private natsClient: ClientProxy) {
     super()
   }
