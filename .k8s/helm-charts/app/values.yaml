@@ -212,7 +212,7 @@ readinessProbe:
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: false
+  enabled: true
   path: '/'
   initialDelaySeconds: 5
   periodSeconds: 3
