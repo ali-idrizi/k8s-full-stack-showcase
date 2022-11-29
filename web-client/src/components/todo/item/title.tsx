@@ -129,7 +129,7 @@ export const TodoTitle: React.FC<TodoTitleProps> = ({ checkboxRef, todo }) => {
         name="title"
         as={EditableInput}
         onChange={formik.handleChange}
-        focusBorderColor="none"
+        focusBorderColor="blue.700"
       />
       <HoverVisibleBox>
         <EditTitleControls isLoading={isLoading} isInvalid={!!formik.errors.title} />
