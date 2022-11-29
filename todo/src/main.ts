@@ -1,6 +1,6 @@
 import { ValidationPipe } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { MicroserviceOptions, Transport } from '@nestjs/microservices'
+import { Transport } from '@nestjs/microservices'
 import * as cookieParser from 'cookie-parser'
 import 'reflect-metadata'
 import { DurationLoggerInterceptor } from './common/interceptors/duration-logger.interceptor'
@@ -26,7 +26,7 @@ async function bootstrap(): Promise<void> {
     )
     .useGlobalInterceptors(new DurationLoggerInterceptor(), new ErrorIterceptor())
     .use(cookieParser())
-    .connectMicroservice<MicroserviceOptions>({
+    .connectMicroservice({
       transport: Transport.NATS,
       options: {
         servers: [NATS_URL],

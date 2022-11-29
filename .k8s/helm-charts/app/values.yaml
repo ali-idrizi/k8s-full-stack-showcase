@@ -178,10 +178,10 @@ extraDeploy: []
 livenessProbe:
   enabled: true
   path: '/'
-  initialDelaySeconds: 60
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
+  initialDelaySeconds: 5
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 3
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -196,9 +196,9 @@ livenessProbe:
 readinessProbe:
   enabled: true
   path: '/'
-  initialDelaySeconds: 10
+  initialDelaySeconds: 5
   periodSeconds: 5
-  timeoutSeconds: 3
+  timeoutSeconds: 1
   failureThreshold: 3
   successThreshold: 1
 ## Configure extra options for startup probe

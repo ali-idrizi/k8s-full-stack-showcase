@@ -3,7 +3,11 @@ image:
 ingress:
   enabled: false
 service:
-  clusterIP: None
+  enabled: false
 db:
   prisma:
     migrate: true
+livenessProbe:
+  path: /health/live
+readinessProbe:
+  path: /health/ready
