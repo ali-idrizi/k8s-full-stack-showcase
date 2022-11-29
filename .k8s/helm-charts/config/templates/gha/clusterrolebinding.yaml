@@ -4,7 +4,6 @@ kind: ClusterRoleBinding
 metadata:
   name: github-actions-cd
   labels: {{- include "config.labels.standard" . | nindent 4 }}
-  namespace: {{ .Release.Namespace | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
