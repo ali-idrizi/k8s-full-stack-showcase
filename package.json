@@ -7,9 +7,11 @@
     "prepare": "husky install",
     "dev:start": "skaffold dev -p dev --skip-tests --cleanup=false",
     "dev:run": "skaffold run -p dev --skip-tests --tail --port-forward=user",
+    "dev:delete": "skaffold delete -p dev",
     "prod:run": "skaffold run -p prod --skip-tests --tail",
     "prod:build": "skaffold build -p prod --default-repo=$DOCKER_REGISTRY --file-output tags.json",
     "prod:deploy": "skaffold deploy -p prod -a tags.json",
+    "prod:delete": "skaffold delete -p prod -a",
     "ci:build": "skaffold build -p ci --skip-tests --file-output tags.json",
     "ci:test": "skaffold test -p ci -a tags.json",
     "ci:deploy": "skaffold deploy -p ci -a tags.json"
