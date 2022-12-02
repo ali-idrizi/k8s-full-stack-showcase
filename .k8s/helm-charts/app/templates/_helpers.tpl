@@ -2,7 +2,7 @@
 Return the proper image name
 */}}
 {{- define "main.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}
+{{- .Values.image.name -}}
 {{- end -}}
 
 {{/*

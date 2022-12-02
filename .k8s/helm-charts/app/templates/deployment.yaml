@@ -61,32 +61,6 @@ spec:
         {{- if .Values.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
-        # Use initContainers to migrate/seed the database.
-        # TODO: Revert back to Job once https://github.com/GoogleContainerTools/skaffold/issues/7989 is fixed
-        {{- if .Values.db.enabled -}}
-        {{- if .Values.db.prisma.migrate }}
-        - name: db-migrate
-          image: {{ include "main.image" . }}
-          envFrom:
-            - secretRef:
-                name: {{ include "common.names.fullname" . }}
-          command:
-            - /bin/sh
-            - -c
-            - npx prisma migrate deploy
-        {{- end -}}
-        {{- if .Values.db.prisma.seed }}
-        - name: db-seed
-          image: {{ include "main.image" . }}
-          envFrom:
-            - secretRef:
-                name: {{ include "common.names.fullname" . }}
-          command:
-            - /bin/sh
-            - -c
-            - npx prisma db seed
-        {{- end -}}
-        {{- end }}
       containers:
         - name: main
           image: {{ include "main.image" . }}
