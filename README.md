@@ -99,15 +99,15 @@ Values are organized in the following way:
 Each of the above directories contains the following structure:
 
 - **db**:
-  - **base**: values added to all db releases
-  - **auth**: values added to db-auth release
-  - **user**: values added to db-user release
-  - **todo**: values added to db-todo release
+  - **base**: values added to `db-*` releases
+  - **auth**: values for `db-auth`
+  - **user**: values for `db-user`
+  - **todo**: values for `db-todo`
 - **app**:
-  - **base**: values added to all app releases
-  - **auth**: values added to app-auth release
-  - **user**: values added to app-user release
-  - **todo**: values added to app-todo release
+  - **base**: values added to `app-*` releases
+  - **auth**: values for `app-auth` release
+  - **user**: values for `app-user` release
+  - **todo**: values for `app-todo` release
 
 ### Secrets
 
