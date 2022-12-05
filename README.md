@@ -80,9 +80,9 @@ Skaffold is used to handle the workflow, both in development and in production. 
   - A ServiceAccount to be used in GitHub Action for CD
   - The Issuer required by cert-manager to generate the certificates
 - **nats**: used for services to communicate with each other
-- **db-auth** - stores refresh tokens
-- **db-user** - stores user account details
-- **db-todo** - stores todo lists and items
+- **db-auth**: stores refresh tokens
+- **db-user**: stores user account details
+- **db-todo**: stores todo lists and items
 - **app-auth**
 - **app-user**
 - **app-todo**
@@ -92,22 +92,22 @@ Skaffold is used to handle the workflow, both in development and in production. 
 
 Values are organized in the following way:
 
-- base: values added to helm releases in all environments
-- dev: values added only in `dev`
-- prod: values added only in `prod`
+- **base**: values added to helm releases in all environments
+- **dev**: values added only in `dev`
+- **prod**: values added only in `prod`
 
 Each of the above directories contains the following structure:
 
-- db
-  - base - values added to all db releases
-  - auth - values added to db-auth release
-  - user - values added to db-user release
-  - todo - values added to db-todo release
-- app
-  - base - values added to all app releases
-  - auth - values added to app-auth release
-  - user - values added to app-user release
-  - todo - values added to app-todo release
+- **db**:
+  - **base**: values added to all db releases
+  - **auth**: values added to db-auth release
+  - **user**: values added to db-user release
+  - **todo**: values added to db-todo release
+- **app**:
+  - **base**: values added to all app releases
+  - **auth**: values added to app-auth release
+  - **user**: values added to app-user release
+  - **todo**: values added to app-todo release
 
 ### Secrets
 
