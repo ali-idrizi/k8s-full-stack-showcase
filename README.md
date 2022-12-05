@@ -105,9 +105,9 @@ Each of the above directories contains the following structure:
   - **todo**: values for `db-todo`
 - **app**:
   - **base**: values added to `app-*` releases
-  - **auth**: values for `app-auth` release
-  - **user**: values for `app-user` release
-  - **todo**: values for `app-todo` release
+  - **auth**: values for `app-auth`
+  - **user**: values for `app-user`
+  - **todo**: values for `app-todo`
 
 ### Secrets
 
