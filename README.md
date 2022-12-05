@@ -108,6 +108,7 @@ Each of the above directories contains the following structure:
   - **auth**: values for `app-auth`
   - **user**: values for `app-user`
   - **todo**: values for `app-todo`
+  - **web-client**: values for `app-web-client`
 
 ### Secrets
 
