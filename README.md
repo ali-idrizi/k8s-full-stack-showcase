@@ -63,7 +63,7 @@ Authentication for all requests is handled through Nginx sub-request feature. Wh
 
 ### Environments
 
-The environments are set up in skaffold.YAML and through helm values in `.k8s/values` and `.k8s/secrets`. There are two environments already set up: `dev` and `prod`.
+The environments are set up in skaffold.yaml and through helm values in `.k8s/values` and `.k8s/secrets`. There are two environments already set up: `dev` and `prod`.
 
 ## Skaffold
 
