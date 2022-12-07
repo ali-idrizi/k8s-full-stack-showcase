@@ -23,7 +23,7 @@
     "src/**/*.{ts,tsx}": "jest --bail --findRelatedTests --passWithNoTests"
   },
   "dependencies": {
-    "@chakra-ui/react": "^2.4.2",
+    "@chakra-ui/react": "^2.4.3",
     "@chakra-ui/skip-nav": "^2.0.12",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
