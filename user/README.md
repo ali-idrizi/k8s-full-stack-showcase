@@ -4,13 +4,13 @@ This microservice is a Nest.js app that stores user details and exposes a REST A
 
 - `/login`:
   - `POST`: expects `email` and `password`, if valid stores auth tokens in cookies
-- `/register`
+- `/register`:
   - `POST`: expects `name`, `email`, `password` and `confirmPassword`, if valid stores auth tokens in cookies
-- `/logout`
+- `/logout`:
   - `POST`: invalidates the provided refresh tokens and clears auth cookies
 - `/auth/refresh-token`
   - `POST`: triggers the refresh JWT flow, storing new auth tokens in cookies
-- `/auth`
+- `/auth`:
   - `GET`: used by ingress-nginx sub-request to authenticate requests. If the JWT is valid it responds with `X-User-ID` and `X-Authenticated` headers that are forwarded to other microservices upstream. This endpoint is not exposed outside the cluster
 
 ## Commands
