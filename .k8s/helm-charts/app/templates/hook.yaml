@@ -27,10 +27,12 @@ metadata:
 spec:
   template:
     spec:
+      {{- include "main.imagePullSecrets" . | nindent 6 }}
       restartPolicy: Never
       containers:
         - name: db-migrate
           image: {{ include "main.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           envFrom:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-preinst
@@ -54,10 +56,12 @@ metadata:
 spec:
   template:
     spec:
+      {{- include "main.imagePullSecrets" . | nindent 6 }}
       restartPolicy: Never
       containers:
         - name: db-seed
           image: {{ include "main.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           envFrom:
             - secretRef:
                 name: {{ include "common.names.fullname" . }}-preinst
