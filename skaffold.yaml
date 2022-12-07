@@ -61,7 +61,7 @@ manifests:
         name: cert-manager
         remoteChart: cert-manager
         valuesFiles:
-          - .k8s/values/main/cert-manager.yaml
+          - .k8s/values/base/cert-manager.yaml
           - .k8s/values/dev/cert-manager.yaml
         namespace: cert-manager
         version: 1.10.0
@@ -71,7 +71,7 @@ manifests:
         name: config
         chartPath: .k8s/helm-charts/config
         valuesFiles:
-          - .k8s/values/main/config.yaml
+          - .k8s/values/base/config.yaml
           - .k8s/values/dev/config.yaml
         namespace: dev
         createNamespace: true
@@ -80,7 +80,7 @@ manifests:
         name: ingress-nginx
         remoteChart: ingress-nginx
         valuesFiles:
-          - .k8s/values/main/ingress-nginx.yaml
+          - .k8s/values/base/ingress-nginx.yaml
           - .k8s/values/dev/ingress-nginx.yaml
         namespace: dev
         version: 4.2.5
@@ -89,7 +89,7 @@ manifests:
         name: nats
         remoteChart: nats
         valuesFiles:
-          - .k8s/values/main/nats.yaml
+          - .k8s/values/base/nats.yaml
           - .k8s/values/dev/nats.yaml
         namespace: dev
         version: 0.18.0
@@ -99,8 +99,8 @@ manifests:
         name: db-auth
         remoteChart: mysql
         valuesFiles:
-          - .k8s/values/main/db/base.yaml
-          - .k8s/values/main/db/auth.yaml
+          - .k8s/values/base/db/base.yaml
+          - .k8s/values/base/db/auth.yaml
           - .k8s/values/dev/db/base.yaml
           - .k8s/values/dev/db/auth.yaml
         namespace: dev
@@ -110,8 +110,8 @@ manifests:
         name: db-todo
         remoteChart: mysql
         valuesFiles:
-          - .k8s/values/main/db/base.yaml
-          - .k8s/values/main/db/todo.yaml
+          - .k8s/values/base/db/base.yaml
+          - .k8s/values/base/db/todo.yaml
           - .k8s/values/dev/db/base.yaml
           - .k8s/values/dev/db/todo.yaml
         namespace: dev
@@ -121,8 +121,8 @@ manifests:
         name: db-user
         remoteChart: mysql
         valuesFiles:
-          - .k8s/values/main/db/base.yaml
-          - .k8s/values/main/db/user.yaml
+          - .k8s/values/base/db/base.yaml
+          - .k8s/values/base/db/user.yaml
           - .k8s/values/dev/db/base.yaml
           - .k8s/values/dev/db/user.yaml
         namespace: dev
@@ -132,8 +132,8 @@ manifests:
         name: app-auth
         chartPath: .k8s/helm-charts/app
         valuesFiles:
-          - .k8s/values/main/app/base.yaml
-          - .k8s/values/main/app/auth.yaml
+          - .k8s/values/base/app/base.yaml
+          - .k8s/values/base/app/auth.yaml
           - .k8s/values/dev/app/base.yaml
           - .k8s/values/dev/app/auth.yaml
         namespace: dev
@@ -143,8 +143,8 @@ manifests:
         name: app-todo
         chartPath: .k8s/helm-charts/app
         valuesFiles:
-          - .k8s/values/main/app/base.yaml
-          - .k8s/values/main/app/todo.yaml
+          - .k8s/values/base/app/base.yaml
+          - .k8s/values/base/app/todo.yaml
           - .k8s/values/dev/app/base.yaml
           - .k8s/values/dev/app/todo.yaml
         namespace: dev
@@ -154,8 +154,8 @@ manifests:
         name: app-user
         chartPath: .k8s/helm-charts/app
         valuesFiles:
-          - .k8s/values/main/app/base.yaml
-          - .k8s/values/main/app/user.yaml
+          - .k8s/values/base/app/base.yaml
+          - .k8s/values/base/app/user.yaml
           - .k8s/values/dev/app/base.yaml
           - .k8s/values/dev/app/user.yaml
         namespace: dev
@@ -165,8 +165,8 @@ manifests:
         name: app-web-client
         chartPath: .k8s/helm-charts/app
         valuesFiles:
-          - .k8s/values/main/app/base.yaml
-          - .k8s/values/main/app/web-client.yaml
+          - .k8s/values/base/app/base.yaml
+          - .k8s/values/base/app/web-client.yaml
           - .k8s/values/dev/app/base.yaml
           - .k8s/values/dev/app/web-client.yaml
         namespace: dev
@@ -176,19 +176,6 @@ deploy:
   helm: {}
   logs:
     prefix: auto
-portForward:
-  - resourceType: service
-    resourceName: ingress-nginx-dev-controller
-    namespace: dev
-    port: 443
-    address: 0.0.0.0
-    localPort: 3443
-  - resourceType: service
-    resourceName: ingress-nginx-dev-controller
-    namespace: dev
-    port: 80
-    address: 0.0.0.0
-    localPort: 3000
 profiles:
   - name: dev
     patches:
@@ -205,6 +192,19 @@ profiles:
       - op: add
         path: /build/artifacts/3/docker/target
         value: dev
+    portForward:
+      - resourceType: service
+        resourceName: ingress-nginx-dev-controller
+        namespace: dev
+        port: 443
+        address: 0.0.0.0
+        localPort: 3443
+      - resourceType: service
+        resourceName: ingress-nginx-dev-controller
+        namespace: dev
+        port: 80
+        address: 0.0.0.0
+        localPort: 3000
   - name: ci
     patches:
       # Build Artifacts (add docker target)
@@ -245,19 +245,19 @@ profiles:
         releases:
           - <<: *certManagerRelease
             valuesFiles:
-              - .k8s/values/main/cert-manager.yaml
+              - .k8s/values/base/cert-manager.yaml
               - .k8s/values/prod/cert-manager.yaml
             useHelmSecrets: true
           - <<: *configRelease
             valuesFiles:
-              - .k8s/values/main/config.yaml
+              - .k8s/values/base/config.yaml
               - .k8s/values/prod/config.yaml
               - .k8s/secrets/prod/config.yaml
             namespace: prod
             useHelmSecrets: true
           - <<: *ingressNginxRelease
             valuesFiles:
-              - .k8s/values/main/ingress-nginx.yaml
+              - .k8s/values/base/ingress-nginx.yaml
               - .k8s/values/prod/ingress-nginx.yaml
             namespace: prod
             useHelmSecrets: true
@@ -272,14 +272,14 @@ profiles:
             repo: https://charts.bitnami.com/bitnami
           - <<: *natsRelease
             valuesFiles:
-              - .k8s/values/main/nats.yaml
+              - .k8s/values/base/nats.yaml
               - .k8s/values/prod/nats.yaml
             namespace: prod
             useHelmSecrets: true
           - <<: *dbAuthRelease
             valuesFiles:
-              - .k8s/values/main/db/base.yaml
-              - .k8s/values/main/db/auth.yaml
+              - .k8s/values/base/db/base.yaml
+              - .k8s/values/base/db/auth.yaml
               - .k8s/values/prod/db/base.yaml
               - .k8s/values/prod/db/auth.yaml
               - .k8s/secrets/prod/db/auth.yaml
@@ -287,8 +287,8 @@ profiles:
             useHelmSecrets: true
           - <<: *dbTodoRelease
             valuesFiles:
-              - .k8s/values/main/db/base.yaml
-              - .k8s/values/main/db/todo.yaml
+              - .k8s/values/base/db/base.yaml
+              - .k8s/values/base/db/todo.yaml
               - .k8s/values/prod/db/base.yaml
               - .k8s/values/prod/db/todo.yaml
               - .k8s/secrets/prod/db/todo.yaml
@@ -296,8 +296,8 @@ profiles:
             useHelmSecrets: true
           - <<: *dbUserRelease
             valuesFiles:
-              - .k8s/values/main/db/base.yaml
-              - .k8s/values/main/db/user.yaml
+              - .k8s/values/base/db/base.yaml
+              - .k8s/values/base/db/user.yaml
               - .k8s/values/prod/db/base.yaml
               - .k8s/values/prod/db/user.yaml
               - .k8s/secrets/prod/db/user.yaml
@@ -305,8 +305,8 @@ profiles:
             useHelmSecrets: true
           - <<: *appAuthRelease
             valuesFiles:
-              - .k8s/values/main/app/base.yaml
-              - .k8s/values/main/app/auth.yaml
+              - .k8s/values/base/app/base.yaml
+              - .k8s/values/base/app/auth.yaml
               - .k8s/values/prod/app/base.yaml
               - .k8s/values/prod/app/auth.yaml
               - .k8s/secrets/prod/app/auth.yaml
@@ -314,8 +314,8 @@ profiles:
             useHelmSecrets: true
           - <<: *appTodoRelease
             valuesFiles:
-              - .k8s/values/main/app/base.yaml
-              - .k8s/values/main/app/todo.yaml
+              - .k8s/values/base/app/base.yaml
+              - .k8s/values/base/app/todo.yaml
               - .k8s/values/prod/app/base.yaml
               - .k8s/values/prod/app/todo.yaml
               - .k8s/secrets/prod/app/todo.yaml
@@ -323,8 +323,8 @@ profiles:
             useHelmSecrets: true
           - <<: *appUserRelease
             valuesFiles:
-              - .k8s/values/main/app/base.yaml
-              - .k8s/values/main/app/user.yaml
+              - .k8s/values/base/app/base.yaml
+              - .k8s/values/base/app/user.yaml
               - .k8s/values/prod/app/base.yaml
               - .k8s/values/prod/app/user.yaml
               - .k8s/secrets/prod/app/user.yaml
@@ -332,8 +332,8 @@ profiles:
             useHelmSecrets: true
           - <<: *appWebClientRelease
             valuesFiles:
-              - .k8s/values/main/app/base.yaml
-              - .k8s/values/main/app/web-client.yaml
+              - .k8s/values/base/app/base.yaml
+              - .k8s/values/base/app/web-client.yaml
               - .k8s/values/prod/app/base.yaml
               - .k8s/values/prod/app/web-client.yaml
             namespace: prod
