@@ -118,4 +118,3 @@ Secrets are organized similar to values. This codebase is set up to run the `pro
 
 - Add monitoring using Prometheus
 - Set up logging
-- Hash the refresh tokens stored in the database
