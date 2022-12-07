@@ -56,7 +56,7 @@ const Dashboard: PageWithLayout = () => {
 
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
-      <TodoTabs listId={listId} />
+      <TodoTabs activeListId={listId} />
     </Flex>
   )
 }
