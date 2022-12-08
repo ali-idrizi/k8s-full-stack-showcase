@@ -89,11 +89,10 @@ describe('RegisterController', () => {
 
       // Test that a correct HttpException is thrown when the email is already registered
       ctx.prisma.user.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError(
-          'Invalid `this.prisma.user.create()` invocation',
-          'P2002',
-          '',
-        ),
+        new Prisma.PrismaClientKnownRequestError('Invalid `this.prisma.user.create()` invocation', {
+          code: 'P2002',
+          clientVersion: '',
+        }),
       )
       await expect(registerController.register(ctx.req, registerData, undefined)).rejects.toThrow(
         new HttpException('Email address is already registered', HttpStatus.CONFLICT),
