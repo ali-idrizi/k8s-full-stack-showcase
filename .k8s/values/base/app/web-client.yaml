@@ -7,3 +7,9 @@ ingress:
   path: /(.*)
 service:
   clusterIP: None
+livenessProbe:
+  enabled: false
+readinessProbe:
+  enabled: false
+startupProbe:
+  enabled: false

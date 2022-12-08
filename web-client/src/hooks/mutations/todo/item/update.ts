@@ -7,25 +7,39 @@ import { TodoItem, TodoList } from '@/utils/types'
 import { useMutation, UseMutationResult, useQueryClient } from '@tanstack/react-query'
 
 export const useUpdateItemMutation = (
-  id: string,
+  todo: TodoItem,
 ): UseMutationResult<TodoItem, ApiError, UpdateTodoItemPayload> => {
   const api = useApi()
   const queryClient = useQueryClient()
 
-  return useMutation(
-    [MUTATION_KEY.TODO_ITEM.UPDATE],
-    (payload) => api.todo.item.update(id, payload),
-    {
-      onSuccess: async (updatedItem) => {
-        queryClient.setQueryData<TodoList>(
-          [QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, updatedItem.listId],
-          (list) => {
-            return updateListItems(list, (items) =>
-              items.map((item) => (item.id === updatedItem.id ? updatedItem : item)),
-            )
-          },
+  const replaceTodo = (newItem: TodoItem) => {
+    queryClient.setQueryData<TodoList>(
+      [QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, todo.listId],
+      (list) => {
+        return updateListItems(list, (items) =>
+          items.map((item) => (item.id === todo.id ? newItem : item)),
         )
       },
+    )
+  }
+
+  return useMutation(
+    [MUTATION_KEY.TODO_ITEM.UPDATE],
+    (payload) => api.todo.item.update(todo.id, payload),
+    {
+      onMutate: (variables) => {
+        replaceTodo({ ...todo, ...variables })
+
+        return {
+          originalTodo: todo,
+        }
+      },
+      onError: (_error, _variables, context) => {
+        if (context?.originalTodo) {
+          replaceTodo(context?.originalTodo)
+        }
+      },
+      onSuccess: replaceTodo,
     },
   )
 }

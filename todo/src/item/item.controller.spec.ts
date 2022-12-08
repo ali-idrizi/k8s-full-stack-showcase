@@ -57,7 +57,7 @@ describe('ItemController', () => {
 
     it('should throw BadRequest if list is not found', async () => {
       prismaMockContext.prisma.item.create.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
+        new Prisma.PrismaClientKnownRequestError('', { code: 'P2025', clientVersion: '' }),
       )
 
       expect(async () => {
@@ -98,7 +98,7 @@ describe('ItemController', () => {
 
     it('should throw BadRequest if item is not found', async () => {
       prismaMockContext.prisma.item.findUniqueOrThrow.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
+        new Prisma.PrismaClientKnownRequestError('', { code: 'P2025', clientVersion: '' }),
       )
 
       expect(async () => {
@@ -141,7 +141,7 @@ describe('ItemController', () => {
 
     it('should throw BadRequest if item is not found', async () => {
       prismaMockContext.prisma.item.findUniqueOrThrow.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('', 'P2025', ''),
+        new Prisma.PrismaClientKnownRequestError('', { code: 'P2025', clientVersion: '' }),
       )
 
       expect(async () => {

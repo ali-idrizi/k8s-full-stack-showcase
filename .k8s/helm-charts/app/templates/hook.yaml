@@ -1,0 +1,73 @@
+{{- if .Values.db.enabled -}}
+{{- if or .Values.db.prisma.migrate .Values.db.prisma.seed -}}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "common.names.fullname" . }}-preinst
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{ include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-5"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+{{ include "main.secret.content" . }}
+{{- end }}
+---
+{{- if .Values.db.prisma.migrate -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-db-migrate
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{ include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "-4"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+spec:
+  template:
+    spec:
+      {{- include "main.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: Never
+      containers:
+        - name: db-migrate
+          image: {{ include "main.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}-preinst
+          command:
+            - /bin/sh
+            - -c
+            - while true; do npx prisma migrate deploy && break || sleep 2; done
+{{- end }}
+---
+{{ if .Values.db.prisma.seed -}}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "common.names.fullname" . }}-db-seed
+  namespace: {{ include "common.names.namespace" . }}
+  labels: {{ include "common.labels.standard" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-3"
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded,hook-failed
+spec:
+  template:
+    spec:
+      {{- include "main.imagePullSecrets" . | nindent 6 }}
+      restartPolicy: Never
+      containers:
+        - name: db-seed
+          image: {{ include "main.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          envFrom:
+            - secretRef:
+                name: {{ include "common.names.fullname" . }}-preinst
+          command:
+            - /bin/sh
+            - -c
+            - while true; do npx prisma db seed && break || sleep 2; done
+{{- end -}}
+{{- end -}}

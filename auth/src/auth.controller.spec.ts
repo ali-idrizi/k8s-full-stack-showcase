@@ -121,7 +121,10 @@ describe('AuthController', () => {
   describe('refreshJwt', () => {
     it('should throw if refresh token is invalid', () => {
       prismaMockContext.prisma.auth.delete.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Row does not exist in the database', 'P2025', ''),
+        new Prisma.PrismaClientKnownRequestError('Row does not exist in the database', {
+          code: 'P2025',
+          clientVersion: '',
+        }),
       )
 
       expect(async () => {
@@ -172,7 +175,10 @@ describe('AuthController', () => {
 
     it('should not throw when the refresh token does not exist', async () => {
       prismaMockContext.prisma.auth.delete.mockRejectedValue(
-        new Prisma.PrismaClientKnownRequestError('Row does not exist in the database', 'P2025', ''),
+        new Prisma.PrismaClientKnownRequestError('Row does not exist in the database', {
+          code: 'P2025',
+          clientVersion: '',
+        }),
       )
 
       expect(async () => {

@@ -11,7 +11,7 @@ type TodoListItemProps = {
 
 export const TodoListItem: React.FC<TodoListItemProps> = ({ todo }) => {
   const checkboxRef = useRef<HTMLInputElement>(null)
-  const { mutate } = useUpdateItemMutation(todo.id)
+  const { mutate } = useUpdateItemMutation(todo)
 
   const onCheckboxChange = () => {
     mutate({

@@ -70,17 +70,13 @@ db:
 ## @section Node deployment parameters
 
 ## Image details
-## @param image.registry Image registry
-## @param image.repository Image repository
-## @param image.tag Image tag (immutable tags are recommended)
+## @param image.name Image name
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image:
-  registry: ""
-  repository: nginx
-  tag: latest
+  name: nginx:latest
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -178,10 +174,10 @@ extraDeploy: []
 livenessProbe:
   enabled: true
   path: '/'
-  initialDelaySeconds: 60
-  periodSeconds: 10
-  timeoutSeconds: 5
-  failureThreshold: 6
+  initialDelaySeconds: 0
+  periodSeconds: 5
+  timeoutSeconds: 1
+  failureThreshold: 3
   successThreshold: 1
 ## Configure extra options for readiness probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
@@ -196,10 +192,10 @@ livenessProbe:
 readinessProbe:
   enabled: true
   path: '/'
-  initialDelaySeconds: 10
+  initialDelaySeconds: 0
   periodSeconds: 5
-  timeoutSeconds: 3
-  failureThreshold: 3
+  timeoutSeconds: 1
+  failureThreshold: 1
   successThreshold: 1
 ## Configure extra options for startup probe
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-startup-readiness-probes/#configure-probes
@@ -212,12 +208,12 @@ readinessProbe:
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: false
+  enabled: true
   path: '/'
   initialDelaySeconds: 5
   periodSeconds: 3
   timeoutSeconds: 1
-  failureThreshold: 15
+  failureThreshold: 20
   successThreshold: 1
 ## @param customLivenessProbe Override default liveness probe
 ##
