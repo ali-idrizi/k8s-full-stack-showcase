@@ -30,7 +30,7 @@
     "@nestjs/microservices": "^9.2.1",
     "@nestjs/platform-express": "^9.2.1",
     "@nestjs/terminus": "^9.1.4",
-    "@prisma/client": "^4.7.1",
+    "@prisma/client": "^4.8.0",
     "class-validator": "^0.14.0",
     "jsonwebtoken": "^8.5.1",
     "nats": "^2.10.0",
