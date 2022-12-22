@@ -32,7 +32,7 @@
     "@nestjs/terminus": "^9.1.4",
     "@prisma/client": "^4.8.0",
     "class-validator": "^0.14.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "nats": "^2.10.2",
     "nestjs-prisma": "^0.19.0",
     "prisma": "^4.8.0",
