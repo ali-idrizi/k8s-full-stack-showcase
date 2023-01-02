@@ -23,17 +23,17 @@ import { EmptyTodoListAlert } from './list/empty-alert'
 const CreateTodoList = dynamic(import('./list').then((mod) => mod.CreateTodoList))
 
 type Props = {
-  listId: string | null
+  activeListId: string | null
 }
 
-export const TodoTabs: React.FC<Props> = ({ listId }) => {
+export const TodoTabs: React.FC<Props> = ({ activeListId }) => {
   const { data: todoLists, isLoading, isError, error } = useTodoLists()
   const { primaryScheme } = useBrandColors()
   const tabListBorderColor = useColorModeValue('gray.100', 'gray.700')
 
   const index = useMemo(() => {
-    return todoLists?.findIndex((list) => list.id === listId) ?? -1
-  }, [todoLists, listId])
+    return todoLists?.findIndex((list) => list.id === activeListId) ?? -1
+  }, [todoLists, activeListId])
 
   if (isLoading) {
     return <Spinner />
@@ -83,7 +83,7 @@ export const TodoTabs: React.FC<Props> = ({ listId }) => {
         {todoLists.map((list) => (
           <TabPanel key={list.id}>
             <AnimatePresence initial={false}>
-              {list.id === listId && (
+              {list.id === activeListId && (
                 <motion.div
                   initial={{ marginTop: 15, opacity: 0 }}
                   animate={{ marginTop: 0, opacity: 1 }}

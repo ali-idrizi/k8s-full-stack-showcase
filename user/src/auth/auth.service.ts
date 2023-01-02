@@ -7,6 +7,8 @@ import { ConfigUtil } from 'src/common/utils/config.util'
 import { COMMAND, NATS_CLIENT } from 'src/nats/nats.constants'
 import { ENV } from 'src/user.constants'
 import { Environment, Tokens } from 'src/user.interface'
+import { EnvUtil } from 'src/common/utils/env.util'
+import { AUTH_COOKIE_MAX_AGE } from './auth.constant'
 import { JwtStatus } from './auth.interface'
 import { InvalidJwtException, InvalidRefreshTokenException } from './exceptions'
 
@@ -77,6 +79,9 @@ export class AuthService {
         value: tokens.jwt,
         options: {
           path: '/',
+          maxAge: AUTH_COOKIE_MAX_AGE,
+          httpOnly: true,
+          secure: EnvUtil.isProd(),
         },
       },
       {
@@ -84,6 +89,9 @@ export class AuthService {
         value: tokens.refreshToken,
         options: {
           path: '/',
+          maxAge: AUTH_COOKIE_MAX_AGE,
+          httpOnly: true,
+          secure: EnvUtil.isProd(),
         },
       },
     ]
