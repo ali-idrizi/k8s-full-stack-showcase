@@ -1,6 +1,12 @@
 import { axiosConfig } from '@/configs'
 import { isDev } from '@/utils/env'
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import axios, {
+  AxiosError,
+  AxiosHeaders,
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+} from 'axios'
 import { ApiError } from './error'
 
 export type ApiClientConfig = AxiosRequestConfig & {
@@ -18,7 +24,7 @@ export class ApiClient {
       headers: {
         ...axiosConfig.headers,
         ...config?.headers,
-      },
+      } as AxiosHeaders,
     })
 
     this.http.interceptors.request.use(
