@@ -31,7 +31,7 @@
     "@tanstack/react-query-devtools": "^4.20.9",
     "axios": "^1.2.2",
     "formik": "^2.2.9",
-    "framer-motion": "^8.0.2",
+    "framer-motion": "^8.1.9",
     "next": "^12.3.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
