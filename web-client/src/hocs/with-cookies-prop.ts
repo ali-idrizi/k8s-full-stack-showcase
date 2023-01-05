@@ -9,9 +9,12 @@ export const withCookiesProp: GsspHoc<Record<string, unknown>, WithCookiesProp, 
   _,
   ctx,
 ) => {
+  // Forward only cookies we need so we don't leak the httpOnly cookies
+  const cookies = [getColorModeCookie(ctx.req.headers.cookie)]
+
   return {
     props: {
-      cookies: getColorModeCookie(ctx.req.headers.cookie),
+      cookies: cookies.join('; '),
     },
   }
 }

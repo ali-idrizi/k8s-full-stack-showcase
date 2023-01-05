@@ -7,10 +7,12 @@ type Props = {
 }
 
 export const Chakra: React.FC<React.PropsWithChildren<Props>> = ({ cookies, children }) => {
+  const documentCookies = typeof document !== 'undefined' ? document.cookie : null
+
   return (
     <ChakraProvider
       theme={theme}
-      colorModeManager={cookieStorageManagerSSR(cookies ?? getColorModeCookie())}
+      colorModeManager={cookieStorageManagerSSR(documentCookies ?? cookies ?? getColorModeCookie())}
     >
       {children}
     </ChakraProvider>
