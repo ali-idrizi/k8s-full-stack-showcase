@@ -2,11 +2,13 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "dependabot/update"
     schedule:
       interval: "daily"
 
   - package-ecosystem: "npm"
     directory: "/"
+    target-branch: "dependabot/update"
     schedule:
       interval: "weekly"
 
