@@ -27,6 +27,6 @@
   },
   "homepage": "https://github.com/ali-idrizi/k8s-full-stack-starter#readme",
   "devDependencies": {
-    "husky": "^8.0.2"
+    "husky": "^8.0.3"
   }
 }
