@@ -1,19 +1,26 @@
 import theme from '@/theme'
-import { getColorModeCookie } from '@/utils/color-mode'
-import { ChakraProvider, cookieStorageManagerSSR } from '@chakra-ui/react'
+import { MaybeColorMode } from '@/utils/color-mode'
+import { isServer } from '@/utils/env'
+import { ChakraProvider, ColorMode, cookieStorageManager } from '@chakra-ui/react'
 
 type Props = {
-  cookies?: string
+  ssrColorMode: ColorMode
 }
 
-export const Chakra: React.FC<React.PropsWithChildren<Props>> = ({ cookies, children }) => {
-  const documentCookies = typeof document !== 'undefined' ? document.cookie : null
+const colorModeManager = (ssrColorMode: ColorMode) => ({
+  type: 'cookie' as const,
+  ssr: true,
+  get: (): MaybeColorMode => {
+    return isServer() ? ssrColorMode : cookieStorageManager.get()
+  },
+  set: (value: ColorMode | 'system'): void => {
+    cookieStorageManager.set(value)
+  },
+})
 
+export const Chakra: React.FC<React.PropsWithChildren<Props>> = ({ children, ssrColorMode }) => {
   return (
-    <ChakraProvider
-      theme={theme}
-      colorModeManager={cookieStorageManagerSSR(documentCookies ?? cookies ?? getColorModeCookie())}
-    >
+    <ChakraProvider theme={theme} colorModeManager={colorModeManager(ssrColorMode)}>
       {children}
     </ChakraProvider>
   )

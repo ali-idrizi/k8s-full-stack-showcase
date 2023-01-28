@@ -2,6 +2,7 @@ import { Container, TooltipIconButton } from '@/components'
 import { useAuthQuery } from '@/hooks'
 import {
   Box,
+  Collapse,
   HStack,
   Icon,
   IconButton,
@@ -9,16 +10,13 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react'
-import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { FiGithub, FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi'
+import { AccountActionButton } from './account-action-button'
 import { DesktopNav } from './desktop-nav'
 import { Logo } from './logo'
 import { MobileNav } from './mobile-nav'
-
-const Collapse = dynamic(() => import('@chakra-ui/transition').then((chakra) => chakra.Collapse))
-const AccountActionButton = dynamic(() => import('./account-action-button'))
 
 export const Header: React.FC = () => {
   const router = useRouter()

@@ -3,7 +3,7 @@ import { ColorMode } from '@chakra-ui/react'
 
 const COLOR_MODE_COOKIE = 'chakra-ui-color-mode'
 
-type MaybeColorMode = ColorMode | undefined
+export type MaybeColorMode = ColorMode | undefined
 
 export function getColorModeFromCookies(cookies?: string): ColorMode {
   const defaultColorMode = theme.config.initialColorMode as ColorMode

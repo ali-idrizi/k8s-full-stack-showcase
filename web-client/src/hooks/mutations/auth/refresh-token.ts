@@ -11,11 +11,17 @@ export const useRefreshTokenMutation = (): UseMutationResult<RefreshTokenRespons
   const toast = useToast()
   const queryClient = useQueryClient()
 
-  return useMutation([MUTATION_KEY.REFRESH_TOKEN], UserApi.refreshToken, {
+  return useMutation([MUTATION_KEY.REFRESH_TOKEN], async () => UserApi.refreshToken(), {
+    onMutate: () => {
+      queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], (auth) => ({
+        userId: auth?.userId ?? null,
+        hasAuthTokens: auth?.hasAuthTokens ?? true,
+      }))
+    },
     onSuccess: (data) => {
       queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
         userId: data.userId,
-        shouldRefreshToken: false,
+        hasAuthTokens: true,
       })
     },
     onError: () => {

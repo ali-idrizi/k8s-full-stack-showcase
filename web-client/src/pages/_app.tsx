@@ -7,7 +7,7 @@ import Head from 'next/head'
 
 const App: React.FC<AppProps> = ({
   Component,
-  pageProps: { dehydratedState, cookies, ...pageProps },
+  pageProps: { dehydratedState, ssrColorMode, ...pageProps },
 }) => {
   const getLayout: PageWithLayout['getLayout'] = Component.getLayout ?? ((page) => page)
 
@@ -22,7 +22,7 @@ const App: React.FC<AppProps> = ({
       </Head>
 
       <ReactQuery dehydratedState={dehydratedState}>
-        <Chakra cookies={cookies}>
+        <Chakra ssrColorMode={ssrColorMode}>
           <SkipNavLink id="main">Skip to content</SkipNavLink>
           <Flex flexDir="column" minH="100vh">
             <Header />

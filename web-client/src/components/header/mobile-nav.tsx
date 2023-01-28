@@ -7,11 +7,17 @@ type NavItemProps = React.PropsWithChildren<{
 
 const NavItem: React.FC<NavItemProps> = ({ href, children }) => {
   return (
-    <Link href={href} passHref>
-      <Button as="a" display="flex" textAlign="start" variant="ghost" py="6" borderRadius="none">
-        {children}
-      </Button>
-    </Link>
+    <Button
+      as={Link}
+      href={href}
+      display="flex"
+      textAlign="start"
+      variant="ghost"
+      py="6"
+      borderRadius="none"
+    >
+      {children}
+    </Button>
   )
 }
 

@@ -1,7 +1,4 @@
-import { forwardRef, IconButton, IconButtonProps } from '@chakra-ui/react'
-import dynamic from 'next/dynamic'
-
-const Tooltip = dynamic(() => import('@chakra-ui/tooltip').then((chakra) => chakra.Tooltip))
+import { forwardRef, IconButton, IconButtonProps, Tooltip } from '@chakra-ui/react'
 
 export const TooltipIconButton = forwardRef<IconButtonProps, 'button'>(
   ({ 'aria-label': ariaLabel, ...rest }, ref) => {

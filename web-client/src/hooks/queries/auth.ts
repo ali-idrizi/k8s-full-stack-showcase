@@ -2,24 +2,27 @@ import { WithAuth } from '@/hocs'
 import { QUERY_KEY } from '@/utils/constants'
 import { useQuery } from '@tanstack/react-query'
 
-export type UseAuthQuery = WithAuth & {
+export type UseAuthQuery = {
+  userId: string | null
   isLoggedIn: boolean
 }
 
 export const useAuthQuery = (): UseAuthQuery => {
-  const { data } = useQuery<WithAuth>([QUERY_KEY.AUTH], {
+  const {
+    data: { userId, hasAuthTokens },
+  } = useQuery<WithAuth>([QUERY_KEY.AUTH], {
     initialData: {
       userId: null,
-      shouldRefreshToken: false,
+      hasAuthTokens: false,
     },
     staleTime: Infinity,
     cacheTime: Infinity,
   })
 
-  const isLoggedIn = data.userId !== null || data.shouldRefreshToken
+  const isLoggedIn = userId !== null || hasAuthTokens
 
   return {
+    userId,
     isLoggedIn,
-    ...data,
   }
 }

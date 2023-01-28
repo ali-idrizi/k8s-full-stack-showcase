@@ -20,12 +20,12 @@ describe('Header', () => {
 
     queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
       userId: 'test-user-id',
-      shouldRefreshToken: false,
+      hasAuthTokens: true,
     })
 
     render(
       <QueryClientProvider client={queryClient}>
-        <Chakra>
+        <Chakra ssrColorMode="dark">
           <Header />
         </Chakra>
       </QueryClientProvider>,
