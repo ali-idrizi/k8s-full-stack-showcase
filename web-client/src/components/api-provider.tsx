@@ -14,7 +14,6 @@ export const ApiProvider: React.FC<React.PropsWithChildren> = ({ children }) => 
 
   const handleRefreshToken = useCallback(async () => {
     try {
-      // await new Promise((res) => setTimeout(res, 200))
       refreshTokenPromiseRef.current ??= mutateRefreshToken(null)
       await refreshTokenPromiseRef.current
       return true
