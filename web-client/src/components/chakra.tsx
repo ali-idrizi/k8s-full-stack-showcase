@@ -1,6 +1,6 @@
 import theme from '@/theme'
 import { MaybeColorMode } from '@/utils/color-mode'
-import { isServer } from '@/utils/env'
+import { isServer, isTest } from '@/utils/env'
 import { ChakraProvider, ColorMode, cookieStorageManager } from '@chakra-ui/react'
 
 type Props = {
@@ -11,7 +11,7 @@ const colorModeManager = (ssrColorMode: ColorMode) => ({
   type: 'cookie' as const,
   ssr: true,
   get: (): MaybeColorMode => {
-    return isServer() ? ssrColorMode : cookieStorageManager.get()
+    return isServer() || isTest() ? ssrColorMode : cookieStorageManager.get()
   },
   set: (value: ColorMode | 'system'): void => {
     cookieStorageManager.set(value)
