@@ -21,7 +21,3 @@ export function getColorModeFromCookies(cookies?: string): ColorMode {
 
   return defaultColorMode
 }
-
-export function getColorModeCookie(cookies?: string): string {
-  return `${COLOR_MODE_COOKIE}=${getColorModeFromCookies(cookies)}`
-}
