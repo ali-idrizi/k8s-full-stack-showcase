@@ -7,7 +7,7 @@ export type UseAuthQuery = {
   isLoggedIn: boolean
 }
 
-export const useAuthQuery = (): UseAuthQuery => {
+export const useAuth = (): UseAuthQuery => {
   const {
     data: { userId, hasAuthTokens },
   } = useQuery<WithAuth>([QUERY_KEY.AUTH], {

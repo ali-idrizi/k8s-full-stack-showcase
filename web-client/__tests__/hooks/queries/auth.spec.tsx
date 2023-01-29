@@ -1,11 +1,11 @@
 import { WithAuth } from '@/hocs'
-import { useAuthQuery } from '@/hooks'
+import { useAuth } from '@/hooks'
 import { QUERY_KEY } from '@/utils/constants'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { render, screen } from '@testing-library/react'
 
 const TestComponent: React.FC = () => {
-  const { isLoggedIn, userId } = useAuthQuery()
+  const { isLoggedIn, userId } = useAuth()
 
   return (
     <>

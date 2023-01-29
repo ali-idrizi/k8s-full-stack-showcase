@@ -1,5 +1,5 @@
 import { Container, TooltipIconButton } from '@/components'
-import { useAuthQuery } from '@/hooks'
+import { useAuth } from '@/hooks'
 import {
   Box,
   Collapse,
@@ -27,7 +27,7 @@ export const Header: React.FC = () => {
     onClose: closeMobileMenu,
   } = useDisclosure()
 
-  const { isLoggedIn } = useAuthQuery()
+  const { isLoggedIn } = useAuth()
 
   useEffect(() => {
     router.events.on('routeChangeStart', closeMobileMenu)
