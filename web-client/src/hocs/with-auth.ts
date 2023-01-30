@@ -7,7 +7,9 @@ export type WithAuth = {
 }
 
 export type WithAuthData = {
-  auth: WithAuth
+  auth: WithAuth & {
+    isLoggedIn: boolean
+  }
 }
 
 export const withAuth: GsspHoc<WithAuthData, unknown, WithReactQueryData> = (
@@ -25,6 +27,7 @@ export const withAuth: GsspHoc<WithAuthData, unknown, WithReactQueryData> = (
       auth: {
         userId,
         hasAuthTokens,
+        isLoggedIn: userId !== null,
       },
     },
   }

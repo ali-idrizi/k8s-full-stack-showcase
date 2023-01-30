@@ -14,15 +14,22 @@ export const getServerSideProps = withHocs(
   withAuth,
   withAuthenticatedRoute(),
   withApi,
-)(async ({ queryClient, api }, ctx) => {
-  const listId = ctx.params?.id?.[0] ?? null
+)(async ({ queryClient, api, auth }, ctx) => {
+  if (auth.isLoggedIn) {
+    const req = [
+      queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], api.todo.list.getAll),
+    ]
 
-  await queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], api.todo.list.getAll)
+    const listId = ctx.params?.id?.[0] ?? null
+    if (listId) {
+      req.push(
+        queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, listId], () =>
+          api.todo.list.getOne(listId),
+        ),
+      )
+    }
 
-  if (listId) {
-    await queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, listId], () =>
-      api.todo.list.getOne(listId),
-    )
+    await Promise.all(req)
   }
 
   return {
