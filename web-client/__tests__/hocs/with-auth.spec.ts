@@ -8,7 +8,7 @@ describe('With Authentication GSSP HOC', () => {
     ctx = createMockContext()
   })
 
-  it('should require access token refresh', async () => {
+  it('should store valid data in react-query', async () => {
     ctx.context.req.headers['x-user-id'] = undefined
     ctx.context.req.headers['x-authenticated'] = 'true'
 
@@ -31,7 +31,7 @@ describe('With Authentication GSSP HOC', () => {
 
     expect(props.dehydratedState?.queries.at(0)?.state.data).toEqual({
       userId: null,
-      shouldRefreshToken: true,
+      hasAuthTokens: true,
     })
   })
 

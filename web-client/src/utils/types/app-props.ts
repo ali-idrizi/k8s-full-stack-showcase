@@ -1,4 +1,5 @@
-import { WithCookiesProp, WithReactQueryProps } from '@/hocs'
+import { WithReactQueryProps } from '@/hocs'
+import { ColorMode } from '@chakra-ui/react'
 import { PageWithLayout } from './page-with-layout'
 
 type Props<P = unknown> = {
@@ -6,4 +7,4 @@ type Props<P = unknown> = {
   Component: PageWithLayout
 }
 
-export type AppProps = Props<WithReactQueryProps & WithCookiesProp>
+export type AppProps = Props<WithReactQueryProps & { ssrColorMode: ColorMode }>

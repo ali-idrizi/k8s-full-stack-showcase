@@ -8,20 +8,19 @@ type Props = {
 
 export const CTAButton: React.FC<React.PropsWithChildren<Props>> = ({ href, ...rest }) => {
   return (
-    <Link href={href} passHref>
-      <Button
-        as="a"
-        variant="solid"
-        borderRadius="full"
-        px="14"
-        py="7"
-        textTransform="uppercase"
-        fontWeight="bold"
-        fontSize={{ base: 'lg', md: 'xl' }}
-        w={{ base: 'full', md: 52 }}
-        maxW="80"
-        {...rest}
-      />
-    </Link>
+    <Button
+      as={Link}
+      href={href}
+      variant="solid"
+      borderRadius="full"
+      px="14"
+      py="7"
+      textTransform="uppercase"
+      fontWeight="bold"
+      fontSize={{ base: 'lg', md: 'xl' }}
+      w={{ base: 'full', md: 52 }}
+      maxW="80"
+      {...rest}
+    />
   )
 }

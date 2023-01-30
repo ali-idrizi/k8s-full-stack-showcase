@@ -2,11 +2,13 @@ version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "dependabot/update"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "npm"
     directory: "/"
+    target-branch: "dependabot/update"
     schedule:
       interval: "weekly"
 
@@ -14,22 +16,22 @@ updates:
     directory: "/auth"
     target-branch: "dependabot/update"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "npm"
     directory: "/todo"
     target-branch: "dependabot/update"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "npm"
     directory: "/user"
     target-branch: "dependabot/update"
     schedule:
-      interval: "daily"
+      interval: "weekly"
 
   - package-ecosystem: "npm"
     directory: "/web-client"
     target-branch: "dependabot/update"
     schedule:
-      interval: "daily"
+      interval: "weekly"

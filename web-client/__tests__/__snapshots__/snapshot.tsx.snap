@@ -6,7 +6,7 @@ exports[`renders homepage unchanged 1`] = `
     class="chakra-stack css-4m2dmu"
   >
     <h2
-      class="chakra-heading css-1s5dc0k"
+      class="chakra-heading css-a3kn27"
     >
       Create and manage your
        
@@ -14,20 +14,20 @@ exports[`renders homepage unchanged 1`] = `
         class="chakra-text css-epvm6"
       >
         <mark
-          class="css-14ksbrr"
+          class="css-tlrssp"
         >
           tasks
         </mark>
          and 
         <mark
-          class="css-14ksbrr"
+          class="css-tlrssp"
         >
           todos
         </mark>
       </span>
     </h2>
     <h2
-      class="chakra-heading css-19wzjxi"
+      class="chakra-heading css-1x6wkgp"
     >
       Create lists with your tasks and organize your day better!
     </h2>
@@ -35,13 +35,13 @@ exports[`renders homepage unchanged 1`] = `
       class="chakra-stack css-1jin9mk"
     >
       <a
-        class="chakra-button css-yu3uh3"
+        class="chakra-button css-1os6a1l"
         href="/login"
       >
         Login
       </a>
       <a
-        class="chakra-button css-176mn0e"
+        class="chakra-button css-1h77yvi"
         href="/register"
       >
         Register
