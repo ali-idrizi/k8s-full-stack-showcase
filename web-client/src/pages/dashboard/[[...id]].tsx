@@ -1,48 +1,35 @@
 import { TodoTabs } from '@/components'
-import { withAuth, withAuthenticatedRoute, withCookiesProp, withHocs, withReactQuery } from '@/hocs'
+import { withAuth, withAuthenticatedRoute, withHocs, withReactQuery } from '@/hocs'
 import { withApi } from '@/hocs/with-api'
+import { useTodoLists } from '@/hooks'
 import { EmptyLayout } from '@/layouts'
 import { QUERY_KEY } from '@/utils/constants'
-import { PageWithLayout, TodoList } from '@/utils/types'
+import { PageWithLayout } from '@/utils/types'
 import { Flex } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
+import { useEffect, useMemo } from 'react'
 
 export const getServerSideProps = withHocs(
-  withCookiesProp,
   withReactQuery,
   withAuth,
   withAuthenticatedRoute(),
   withApi,
-)(async ({ queryClient, api }, ctx) => {
-  let lists: TodoList[] = []
-  try {
-    lists = await queryClient.fetchQuery(
-      [QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS],
-      api.todo.list.getAll,
-    )
-  } catch (e) {}
+)(async ({ queryClient, api, auth }, ctx) => {
+  if (auth.isLoggedIn) {
+    const req = [
+      queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LISTS], api.todo.list.getAll),
+    ]
 
-  // Find the list based on URL parameter, if it doesn't exist, then find the default list.
-  // If there is no default list, then simply select the first list.
-  const paramListId = ctx.params?.id?.[0]
-  const activeList =
-    lists.find((list) => list.id === paramListId) ?? lists.find((list) => list.default) ?? lists[0]
-
-  const listId = activeList?.id
-
-  if (listId) {
-    if (paramListId !== listId) {
-      return {
-        redirect: {
-          destination: `/dashboard/${listId}`,
-          permanent: false,
-        },
-      }
+    const listId = ctx.params?.id?.[0] ?? null
+    if (listId) {
+      req.push(
+        queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, listId], () =>
+          api.todo.list.getOne(listId),
+        ),
+      )
     }
 
-    await queryClient.prefetchQuery([QUERY_KEY.TODO, QUERY_KEY.TODO_LIST, listId], () =>
-      api.todo.list.getOne(listId),
-    )
+    await Promise.all(req)
   }
 
   return {
@@ -52,11 +39,26 @@ export const getServerSideProps = withHocs(
 
 const Dashboard: PageWithLayout = () => {
   const router = useRouter()
-  const listId = router.query.id?.[0] ?? null
+  const { data: lists } = useTodoLists()
+
+  const paramListId = router.query.id?.[0]
+  const activeList = useMemo(() => {
+    return (
+      lists?.find((list) => list.id === paramListId) ??
+      lists?.find((list) => list.default) ??
+      lists?.[0]
+    )
+  }, [lists, paramListId])
+
+  useEffect(() => {
+    if (activeList?.id && paramListId !== activeList.id) {
+      Router.replace(`/dashboard/${activeList.id}`)
+    }
+  }, [activeList, paramListId])
 
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
-      <TodoTabs activeListId={listId} />
+      <TodoTabs activeListId={activeList?.id ?? null} />
     </Flex>
   )
 }

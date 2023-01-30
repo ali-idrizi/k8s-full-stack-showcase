@@ -15,10 +15,19 @@ type InitialProps = {
 
 class Document extends NextDocument<InitialProps> {
   static async getInitialProps(ctx: DocumentContext): Promise<DocumentInitialProps & InitialProps> {
-    const colorMode = getColorModeFromCookies(ctx.req?.headers.cookie)
+    const { renderPage, req } = ctx
+    const colorMode = getColorModeFromCookies(req?.headers.cookie)
+
+    ctx.renderPage = () =>
+      renderPage({
+        enhanceApp: (App) => (props) =>
+          <App {...props} pageProps={{ ...props.pageProps, ssrColorMode: colorMode }} />,
+      })
+
+    const initialProps = await NextDocument.getInitialProps(ctx)
 
     return {
-      ...(await NextDocument.getInitialProps(ctx)),
+      ...initialProps,
       colorMode,
     }
   }

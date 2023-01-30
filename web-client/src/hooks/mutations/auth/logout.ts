@@ -9,10 +9,10 @@ export const useLogoutMutation = (): UseMutationResult<unknown, ApiError, unknow
   const router = useRouter()
 
   return useMutation([MUTATION_KEY.LOGOUT], UserApi.logout, {
-    onSuccess: () => {
+    onMutate: () => {
       queryClient.setQueryData<WithAuth>([QUERY_KEY.AUTH], {
         userId: null,
-        shouldRefreshToken: false,
+        hasAuthTokens: false,
       })
 
       router.push('/login')

@@ -6,8 +6,8 @@ import { GsspHoc, WithAuthData } from '.'
 export const withUnauthenticatedRoute: (
   destination?: string,
 ) => GsspHoc<unknown, unknown, WithAuthData> = (destination = '/dashboard') => {
-  return ({ auth: { isLoggedIn } }) => {
-    if (isLoggedIn) {
+  return ({ auth: { hasAuthTokens } }) => {
+    if (hasAuthTokens) {
       return {
         redirect: {
           destination,
