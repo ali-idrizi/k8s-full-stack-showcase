@@ -42,23 +42,24 @@ const Dashboard: PageWithLayout = () => {
   const { data: lists } = useTodoLists()
 
   const paramListId = router.query.id?.[0]
-  const activeList = useMemo(() => {
-    return (
+  const activeListId = useMemo(() => {
+    const activeList =
       lists?.find((list) => list.id === paramListId) ??
       lists?.find((list) => list.default) ??
       lists?.[0]
-    )
+
+    return activeList?.id ?? null
   }, [lists, paramListId])
 
   useEffect(() => {
-    if (activeList?.id && paramListId !== activeList.id) {
-      Router.replace(`/dashboard/${activeList.id}`)
+    if (activeListId && paramListId !== activeListId) {
+      Router.replace(`/dashboard/${activeListId}`)
     }
-  }, [activeList, paramListId])
+  }, [activeListId, paramListId])
 
   return (
     <Flex py={{ base: 8, md: 12 }} justifyContent="center">
-      <TodoTabs activeListId={activeList?.id ?? null} />
+      <TodoTabs activeListId={activeListId} />
     </Flex>
   )
 }

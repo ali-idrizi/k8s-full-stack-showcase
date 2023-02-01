@@ -1,16 +1,17 @@
 import { GradientHeading } from '@/components'
-import { useBrandColors } from '@/hooks'
+import { useAuth, useBrandColors } from '@/hooks'
 import { Icon, Link } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import { FiCheckCircle } from 'react-icons/fi'
 
 export const Logo: React.FC = () => {
   const { primary } = useBrandColors()
+  const { isLoggedIn } = useAuth()
 
   return (
     <Link
       as={NextLink}
-      href="/"
+      href={isLoggedIn ? '/dashboard' : '/'}
       data-testid="logo"
       _hover={{ textDecoration: 'none' }}
       display="flex"

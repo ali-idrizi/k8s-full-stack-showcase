@@ -1,9 +1,4 @@
 export const colors = {
-  brand: {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
-  },
   gray: {
     50: '#f4f5f8',
     100: '#e9ecf2',
