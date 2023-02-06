@@ -28,7 +28,7 @@
     "@nestjs/config": "^2.3.0",
     "@nestjs/core": "^9.3.2",
     "@nestjs/microservices": "^9.3.2",
-    "@nestjs/platform-express": "^9.3.2",
+    "@nestjs/platform-express": "^9.3.3",
     "@nestjs/terminus": "^9.2.0",
     "@prisma/client": "^4.9.0",
     "class-transformer": "^0.5.1",
