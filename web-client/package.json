@@ -38,7 +38,7 @@
     "react-focus-lock": "^2.9.3",
     "react-icons": "^4.7.1",
     "rimraf": "^4.1.2",
-    "yup": "^1.0.0-beta.8"
+    "yup": "^1.0.0"
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.3.0",
