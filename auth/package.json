@@ -35,7 +35,7 @@
     "jsonwebtoken": "^9.0.0",
     "nats": "^2.12.1",
     "nestjs-prisma": "^0.20.0",
-    "prisma": "^4.10.1",
+    "prisma": "^4.11.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^4.3.0",
     "rxjs": "^7.8.0",
