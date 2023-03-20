@@ -27,7 +27,7 @@
     "seed": "ts-node -T prisma/seed.ts"
   },
   "dependencies": {
-    "@nestjs/common": "^9.3.9",
+    "@nestjs/common": "^9.3.10",
     "@nestjs/config": "^2.3.1",
     "@nestjs/core": "^9.3.10",
     "@nestjs/microservices": "^9.3.10",
