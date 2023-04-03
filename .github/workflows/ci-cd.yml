@@ -29,7 +29,7 @@ jobs:
         uses: hiberbee/github-action-minikube@1.7.0
 
       - name: Setup Helm
-        uses: hiberbee/github-action-helm@1.13.0
+        uses: hiberbee/github-action-helm@1.14.1
 
       - name: Setup Helm Repos
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Helm
-        uses: hiberbee/github-action-helm@1.13.0
+        uses: hiberbee/github-action-helm@1.14.1
 
       - name: Setup Helm Repos
         run: helm repo add bitnami https://charts.bitnami.com/bitnami
