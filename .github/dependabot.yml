@@ -4,34 +4,34 @@ updates:
     directory: "/"
     target-branch: "dependabot/update"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
   - package-ecosystem: "npm"
     directory: "/"
     target-branch: "dependabot/update"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
   - package-ecosystem: "npm"
     directory: "/auth"
     target-branch: "dependabot/update"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
   - package-ecosystem: "npm"
     directory: "/todo"
     target-branch: "dependabot/update"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
   - package-ecosystem: "npm"
     directory: "/user"
     target-branch: "dependabot/update"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
 
   - package-ecosystem: "npm"
     directory: "/web-client"
     target-branch: "dependabot/update"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
