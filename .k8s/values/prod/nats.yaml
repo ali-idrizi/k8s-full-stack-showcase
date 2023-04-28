@@ -1,0 +1,8 @@
+nats:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 90Mi
+    limits:
+      cpu: 50m
+      memory: 90Mi
