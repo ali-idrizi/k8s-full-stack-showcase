@@ -10,3 +10,10 @@ controller:
     annotations:
       external-dns.alpha.kubernetes.io/hostname: todo.alidrizi.com
       external-dns.alpha.kubernetes.io/ttl: 5m
+  resources:
+    requests:
+      cpu: 50m
+      memory: 90Mi
+    limits:
+      cpu: 50m
+      memory: 90Mi
