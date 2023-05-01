@@ -13,7 +13,7 @@ export class UserApi {
 
   private static createClient(config?: ApiClientConfig): ApiClient {
     return new ApiClient({
-      baseURL: isServer() ? 'http://app-user' : '/api/user',
+      baseURL: isServer() ? process.env.USER_SERVICE_URL : '/api/user',
       ...config,
     })
   }
