@@ -114,5 +114,5 @@ jobs:
       - name: Build
         run: npm run prod:build
 
-      - name: Deploy
-        run: npm run prod:deploy
+      # - name: Deploy
+      #   run: npm run prod:deploy
