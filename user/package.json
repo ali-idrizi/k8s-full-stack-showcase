@@ -38,7 +38,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
-    "nats": "^2.13.1",
+    "nats": "^2.15.1",
     "nestjs-prisma": "^0.20.0",
     "prisma": "^4.13.0",
     "reflect-metadata": "^0.1.13",
