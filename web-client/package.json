@@ -37,7 +37,7 @@
     "react-dom": "^18.2.0",
     "react-focus-lock": "^2.9.4",
     "react-icons": "^4.8.0",
-    "rimraf": "^4.4.1",
+    "rimraf": "^5.0.1",
     "yup": "^1.0.2"
   },
   "devDependencies": {
