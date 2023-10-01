@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Minikube
         uses: hiberbee/github-action-minikube@1.7.0
@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Dependencies
         run: .scripts/install-deps.sh
@@ -82,7 +82,7 @@ jobs:
           k8s-secret: ${{ secrets.KUBERNETES_TOKEN }}
 
       - name: Checkout sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Helm
         uses: hiberbee/github-action-helm@1.14.1
