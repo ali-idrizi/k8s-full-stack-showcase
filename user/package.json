@@ -42,7 +42,7 @@
     "nestjs-prisma": "^0.20.0",
     "prisma": "^4.13.0",
     "reflect-metadata": "^0.1.13",
-    "rimraf": "^4.4.1",
+    "rimraf": "^5.0.5",
     "rxjs": "^7.8.1",
     "ts-node": "^10.9.1"
   },
